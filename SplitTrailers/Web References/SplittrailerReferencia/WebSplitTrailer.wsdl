@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://189.206.160.206:81/WebServiceSplitTrailer" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://189.206.160.206:81/WebServiceSplitTrailer" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://189.206.160.206:81/WebServiceSplitTrailer">
+      <s:element name="InsertaDatosClientes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="nom" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tel" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ciu" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertaDatosClientesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="InsertaDatosClientesResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomerList">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetCustomerListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomerListResult" type="tns:ArrayOfArmadores" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfArmadores">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Armadores" nillable="true" type="tns:Armadores" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Armadores">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="nombre" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="id" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TraePedidos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cve_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fecha_trailer" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraePedidosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraePedidosResult" type="tns:ArrayOfPedidos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPedidos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Pedidos" nillable="true" type="tns:Pedidos" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Pedidos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="no_trailer" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="transporte" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="chofer" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TraeDetallePedidos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="placa" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fecha_trailer" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraeDetallePedidosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraeDetallePedidosResult" type="tns:ArrayOfDetallePedidos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDetallePedidos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="detallePedidos" nillable="true" type="tns:detallePedidos" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="detallePedidos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="productonombre" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="detalle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cantidad" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="validaetiquetaleida">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="placa" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fecha_trailer" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="validaetiquetaleidaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="validaetiquetaleidaResult" type="tns:ArrayOfDetallePedidos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertarNonQuery">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="consulta" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertarNonQueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="InsertarNonQueryResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="validarcaja">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cadena" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="validarcajaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="validarcajaResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidaCajaPreesplit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cadena" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidaCajaPreesplitResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidaCajaPreesplitResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraeinfoOrden">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="diascad" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="mtip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mcod" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mfol" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="mtar" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraeinfoOrdenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraeinfoOrdenResult" type="tns:ArrayOfInfoprod" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfInfoprod">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="infoprod" nillable="true" type="tns:infoprod" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="infoprod">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PROD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SURTIDO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECCAD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fecha_cad" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Traeinfosurprod">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="mtip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mcod" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mfol" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="mtar" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraeinfosurprodResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraeinfosurprodResult" type="tns:ArrayOfRecibosvencidos" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRecibosvencidos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="recibosvencidos" nillable="true" type="tns:recibosvencidos" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="recibosvencidos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PROD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SURTIDO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECCAD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="estatus_sur" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Traerecibosdisponibles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="diascad" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="prod" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mtip" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TraerecibosdisponiblesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TraerecibosdisponiblesResult" type="tns:ArrayOfRecibosdisponibles" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRecibosdisponibles">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="recibosdisponibles" nillable="true" type="tns:recibosdisponibles" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="recibosdisponibles">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="disponible" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fecha_cad" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="recibo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tarima" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ejecutarconsultaExcalar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cadena" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ejecutarconsultaExcalarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ejecutarconsultaExcalarResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="InsertaDatosClientesSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertaDatosClientes" />
+  </wsdl:message>
+  <wsdl:message name="InsertaDatosClientesSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertaDatosClientesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomerList" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomerListResponse" />
+  </wsdl:message>
+  <wsdl:message name="TraePedidosSoapIn">
+    <wsdl:part name="parameters" element="tns:TraePedidos" />
+  </wsdl:message>
+  <wsdl:message name="TraePedidosSoapOut">
+    <wsdl:part name="parameters" element="tns:TraePedidosResponse" />
+  </wsdl:message>
+  <wsdl:message name="TraeDetallePedidosSoapIn">
+    <wsdl:part name="parameters" element="tns:TraeDetallePedidos" />
+  </wsdl:message>
+  <wsdl:message name="TraeDetallePedidosSoapOut">
+    <wsdl:part name="parameters" element="tns:TraeDetallePedidosResponse" />
+  </wsdl:message>
+  <wsdl:message name="validaetiquetaleidaSoapIn">
+    <wsdl:part name="parameters" element="tns:validaetiquetaleida" />
+  </wsdl:message>
+  <wsdl:message name="validaetiquetaleidaSoapOut">
+    <wsdl:part name="parameters" element="tns:validaetiquetaleidaResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertarNonQuerySoapIn">
+    <wsdl:part name="parameters" element="tns:InsertarNonQuery" />
+  </wsdl:message>
+  <wsdl:message name="InsertarNonQuerySoapOut">
+    <wsdl:part name="parameters" element="tns:InsertarNonQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="validarcajaSoapIn">
+    <wsdl:part name="parameters" element="tns:validarcaja" />
+  </wsdl:message>
+  <wsdl:message name="validarcajaSoapOut">
+    <wsdl:part name="parameters" element="tns:validarcajaResponse" />
+  </wsdl:message>
+  <wsdl:message name="ValidaCajaPreesplitSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidaCajaPreesplit" />
+  </wsdl:message>
+  <wsdl:message name="ValidaCajaPreesplitSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidaCajaPreesplitResponse" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfoOrdenSoapIn">
+    <wsdl:part name="parameters" element="tns:TraeinfoOrden" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfoOrdenSoapOut">
+    <wsdl:part name="parameters" element="tns:TraeinfoOrdenResponse" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfosurprodSoapIn">
+    <wsdl:part name="parameters" element="tns:Traeinfosurprod" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfosurprodSoapOut">
+    <wsdl:part name="parameters" element="tns:TraeinfosurprodResponse" />
+  </wsdl:message>
+  <wsdl:message name="TraerecibosdisponiblesSoapIn">
+    <wsdl:part name="parameters" element="tns:Traerecibosdisponibles" />
+  </wsdl:message>
+  <wsdl:message name="TraerecibosdisponiblesSoapOut">
+    <wsdl:part name="parameters" element="tns:TraerecibosdisponiblesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ejecutarconsultaExcalarSoapIn">
+    <wsdl:part name="parameters" element="tns:ejecutarconsultaExcalar" />
+  </wsdl:message>
+  <wsdl:message name="ejecutarconsultaExcalarSoapOut">
+    <wsdl:part name="parameters" element="tns:ejecutarconsultaExcalarResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebSplitTrailerSoap">
+    <wsdl:operation name="InsertaDatosClientes">
+      <wsdl:input message="tns:InsertaDatosClientesSoapIn" />
+      <wsdl:output message="tns:InsertaDatosClientesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <wsdl:input message="tns:GetCustomerListSoapIn" />
+      <wsdl:output message="tns:GetCustomerListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <wsdl:input message="tns:TraePedidosSoapIn" />
+      <wsdl:output message="tns:TraePedidosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <wsdl:input message="tns:TraeDetallePedidosSoapIn" />
+      <wsdl:output message="tns:TraeDetallePedidosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <wsdl:input message="tns:validaetiquetaleidaSoapIn" />
+      <wsdl:output message="tns:validaetiquetaleidaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <wsdl:input message="tns:InsertarNonQuerySoapIn" />
+      <wsdl:output message="tns:InsertarNonQuerySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <wsdl:input message="tns:validarcajaSoapIn" />
+      <wsdl:output message="tns:validarcajaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <wsdl:input message="tns:ValidaCajaPreesplitSoapIn" />
+      <wsdl:output message="tns:ValidaCajaPreesplitSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <wsdl:input message="tns:TraeinfoOrdenSoapIn" />
+      <wsdl:output message="tns:TraeinfoOrdenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <wsdl:input message="tns:TraeinfosurprodSoapIn" />
+      <wsdl:output message="tns:TraeinfosurprodSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <wsdl:input message="tns:TraerecibosdisponiblesSoapIn" />
+      <wsdl:output message="tns:TraerecibosdisponiblesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <wsdl:input message="tns:ejecutarconsultaExcalarSoapIn" />
+      <wsdl:output message="tns:ejecutarconsultaExcalarSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebSplitTrailerSoap" type="tns:WebSplitTrailerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="InsertaDatosClientes">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/InsertaDatosClientes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/GetCustomerList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/TraePedidos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/TraeDetallePedidos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/validaetiquetaleida" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/InsertarNonQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/validarcaja" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/ValidaCajaPreesplit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/TraeinfoOrden" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/Traeinfosurprod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/Traerecibosdisponibles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <soap:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/ejecutarconsultaExcalar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebSplitTrailerSoap12" type="tns:WebSplitTrailerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="InsertaDatosClientes">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/InsertaDatosClientes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/GetCustomerList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/TraePedidos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/TraeDetallePedidos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/validaetiquetaleida" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/InsertarNonQuery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/validarcaja" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/ValidaCajaPreesplit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/TraeinfoOrden" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/Traeinfosurprod" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/Traerecibosdisponibles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <soap12:operation soapAction="http://189.206.160.206:81/WebServiceSplitTrailer/ejecutarconsultaExcalar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebSplitTrailer">
+    <wsdl:port name="WebSplitTrailerSoap" binding="tns:WebSplitTrailerSoap">
+      <soap:address location="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebSplitTrailerSoap12" binding="tns:WebSplitTrailerSoap12">
+      <soap12:address location="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

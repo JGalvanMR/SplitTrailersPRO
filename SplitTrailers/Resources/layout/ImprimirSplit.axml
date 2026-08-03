@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="?attr/colorSurface"
+    android:gravity="top"
+    android:clipToPadding="false">
+	<include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+	<!-- Encabezado -->
+	<TextView
+        android:id="@+id/userprint"
+        android:text="Usuario: Supervisor"
+        style="@style/label_primary"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="?attr/colorSurfaceContainerHigh" />
+
+	<!-- Campo Pedido -->
+	<TextView
+        android:text="Pedido a imprimir"
+        style="@style/label_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"/>
+
+	<EditText
+        android:id="@+id/pedidoprint"
+        style="@style/entry_m3"
+        android:inputType="number"
+        android:hint="Ingrese número de pedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+	<!-- Título splits -->
+	<TextView
+        android:id="@+id/textosplit"
+        android:text="Splits capturados"
+        style="@style/label_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+	<!-- Contenedor de la lista -->
+	<LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="?attr/colorSurfaceContainerLow"
+        android:elevation="2dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="4dp">
+
+		<GridView
+            android:id="@+id/gvCtrimprimir"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="1"
+            android:verticalSpacing="6dp"
+            android:horizontalSpacing="6dp"
+            android:padding="4dp"
+            android:clipToPadding="false" />
+	</LinearLayout>
+
+	<!-- Total -->
+	<TextView
+        android:id="@+id/totalsplitimp"
+        android:text="Total de Splits: 0"
+        style="@style/label_primary"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"
+        android:background="?attr/colorSurfaceContainerHigh"
+        android:elevation="2dp"
+        android:layout_marginBottom="4dp" />
+</LinearLayout>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/md_theme_background">
+
+	<LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/marginTop">
+
+		<!-- Toolbar -->
+		<include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+		<!-- Logos principales -->
+		<ImageView
+            android:id="@+id/iVlogos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/Logo_Apps"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true" />
+
+		<ImageView
+            android:id="@+id/iVlogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/logo_splittrailers"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true" />
+
+		<!-- Título -->
+		<TextView
+            android:id="@+id/tvlogin"
+            style="@style/label_primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Split Por Trailer"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+
+		<!-- Responsable -->
+		<TextView
+            android:id="@+id/textView2"
+            style="@style/label_secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Responsable:"
+            android:layout_marginTop="24dp" />
+
+		<!-- Spinner moderno con ripple -->
+		<FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/bg_spinner_moderno"
+            android:layout_marginTop="8dp">
+
+			<Spinner
+                android:id="@+id/spinner2"
+                style="@style/spinner_moderno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp" />
+		</FrameLayout>
+
+		<!-- Contraseña con elevación y ripple -->
+		<com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/entry_m3"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/md_theme_outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+			<EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:background="@null"
+                android:padding="12dp"
+                android:textColor="@color/md_theme_onBackground"
+                android:fontFamily="sans-serif-medium" />
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<!-- Botón Login con ripple y elevación -->
+		<Button
+            android:id="@+id/btnlogin"
+            style="@style/btn_m3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:layout_marginTop="24dp"
+            android:stateListAnimator="@animator/button_elevation_anim" />
+
+		<!-- Versión de la app -->
+		<TextView
+            android:id="@+id/versionapp"
+            style="@style/label_secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Split Trailers - Versión: 6.6"
+            android:gravity="end"
+            android:textSize="12sp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp" />
+
+	</LinearLayout>
+</ScrollView>

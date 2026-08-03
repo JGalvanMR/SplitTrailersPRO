@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitTrailers", "SplitTrailers\SplitTrailers.csproj", "{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "woosimprinter_bt", "woosimprinter_bt\woosimprinter_bt.csproj", "{89F45D79-4228-4976-B756-3AA7102302FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E86C1E6D-5C6C-4F25-89E6-70508A21FAEB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{89F45D79-4228-4976-B756-3AA7102302FE}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{89F45D79-4228-4976-B756-3AA7102302FE}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{89F45D79-4228-4976-B756-3AA7102302FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89F45D79-4228-4976-B756-3AA7102302FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52EC925D-9113-4340-98F4-B4F75D3EA177}
+	EndGlobalSection
+EndGlobal

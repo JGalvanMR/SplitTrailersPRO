@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+       android:id="@+id/menu_edit"
+       android:icon="@mipmap/ic_action_content_create"
+       android:showAsAction="ifRoom"
+       android:title="Nuevo" />
+  <item
+       android:id="@+id/menu_save"
+       android:icon="@mipmap/ic_menu_search_holo_dark"
+       android:showAsAction="ifRoom"
+       android:title="Consultar" />
+  <item
+       android:id="@+id/menu_save"
+       android:icon="@mipmap/ic_menu_paste_holo_dark"
+       android:showAsAction="ifRoom"
+       android:title="Cancelar" />
+  <item
+      android:id="@+id/menu_save"
+      android:icon="@mipmap/ic_menu_paste_holo_dark"
+      android:showAsAction="ifRoom"
+      android:title="Imprimir Split" />
+  <item
+     android:id="@+id/reasignar"
+     android:icon="@mipmap/ic_menu_paste_holo_dark"
+     android:showAsAction="ifRoom"
+     android:title="Reasignar Orden" />
+  <item
+     android:id="@+id/Solicitarproducto"
+     android:icon="@mipmap/ic_menu_paste_holo_dark"
+     android:showAsAction="ifRoom"
+     android:title="Solicitar Producto" />
+  <item
+     android:id="@+id/cerrarSesion"
+     android:icon="@mipmap/ic_menu_paste_holo_dark"
+     android:showAsAction="ifRoom"
+     android:title="Cerrar Sesion" />
+</menu>
+<!-- Code to implement into Activity:
+
+Android.Widget.SearchView searchView;
+public override bool OnCreateOptionsMenu(IMenu menu)
+{
+  this.MenuInflater.Inflate(Resource.Menu.top_menus, menu);
+
+  var searchItem = menu.FindItem(Resource.Id.action_search);
+
+  searchView = searchItem.ActionProvider.JavaCast<Android.Widget.SearchView>();
+
+  searchView.QueryTextSubmit += (sender, args) =>
+  {
+    Toast.MakeText(this, "You searched: " + args.Query, ToastLength.Short).Show();
+
+  };
+
+
+  return base.OnCreateOptionsMenu(menu);
+}
+
+-->

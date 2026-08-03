@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+		<LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayoutHorizontal"
+            android:padding="8dp">
+
+			<ImageView
+                android:id="@+id/imgPers"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/ic_menu_gallery"
+                android:layout_gravity="center_vertical"
+                android:paddingEnd="8dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Imagen del producto" />
+
+			<LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/linearLayout1"
+                android:paddingStart="8dp">
+
+				<TextView
+                    android:id="@+id/txtName"
+                    style="@style/label_primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre del producto"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+				<TextView
+                    android:id="@+id/txtAge"
+                    style="@style/label_secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Información del producto"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2" />
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

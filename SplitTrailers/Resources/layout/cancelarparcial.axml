@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:layout_marginTop="@dimen/marginTop">
+	<TextView
+        style="@style/label_primary"
+        android:text="PEDIDO:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pedidoencaptura"
+        android:gravity="right"
+        android:singleLine="true" />
+	<TextView
+        style="@style/label_primary"
+        android:text="CODIGO:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true" />
+	<EditText
+		style="@style/entry_m3"
+        android:inputType="text"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/FolioCancelar"
+        android:imeOptions="actionDone" />
+	<Button
+        android:text="Liberar Cajas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/GuardarCancelado"
+        style="@style/btn_m3"
+		android:stateListAnimator="@animator/button_elevation_anim" />
+	<TextView
+        style="@style/label_primary"
+        android:text="000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalcapturadocancelar" />
+	<GridView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="1"
+        android:id="@+id/gvCtrCanceladoParcial"
+        android:layout_weight="1"
+        android:columnWidth="150dp"
+		style="@style/card_m3"/>
+</LinearLayout>

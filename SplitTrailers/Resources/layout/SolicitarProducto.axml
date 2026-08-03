@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:layout_marginTop="@dimen/marginTop">
+	<TextView
+        style="@style/label_primary"
+		android:text="SOLICITUD POR FALTA DE PRODUCTO"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/textsolicitud"/>
+	<TextView
+        style="@style/label_primary"
+		android:text="NUMERO DE PEDIDO"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/textpedsol"/>
+	<TextView
+        style="@style/label_primary"
+		android:text="Clave del Producto"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/textView1"/>
+	<Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerprodfal"
+        android:spinnerMode="dropdown"/>
+	<TextView
+        style="@style/label_primary"
+		android:text="Cantidad por Armar"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/porarmar"/>
+	<EditText
+		style="@style/entry_m3"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cantidadfaltante" />
+	<TextView
+        style="@style/label_primary"
+		android:text="Observaciones/Comentarios"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/textobsprod"/>
+	<EditText
+		style="@style/entry_m3"
+		android:inputType="textMultiLine"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/obsprod" />
+	<Button
+        android:text="SOLICITAR PRODUCTO"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnsolicitarprod"
+        android:drawableLeft="@drawable/email"
+		style="@style/btn_m3"
+		android:stateListAnimator="@animator/button_elevation_anim"/>
+</LinearLayout>

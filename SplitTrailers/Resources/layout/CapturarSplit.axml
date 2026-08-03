@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginTop="@dimen/marginTop"
+	android:padding="0dp"
+	android:gravity="center">
+
+	<include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+	<CheckBox
+        android:textSize="16sp"
+		android:text="Eliminar Caja"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/Eliminar" />
+	<TextView
+		android:text="DIAS MINIMOS DE CARGA:"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/splitdiasmin"
+		android:gravity="right"
+		android:singleLine="true"
+		style="@style/label_primary"/>
+	<TextView
+		android:text="SPLIT:"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/splitcantidad"
+		android:gravity="right"
+		android:singleLine="true"
+		style="@style/label_primary"/>
+	<TextView
+		android:text="PEDIDO:"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/pedidoencaptura"
+		android:gravity="right"
+		android:singleLine="true"
+		style="@style/label_primary"/>
+	<RadioGroup
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<RadioButton
+        android:textSize="16sp"
+			android:id="@+id/radio_blanco"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scaleX="0.9"
+			android:scaleY="0.9"
+			android:checked="true"
+			android:text="CAJAXCAJA" />
+		<RadioButton
+        android:textSize="16sp"
+			android:id="@+id/radio_verde"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scaleX="0.9"
+			android:scaleY="0.9"
+			android:text="TARIMA COMPLETA" />
+	</RadioGroup>
+	<TextView
+		android:text="CODIGO:"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/textView12"
+		android:singleLine="true"
+		style="@style/label_primary"/>
+	<EditText
+		android:inputType="text"
+		android:singleLine="true"
+		android:maxLines="1"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/Folio"
+		android:imeOptions="actionDone"
+		style="@style/entry_m3"/>
+	<Button
+		android:text="Grabar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/GuardarCapturado"
+		style="@style/btn_m3"
+		android:stateListAnimator="@animator/button_elevation_anim"/>
+	<TextView
+		android:text="000"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/totalcapturado"
+		style="@style/label_secondary"/>
+	<GridView
+		android:minWidth="25px"
+		android:minHeight="25px"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:numColumns="1"
+		android:id="@+id/gvCtr2"
+		android:layout_weight="1"
+		android:columnWidth="150dp"
+		style="@style/card_m3"/>
+</LinearLayout>

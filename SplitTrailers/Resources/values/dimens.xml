@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- BOTONES -->
+	<dimen name="button_padding_horizontal">24dp</dimen>
+	<!-- Increased for touch targets -->
+	<dimen name="button_padding_vertical">16dp</dimen>
+	<dimen name="button_corner_radius">28dp</dimen>
+	<!-- Softer edges -->
+	<dimen name="button_elevation">2dp</dimen>
+	<!-- Subtler for minimalism -->
+	<dimen name="button_height">56dp</dimen>
+	<!-- M3 standard for filled buttons -->
+
+	<!-- CARDS / FRAMES -->
+	<dimen name="card_padding">24dp</dimen>
+	<!-- More space for readability -->
+	<dimen name="card_corner_radius">32dp</dimen>
+	<!-- Exaggerated softness -->
+	<dimen name="card_elevation">4dp</dimen>
+
+	<!-- LABELS / TEXTOS -->
+	<dimen name="text_primary_size">18sp</dimen>
+	<!-- Big typography trend -->
+	<dimen name="text_primary_line_height">24sp</dimen>
+	<dimen name="text_secondary_size">16sp</dimen>
+	<dimen name="text_secondary_line_height">20sp</dimen>
+
+	<!-- ENTRADAS / EDITTEXT -->
+	<dimen name="entry_padding">16dp</dimen>
+	<dimen name="entry_margin">12dp</dimen>
+	<dimen name="entry_corner_radius">24dp</dimen>
+	<!-- Softer -->
+	<dimen name="entry_height">56dp</dimen>
+	<!-- Matches button for consistency -->
+	<dimen name="entry_elevation">1dp</dimen>
+	<!-- Minimal shadow -->
+
+	<!-- SPINNER -->
+	<dimen name="spinner_padding">16dp</dimen>
+	<dimen name="spinner_dropdown_offset">12dp</dimen>
+
+	<dimen name="marginTop">80dp</dimen>
+
+	
+	<dimen name="section_margin">20dp</dimen>
+	<dimen name="content_padding">16dp</dimen>
+	<dimen name="dialog_corner_radius">16dp</dimen>
+
+
+</resources>

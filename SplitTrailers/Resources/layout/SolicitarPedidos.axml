@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="?attr/colorSurface"
+	android:paddingHorizontal="16dp"
+	android:paddingVertical="8dp"
+	android:gravity="center_horizontal">
+
+	<!-- 🔹 Toolbar superior -->
+	<include
+		android:id="@+id/toolbar"
+		layout="@layout/toolbar" />
+
+	<!-- 🔹 Tarjeta de información principal -->
+	<com.google.android.material.card.MaterialCardView
+		style="@style/card_m3"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="16dp"
+		app:cardElevation="2dp">
+		<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+			<!-- Usuario actual -->
+			<TextView
+				style="@style/label_secondary"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Usuario actual"
+				android:textAllCaps="true"
+				 />
+
+			<TextView
+				android:id="@+id/usuario"
+				style="@style/label_primary"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="16dp"
+				android:text="Nombre del Usuario"
+				tools:text="Juan Pérez" />
+
+			<!-- Número de pedido -->
+			<TextView
+				style="@style/label_secondary"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Número de pedido"
+				android:textAllCaps="true"
+				/>
+			<com.google.android.material.textfield.TextInputLayout
+					style="@style/entry_m3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:helperText="Ejemplo: 12345"
+                    app:helperTextTextColor="?attr/colorOnSurfaceVariant"
+                    app:placeholderText="Ingresa el número de pedido"
+                    app:startIconDrawable="@drawable/ic_barcode"
+                    app:startIconTint="?attr/colorOnSurfaceVariant">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/agregarpedido"
+					style="@style/entry_m3"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:importantForAutofill="no"
+					android:inputType="number"
+					android:maxLines="1" />
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<!-- 🔹 Botón acción principal -->
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/button1"
+				style="@style/btn_m3"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:text="Capturar Pedido"
+				app:icon="@drawable/ic_add"
+				app:iconGravity="textStart"
+				app:iconPadding="8dp" />
+		</LinearLayout>
+	</com.google.android.material.card.MaterialCardView>
+
+	<!-- 🔹 Sección de detalles del producto -->
+	<com.google.android.material.card.MaterialCardView
+		style="@style/card_m3"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		app:cardElevation="1dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<!-- Encabezado de la sección -->
+			<TextView
+				style="@style/label_primary"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/colorSurfaceContainerHigh"
+				android:gravity="center"
+				android:paddingVertical="16dp"
+				android:text="Detalles del Producto"
+				android:textAllCaps="true"
+				/>
+
+			<!-- 🔹 Contenedor lista productos -->
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/gvCtrl"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:clipToPadding="false"
+				android:padding="8dp"
+				tools:itemCount="3"
+				tools:listitem="@layout/cust_recycler_item"
+				 />
+
+			<!-- 🔹 Totales - Pie de sección -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/colorSurfaceContainer"
+				android:orientation="horizontal"
+				android:padding="16dp">
+
+				<TextView
+					style="@style/label_secondary"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Resumen total:"
+					android:textStyle="normal" />
+
+				<TextView
+					android:id="@+id/textTOTALESCA"
+					style="@style/label_primary"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="end"
+					android:text="000 | 000"
+					android:textStyle="bold" />
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

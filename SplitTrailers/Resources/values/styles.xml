@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- ================== TEMA CLARO ================== -->
+	<style name="AppTheme" parent="@style/Theme.Material3.Light.NoActionBar">
+		
+
+		<!-- Colores principales -->
+		<item name="colorPrimary">@color/md_theme_primary</item>
+		<item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+		<item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+		<item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+
+		<item name="colorSecondary">@color/md_theme_secondary</item>
+		<item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+		<item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+		<item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+
+		<item name="colorTertiary">@color/md_theme_tertiary</item>
+		<item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+		<item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+		<item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+
+		<!-- Colores semánticos -->
+		<item name="colorError">@color/md_theme_error</item>
+		<item name="colorOnError">@color/md_theme_onError</item>
+		<item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+		<item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+
+		<!-- Colores de superficie -->
+		<item name="android:colorBackground">@color/md_theme_background</item>
+		<item name="colorOnBackground">@color/md_theme_onBackground</item>
+		<item name="colorSurface">@color/md_theme_surface</item>
+		<item name="colorOnSurface">@color/md_theme_onSurface</item>
+		<item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+		<item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+
+		<!-- Bordes -->
+		<item name="colorOutline">@color/md_theme_outline</item>
+		<item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
+
+		<!-- Colores inversos -->
+		<item name="colorSurfaceInverse">@color/md_theme_inverseSurface</item>
+		<item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface</item>
+		<item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
+
+		<!-- Colores fijos -->
+		<item name="colorPrimaryFixed">@color/md_theme_primaryFixed</item>
+		<item name="colorOnPrimaryFixed">@color/md_theme_onPrimaryFixed</item>
+		<item name="colorPrimaryFixedDim">@color/md_theme_primaryFixedDim</item>
+		<item name="colorOnPrimaryFixedVariant">@color/md_theme_onPrimaryFixedVariant</item>
+
+		<!-- Jerarquía de superficie (NUEVO en Material 3) -->
+		<item name="colorSurfaceDim">@color/md_theme_surfaceDim</item>
+		<item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
+		<item name="colorSurfaceContainerLowest">@color/md_theme_surfaceContainerLowest</item>
+		<item name="colorSurfaceContainerLow">@color/md_theme_surfaceContainerLow</item>
+		<item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
+		<item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
+		<item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+
+		<!-- Formas consistentes -->
+		<item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Material3.SmallComponent</item>
+		<item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Material3.MediumComponent</item>
+		<item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Material3.LargeComponent</item>
+
+		<!-- Tipografía dinámica -->
+		<item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
+		<item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium</item>
+		<item name="textAppearanceDisplaySmall">@style/TextAppearance.Material3.DisplaySmall</item>
+
+		<item name="textAppearanceHeadlineLarge">@style/TextAppearance.Material3.HeadlineLarge</item>
+		<item name="textAppearanceHeadlineMedium">@style/TextAppearance.Material3.HeadlineMedium</item>
+		<item name="textAppearanceHeadlineSmall">@style/TextAppearance.Material3.HeadlineSmall</item>
+
+		<item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
+		<item name="textAppearanceTitleMedium">@style/TextAppearance.Material3.TitleMedium</item>
+		<item name="textAppearanceTitleSmall">@style/TextAppearance.Material3.TitleSmall</item>
+
+		<item name="textAppearanceBodyLarge">@style/TextAppearance.Material3.BodyLarge</item>
+		<item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
+		<item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall</item>
+
+		<item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
+		<item name="textAppearanceLabelMedium">@style/TextAppearance.Material3.LabelMedium</item>
+		<item name="textAppearanceLabelSmall">@style/TextAppearance.Material3.LabelSmall</item>
+
+		<!-- Componentes específicos -->
+		<item name="materialButtonStyle">@style/Widget.Material3.Button.Filled</item>
+		<item name="textInputStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>
+		
+		
+
+		<!-- Diálogos Material 3 -->
+		<item name="materialAlertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+		<item name="alertDialogCenterButtons">true</item>
+
+		<!-- Animaciones -->
+		<item name="android:windowContentTransitions">true</item>
+		<item name="android:activityOpenEnterAnimation">@anim/m3_motion_fade_enter</item>
+		<item name="android:activityOpenExitAnimation">@anim/m3_motion_fade_exit</item>
+
+		<!-- Personalizaciones -->
+		<!--<item name="android:statusBarColor">?attr/colorPrimary</item>
+		<item name="android:navigationBarColor">?attr/colorSurface</item>-->
+
+		<!-- Aplica el shape redondeado personalizado globalmente -->
+		<!--<item name="shapeAppearanceSmallComponent">@style/ShapeAppearanceOverlay.Custom.Medium</item>
+		<item name="shapeAppearanceMediumComponent">@style/ShapeAppearanceOverlay.Custom.Medium</item>
+		<item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Custom.Medium</item>-->
+
+		<!-- Tipografía global -->
+		<item name="fontFamily">@font/roboto_flex</item>
+
+		<!-- Widgets personalizados -->
+		<item name="android:buttonStyle">@style/btn_m3</item>
+		<item name="android:editTextStyle">@style/entry_m3</item>
+		<item name="android:spinnerStyle">@style/spinner_moderno</item>
+		<item name="android:textColorPrimary">@color/md_theme_onBackground</item>
+		<item name="android:editTextStyle">@style/TextInputLayout_Outlined</item>
+		<item name="android:toolbarStyle">@style/ToolbarStyle</item>
+	</style>
+
+	<!-- ================== TEMA OSCURO ================== -->
+	<style name="AppTheme.Dark" parent="@style/Theme.Material3.Dark.NoActionBar">
+		<item name="colorPrimary">@color/md_theme_primary</item>
+		<item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+		<item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+		<item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+		<item name="colorSecondary">@color/md_theme_secondary</item>
+		<item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+		<item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+		<item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+		<item name="colorTertiary">@color/md_theme_tertiary</item>
+		<item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+		<item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+		<item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+		<item name="colorError">@color/md_theme_error</item>
+		<item name="colorOnError">@color/md_theme_onError</item>
+		<item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+		<item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+		<item name="android:colorBackground">@color/md_theme_background</item>
+		<item name="colorOnBackground">@color/md_theme_onBackground</item>
+		<item name="colorSurface">@color/md_theme_surface</item>
+		<item name="colorOnSurface">@color/md_theme_onSurface</item>
+		<item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+		<item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+		<item name="colorOutline">@color/md_theme_outline</item>
+		<item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
+		<item name="colorSurfaceInverse">@color/md_theme_inverseSurface</item>
+		<item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface</item>
+		<item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
+		<item name="colorPrimaryFixed">@color/md_theme_primaryFixed</item>
+		<item name="colorOnPrimaryFixed">@color/md_theme_onPrimaryFixed</item>
+		<item name="colorPrimaryFixedDim">@color/md_theme_primaryFixedDim</item>
+		<item name="colorOnPrimaryFixedVariant">@color/md_theme_onPrimaryFixedVariant</item>
+		<item name="colorSecondaryFixed">@color/md_theme_secondaryFixed</item>
+		<item name="colorOnSecondaryFixed">@color/md_theme_onSecondaryFixed</item>
+		<item name="colorSecondaryFixedDim">@color/md_theme_secondaryFixedDim</item>
+		<item name="colorOnSecondaryFixedVariant">@color/md_theme_onSecondaryFixedVariant</item>
+		<item name="colorTertiaryFixed">@color/md_theme_tertiaryFixed</item>
+		<item name="colorOnTertiaryFixed">@color/md_theme_onTertiaryFixed</item>
+		<item name="colorTertiaryFixedDim">@color/md_theme_tertiaryFixedDim</item>
+		<item name="colorOnTertiaryFixedVariant">@color/md_theme_onTertiaryFixedVariant</item>
+		<item name="colorSurfaceDim">@color/md_theme_surfaceDim</item>
+		<item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
+		<item name="colorSurfaceContainerLowest">@color/md_theme_surfaceContainerLowest</item>
+		<item name="colorSurfaceContainerLow">@color/md_theme_surfaceContainerLow</item>
+		<item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
+		<item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
+		<item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+
+		<item name="android:forceDarkAllowed">false</item>
+		
+		<!-- Tipografía -->
+		<item name="fontFamily">@font/roboto_flex</item>
+
+		<!-- Widgets personalizados -->
+		<!--<item name="android:buttonStyle">@style/btn_m3</item>
+		<item name="android:editTextStyle">@style/entry_m3</item>
+		<item name="android:spinnerStyle">@style/spinner_moderno</item>
+		<item name="android:textColorPrimary">@color/md_theme_onBackground</item>-->
+		<!--<item name="android:editTextStyle">@style/TextInputLayout_Outlined</item>-->
+		<!--<item name="alertDialogTheme">@style/alertDialog</item>-->
+	</style>
+
+	<!-- ================== BOTONES ================== -->
+	<style name="Widget.Material3.Button.Filled" parent="@style/Widget.Material3.Button.ElevatedButton">
+		<item name="android:backgroundTint">@color/md_theme_primary</item>
+		<item name="android:textColor">@color/md_theme_onPrimary</item>
+		<item name="android:minHeight">48dp</item>
+		<item name="android:paddingLeft">16dp</item>
+		<item name="android:paddingRight">16dp</item>
+		<item name="android:elevation">2dp</item>
+		<item name="shapeAppearanceOverlay">@style/shape_btn_rounded</item>
+	</style>
+
+	<style name="btn_m3" parent="@style/Widget.Material3.Button.Filled" />
+
+	<style name="shape_btn_rounded">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">12dp</item>
+	</style>
+
+	<!-- ================== DIALOG ================== -->
+	<!-- 🔷 Overlay para AppBar -->
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
+
+	<!-- 🔶 Overlay para popups -->
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
+
+	<!-- ⚙️ Diálogo personalizado (para MaterialAlertDialogBuilder) -->
+	<style name="AppTheme.CustomAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:backgroundDimEnabled">true</item>
+		<item name="android:backgroundDimAmount">0.5</item>
+		<item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Custom.Medium</item>
+	</style>
+
+	<!-- 🟢 Esquinas redondeadas personalizadas -->
+	<style name="ShapeAppearanceOverlay.Custom.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">16dp</item>
+	</style>
+
+	<!-- Alias adicional para compatibilidad con referencias antiguas -->
+	<style name="ShapeAppearanceOverlay.Custom" parent="ShapeAppearance.Material3.MediumComponent">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">16dp</item>
+	</style>
+
+	<!-- 🔧 Define un estilo vacío para ShapeAppearanceOverlay (resuelve tu error actual) -->
+	<style name="ShapeAppearanceOverlay">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">8dp</item>
+	</style>
+
+
+	<!-- ================== INPUTS ================== -->
+	<style name="entry_m3" parent="@style/Widget.Material3.TextInputEditText.OutlinedBox">
+		<item name="android:textColor">@color/md_theme_onSurface</item>
+		<item name="android:backgroundTint">@color/md_theme_surfaceVariant</item>
+		<item name="shapeAppearanceOverlay">@style/shape_entry_rounded</item>
+		<item name="android:padding">12dp</item>
+		<item name="android:layout_height">56dp</item>
+	</style>
+
+	<style name="shape_entry_rounded">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">8dp</item>
+	</style>
+
+	<style name="TextInputLayout_Outlined" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+		<item name="android:textColorHint">@color/hint_color</item>
+		<item name="boxBackgroundMode">outline</item>
+		<item name="boxStrokeColor">@color/outline_active</item>
+		<item name="boxStrokeWidth">1.5dp</item>
+		<item name="boxStrokeWidthFocused">2dp</item>
+		<item name="boxCornerRadiusTopStart">12dp</item>
+		<item name="boxCornerRadiusTopEnd">12dp</item>
+		<item name="boxCornerRadiusBottomStart">12dp</item>
+		<item name="boxCornerRadiusBottomEnd">12dp</item>
+	</style>
+
+	<!-- ================== SPINNER ================== -->
+	<style name="spinner_moderno" parent="@style/Widget.AppCompat.Spinner">
+		<item name="android:background">@drawable/bg_spinner_moderno</item>
+		<item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
+		<item name="android:padding">8dp</item>
+		<item name="android:popupBackground">@color/md_theme_surfaceContainer</item>
+		<item name="android:dropDownVerticalOffset">4dp</item>
+	</style>
+
+	<!-- ================== CARDS ================== -->
+	<style name="card_m3" parent="@style/Widget.Material3.CardView.Elevated">
+		<item name="cardBackgroundColor">@color/md_theme_surfaceContainer</item>
+		<item name="cardCornerRadius">12dp</item>
+		<item name="cardElevation">4dp</item>
+		<item name="contentPadding">12dp</item>
+	</style>
+
+	<!-- ================== TOOLBAR ================== -->
+	<!--<style name="ToolbarStyle" parent="@style/Widget.Material3.Toolbar">
+		<item name="android:background">@color/md_theme_surfaceContainer</item>
+		<item name="titleTextColor">@color/md_theme_onSurface</item>
+		<item name="subtitleTextColor">@color/md_theme_onSurface</item>
+	</style>-->
+	<style name="ToolbarStyle" parent="@style/Widget.Material3.Toolbar">
+		<item name="android:background">@color/md_theme_surfaceContainer</item>
+		<item name="titleTextColor">@color/md_theme_onSurface</item>
+		<item name="subtitleTextColor">@color/md_theme_onSurface</item>
+
+		<!-- Mejoras clave -->
+		<item name="android:elevation">0dp</item>
+		<item name="maxButtonHeight">48dp</item>
+
+		<!-- Tint para íconos -->
+		<item name="navigationIconTint">@color/md_theme_onSurface</item>
+		<item name="iconTint">@color/md_theme_onSurface</item>
+
+		<!-- Tipografía Material 3 -->
+		<item name="titleTextAppearance">@style/TextAppearance.Material3.TitleMedium</item>
+		<item name="subtitleTextAppearance">@style/TextAppearance.Material3.BodyMedium</item>
+
+		<!-- Para mejor integración con sistema -->
+		<item name="android:fitsSystemWindows">true</item>
+
+		<!-- Padding interno consistente -->
+		<item name="contentInsetStart">0dp</item>
+		<item name="contentInsetEnd">0dp</item>
+
+		<item name="cornerRadius">12dp</item>
+		<item name="android:clipToOutline">true</item>
+
+		<item name="rippleColor">@color/md_theme_onSurface</item>
+	</style>
+
+	<!-- ================== LABELS ================== -->
+	<style name="label_primary" parent="@style/TextAppearance.Material3.TitleMedium">
+		<item name="android:textColor">@color/md_theme_onBackground</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="label_secondary" parent="@style/TextAppearance.Material3.BodyMedium">
+		<item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
+	</style>
+
+	<style name="label_error" parent="@style/TextAppearance.Material3.BodyMedium">
+		<item name="android:textColor">@color/md_theme_onError</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="label_dialog" parent="@style/TextAppearance.Material3.TitleMedium">
+		<item name="android:textColor">?attr/colorOnSurfaceInverse</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+
+
+
+</resources>
