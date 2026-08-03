@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://189.206.160.206:81/WebServiceSplitTrailer" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://189.206.160.206:81/WebServiceSplitTrailer" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://189.206.160.206:81/WebServiceSplitTrailer" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://189.206.160.206:81/WebServiceSplitTrailer" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://189.206.160.206:81/WebServiceSplitTrailer">
       <s:element name="InsertaDatosClientes">
@@ -254,6 +254,14 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="boolean" type="s:boolean" />
+      <s:element name="ArrayOfArmadores" nillable="true" type="tns:ArrayOfArmadores" />
+      <s:element name="ArrayOfPedidos" nillable="true" type="tns:ArrayOfPedidos" />
+      <s:element name="ArrayOfDetallePedidos" nillable="true" type="tns:ArrayOfDetallePedidos" />
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="ArrayOfInfoprod" nillable="true" type="tns:ArrayOfInfoprod" />
+      <s:element name="ArrayOfRecibosvencidos" nillable="true" type="tns:ArrayOfRecibosvencidos" />
+      <s:element name="ArrayOfRecibosdisponibles" nillable="true" type="tns:ArrayOfRecibosdisponibles" />
     </s:schema>
   </wsdl:types>
   <wsdl:message name="InsertaDatosClientesSoapIn">
@@ -328,6 +336,174 @@
   <wsdl:message name="ejecutarconsultaExcalarSoapOut">
     <wsdl:part name="parameters" element="tns:ejecutarconsultaExcalarResponse" />
   </wsdl:message>
+  <wsdl:message name="InsertaDatosClientesHttpGetIn">
+    <wsdl:part name="nom" type="s:string" />
+    <wsdl:part name="tel" type="s:string" />
+    <wsdl:part name="ciu" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="InsertaDatosClientesHttpGetOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerListHttpGetIn" />
+  <wsdl:message name="GetCustomerListHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfArmadores" />
+  </wsdl:message>
+  <wsdl:message name="TraePedidosHttpGetIn">
+    <wsdl:part name="cve_cliente" type="s:string" />
+    <wsdl:part name="fecha_trailer" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraePedidosHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPedidos" />
+  </wsdl:message>
+  <wsdl:message name="TraeDetallePedidosHttpGetIn">
+    <wsdl:part name="placa" type="s:string" />
+    <wsdl:part name="fecha_trailer" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeDetallePedidosHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfDetallePedidos" />
+  </wsdl:message>
+  <wsdl:message name="validaetiquetaleidaHttpGetIn">
+    <wsdl:part name="placa" type="s:string" />
+    <wsdl:part name="fecha_trailer" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="validaetiquetaleidaHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfDetallePedidos" />
+  </wsdl:message>
+  <wsdl:message name="InsertarNonQueryHttpGetIn">
+    <wsdl:part name="consulta" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="InsertarNonQueryHttpGetOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="validarcajaHttpGetIn">
+    <wsdl:part name="cadena" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="validarcajaHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidaCajaPreesplitHttpGetIn">
+    <wsdl:part name="cadena" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidaCajaPreesplitHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfoOrdenHttpGetIn">
+    <wsdl:part name="diascad" type="s:string" />
+    <wsdl:part name="mtip" type="s:string" />
+    <wsdl:part name="mcod" type="s:string" />
+    <wsdl:part name="mfol" type="s:string" />
+    <wsdl:part name="mtar" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfoOrdenHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfInfoprod" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfosurprodHttpGetIn">
+    <wsdl:part name="mtip" type="s:string" />
+    <wsdl:part name="mcod" type="s:string" />
+    <wsdl:part name="mfol" type="s:string" />
+    <wsdl:part name="mtar" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfosurprodHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRecibosvencidos" />
+  </wsdl:message>
+  <wsdl:message name="TraerecibosdisponiblesHttpGetIn">
+    <wsdl:part name="diascad" type="s:string" />
+    <wsdl:part name="prod" type="s:string" />
+    <wsdl:part name="mtip" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraerecibosdisponiblesHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRecibosdisponibles" />
+  </wsdl:message>
+  <wsdl:message name="ejecutarconsultaExcalarHttpGetIn">
+    <wsdl:part name="cadena" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ejecutarconsultaExcalarHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="InsertaDatosClientesHttpPostIn">
+    <wsdl:part name="nom" type="s:string" />
+    <wsdl:part name="tel" type="s:string" />
+    <wsdl:part name="ciu" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="InsertaDatosClientesHttpPostOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerListHttpPostIn" />
+  <wsdl:message name="GetCustomerListHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfArmadores" />
+  </wsdl:message>
+  <wsdl:message name="TraePedidosHttpPostIn">
+    <wsdl:part name="cve_cliente" type="s:string" />
+    <wsdl:part name="fecha_trailer" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraePedidosHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPedidos" />
+  </wsdl:message>
+  <wsdl:message name="TraeDetallePedidosHttpPostIn">
+    <wsdl:part name="placa" type="s:string" />
+    <wsdl:part name="fecha_trailer" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeDetallePedidosHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfDetallePedidos" />
+  </wsdl:message>
+  <wsdl:message name="validaetiquetaleidaHttpPostIn">
+    <wsdl:part name="placa" type="s:string" />
+    <wsdl:part name="fecha_trailer" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="validaetiquetaleidaHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfDetallePedidos" />
+  </wsdl:message>
+  <wsdl:message name="InsertarNonQueryHttpPostIn">
+    <wsdl:part name="consulta" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="InsertarNonQueryHttpPostOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="validarcajaHttpPostIn">
+    <wsdl:part name="cadena" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="validarcajaHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidaCajaPreesplitHttpPostIn">
+    <wsdl:part name="cadena" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidaCajaPreesplitHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfoOrdenHttpPostIn">
+    <wsdl:part name="diascad" type="s:string" />
+    <wsdl:part name="mtip" type="s:string" />
+    <wsdl:part name="mcod" type="s:string" />
+    <wsdl:part name="mfol" type="s:string" />
+    <wsdl:part name="mtar" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfoOrdenHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfInfoprod" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfosurprodHttpPostIn">
+    <wsdl:part name="mtip" type="s:string" />
+    <wsdl:part name="mcod" type="s:string" />
+    <wsdl:part name="mfol" type="s:string" />
+    <wsdl:part name="mtar" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraeinfosurprodHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRecibosvencidos" />
+  </wsdl:message>
+  <wsdl:message name="TraerecibosdisponiblesHttpPostIn">
+    <wsdl:part name="diascad" type="s:string" />
+    <wsdl:part name="prod" type="s:string" />
+    <wsdl:part name="mtip" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="TraerecibosdisponiblesHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRecibosdisponibles" />
+  </wsdl:message>
+  <wsdl:message name="ejecutarconsultaExcalarHttpPostIn">
+    <wsdl:part name="cadena" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ejecutarconsultaExcalarHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
   <wsdl:portType name="WebSplitTrailerSoap">
     <wsdl:operation name="InsertaDatosClientes">
       <wsdl:input message="tns:InsertaDatosClientesSoapIn" />
@@ -376,6 +552,106 @@
     <wsdl:operation name="ejecutarconsultaExcalar">
       <wsdl:input message="tns:ejecutarconsultaExcalarSoapIn" />
       <wsdl:output message="tns:ejecutarconsultaExcalarSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WebSplitTrailerHttpGet">
+    <wsdl:operation name="InsertaDatosClientes">
+      <wsdl:input message="tns:InsertaDatosClientesHttpGetIn" />
+      <wsdl:output message="tns:InsertaDatosClientesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <wsdl:input message="tns:GetCustomerListHttpGetIn" />
+      <wsdl:output message="tns:GetCustomerListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <wsdl:input message="tns:TraePedidosHttpGetIn" />
+      <wsdl:output message="tns:TraePedidosHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <wsdl:input message="tns:TraeDetallePedidosHttpGetIn" />
+      <wsdl:output message="tns:TraeDetallePedidosHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <wsdl:input message="tns:validaetiquetaleidaHttpGetIn" />
+      <wsdl:output message="tns:validaetiquetaleidaHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <wsdl:input message="tns:InsertarNonQueryHttpGetIn" />
+      <wsdl:output message="tns:InsertarNonQueryHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <wsdl:input message="tns:validarcajaHttpGetIn" />
+      <wsdl:output message="tns:validarcajaHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <wsdl:input message="tns:ValidaCajaPreesplitHttpGetIn" />
+      <wsdl:output message="tns:ValidaCajaPreesplitHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <wsdl:input message="tns:TraeinfoOrdenHttpGetIn" />
+      <wsdl:output message="tns:TraeinfoOrdenHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <wsdl:input message="tns:TraeinfosurprodHttpGetIn" />
+      <wsdl:output message="tns:TraeinfosurprodHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <wsdl:input message="tns:TraerecibosdisponiblesHttpGetIn" />
+      <wsdl:output message="tns:TraerecibosdisponiblesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <wsdl:input message="tns:ejecutarconsultaExcalarHttpGetIn" />
+      <wsdl:output message="tns:ejecutarconsultaExcalarHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WebSplitTrailerHttpPost">
+    <wsdl:operation name="InsertaDatosClientes">
+      <wsdl:input message="tns:InsertaDatosClientesHttpPostIn" />
+      <wsdl:output message="tns:InsertaDatosClientesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <wsdl:input message="tns:GetCustomerListHttpPostIn" />
+      <wsdl:output message="tns:GetCustomerListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <wsdl:input message="tns:TraePedidosHttpPostIn" />
+      <wsdl:output message="tns:TraePedidosHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <wsdl:input message="tns:TraeDetallePedidosHttpPostIn" />
+      <wsdl:output message="tns:TraeDetallePedidosHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <wsdl:input message="tns:validaetiquetaleidaHttpPostIn" />
+      <wsdl:output message="tns:validaetiquetaleidaHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <wsdl:input message="tns:InsertarNonQueryHttpPostIn" />
+      <wsdl:output message="tns:InsertarNonQueryHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <wsdl:input message="tns:validarcajaHttpPostIn" />
+      <wsdl:output message="tns:validarcajaHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <wsdl:input message="tns:ValidaCajaPreesplitHttpPostIn" />
+      <wsdl:output message="tns:ValidaCajaPreesplitHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <wsdl:input message="tns:TraeinfoOrdenHttpPostIn" />
+      <wsdl:output message="tns:TraeinfoOrdenHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <wsdl:input message="tns:TraeinfosurprodHttpPostIn" />
+      <wsdl:output message="tns:TraeinfosurprodHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <wsdl:input message="tns:TraerecibosdisponiblesHttpPostIn" />
+      <wsdl:output message="tns:TraerecibosdisponiblesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <wsdl:input message="tns:ejecutarconsultaExcalarHttpPostIn" />
+      <wsdl:output message="tns:ejecutarconsultaExcalarHttpPostOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WebSplitTrailerSoap" type="tns:WebSplitTrailerSoap">
@@ -600,12 +876,240 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="WebSplitTrailerHttpGet" type="tns:WebSplitTrailerHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="InsertaDatosClientes">
+      <http:operation location="/InsertaDatosClientes" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <http:operation location="/GetCustomerList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <http:operation location="/TraePedidos" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <http:operation location="/TraeDetallePedidos" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <http:operation location="/validaetiquetaleida" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <http:operation location="/InsertarNonQuery" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <http:operation location="/validarcaja" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <http:operation location="/ValidaCajaPreesplit" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <http:operation location="/TraeinfoOrden" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <http:operation location="/Traeinfosurprod" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <http:operation location="/Traerecibosdisponibles" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <http:operation location="/ejecutarconsultaExcalar" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebSplitTrailerHttpPost" type="tns:WebSplitTrailerHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="InsertaDatosClientes">
+      <http:operation location="/InsertaDatosClientes" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerList">
+      <http:operation location="/GetCustomerList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraePedidos">
+      <http:operation location="/TraePedidos" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeDetallePedidos">
+      <http:operation location="/TraeDetallePedidos" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validaetiquetaleida">
+      <http:operation location="/validaetiquetaleida" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarNonQuery">
+      <http:operation location="/InsertarNonQuery" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarcaja">
+      <http:operation location="/validarcaja" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidaCajaPreesplit">
+      <http:operation location="/ValidaCajaPreesplit" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TraeinfoOrden">
+      <http:operation location="/TraeinfoOrden" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traeinfosurprod">
+      <http:operation location="/Traeinfosurprod" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Traerecibosdisponibles">
+      <http:operation location="/Traerecibosdisponibles" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ejecutarconsultaExcalar">
+      <http:operation location="/ejecutarconsultaExcalar" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="WebSplitTrailer">
     <wsdl:port name="WebSplitTrailerSoap" binding="tns:WebSplitTrailerSoap">
-      <soap:address location="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
+      <soap:address location="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
     </wsdl:port>
     <wsdl:port name="WebSplitTrailerSoap12" binding="tns:WebSplitTrailerSoap12">
-      <soap12:address location="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
+      <soap12:address location="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebSplitTrailerHttpGet" binding="tns:WebSplitTrailerHttpGet">
+      <http:address location="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebSplitTrailerHttpPost" binding="tns:WebSplitTrailerHttpPost">
+      <http:address location="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

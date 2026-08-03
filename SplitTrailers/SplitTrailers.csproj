@@ -679,10 +679,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx%3fop=GetCustomerList">
+    <WebReferenceUrl Include="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\SplittrailerReferencia\</RelPath>
-      <UpdateFromURL>http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx%3fop=GetCustomerList</UpdateFromURL>
+      <UpdateFromURL>http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

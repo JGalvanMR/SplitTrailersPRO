@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
-  <contractRef ref="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx?wsdl" docRef="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
-  <soap address="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" xmlns:q1="http://189.206.160.206:81/WebServiceSplitTrailer" binding="q1:WebSplitTrailerSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-  <soap address="http://192.168.123.4:81/WebServiceSplitTrailer/WebSplitTrailer.asmx" xmlns:q2="http://189.206.160.206:81/WebServiceSplitTrailer" binding="q2:WebSplitTrailerSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+<discovery xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx?wsdl" docRef="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" xmlns:q1="http://189.206.160.206:81/WebServiceSplitTrailer" binding="q1:WebSplitTrailerSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://189.206.160.206:81/EmbarquesApk/WebServiceSplitTrailer/WebSplitTrailer.asmx" xmlns:q2="http://189.206.160.206:81/WebServiceSplitTrailer" binding="q2:WebSplitTrailerSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
 </discovery>
