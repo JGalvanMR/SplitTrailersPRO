@@ -8,9 +8,11 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Google.Android.Material.Dialog;
 using Java.Util;
+using SplitTrailers.Helpers; // <-- AGREGADO
 using SplitTrailers.Models;
 using SQLite;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -262,113 +264,40 @@ namespace SplitTrailers
 
             thisConnection.Close();
 
-            #region MATERIAL DIALOG - SOLICITUD DE REETIQUETADO ENVIADA
-            // Construimos el título con color azul y negritas
-            var titleSpannable = new SpannableStringBuilder("Solicitud de Reetiquetado Enviada");
-            titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5FBDD5")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-            titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-            // Construimos el mensaje con color y estilo
-            var mensajeSpannable = new SpannableStringBuilder("La solicitud de reimpresión se realizó correctamente.");
-            mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-            // Creamos el diálogo Material3 con tema visual consistente
-            var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-            builder.SetTitle(titleSpannable);
-            builder.SetIcon(Resource.Drawable.exito);
-            builder.SetMessage(mensajeSpannable);
-            builder.SetCancelable(false);
-
-            // Botón de acción
-            builder.SetPositiveButton("Entendido", (s, e) =>
-            {
-                myEditText.Text = "";
-                Spinner spinner = FindViewById<Spinner>(Resource.Id.spinner3);
-                Spinner spinnerT = FindViewById<Spinner>(Resource.Id.tarimareim);
-                Spinner spinnerC = FindViewById<Spinner>(Resource.Id.cajareim);
-
-                ds.Clear();
-                System.Collections.ArrayList listaFrutas = new System.Collections.ArrayList();
-
-                // Reinicio de datos de spinners
-                strFrutas = new String[] { "Ingrese un Folio válido" };
-                strTarima = new String[] { "Ingrese un Folio válido" };
-                strCajas = new String[] { "Ingrese un Folio válido" };
-
-                Collections.AddAll(listaFrutas, strFrutas);
-
-                comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strFrutas);
-                comboAdapterTarima = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strTarima);
-                comboAdapterCaja = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strCajas);
-
-                spinner.Adapter = comboAdapter;
-                spinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
-
-                spinnerT.Adapter = comboAdapterTarima;
-                spinnerT.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnertarima_ItemSelected);
-
-                spinnerC.Adapter = comboAdapterCaja;
-                spinnerC.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnercaja_ItemSelected);
-            });
-
-            // Crear y mostrar el diálogo
-            var dialog = builder.Create();
-            dialog.Show();
-
-            // Personalización del botón luego de mostrar el diálogo
-            dialog.Window.DecorView.Post(() =>
-            {
-                var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                positiveButton?.SetTextColor(Color.ParseColor("#0277BD")); // Azul Material
-                positiveButton?.SetAllCaps(false);
-            });
-            #endregion
-
-
-            /*var queryqe = detalle_pedidos.db.Table<productoscapturados>();
-            foreach (var captu in queryqe)
-            {
-                if (captu.folio == folio && captu.prod_clave == prod_clave && captu.tarima == tarima && captu.caja == caja)
+            // Diálogo de éxito con Helper
+            DialogHelper.ShowSuccessDialog(this,
+                message: "La solicitud de reimpresión se realizó correctamente.",
+                positiveText: "Entendido",
+                positiveAction: (s, e) =>
                 {
-                    Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
-                    alertDialog.SetTitle(Html.FromHtml("<font color='#dc3545' size = 10>La caja de este producto ya se agrego</font>"));
-                    alertDialog.SetIcon(Resource.Drawable.no);
-                    alertDialog.SetNeutralButton("Ok", delegate {
-                        alertDialog.Dispose();
-                    });
-                    alertDialog.Show();
-                    find = true;
-                    box.RequestFocus();
-                }
-            }*/
+                    myEditText.Text = "";
+                    Spinner spinner = FindViewById<Spinner>(Resource.Id.spinner3);
+                    Spinner spinnerT = FindViewById<Spinner>(Resource.Id.tarimareim);
+                    Spinner spinnerC = FindViewById<Spinner>(Resource.Id.cajareim);
 
+                    ds.Clear();
+                    System.Collections.ArrayList listaFrutas = new System.Collections.ArrayList();
 
-            /*if (find == false)
-            {
-                DataRow row = detalle_pedidos.productos_leidos.NewRow();
-                row["folio"] = folio;
-                row["prod_clave"] = prod_clave.ToUpper();
-                row["tipo"] = tipo;
-                row["tarima"] = tarima;
-                row["caja"] = caja;
-                row["num_cajas"] = 1;
-                thisConnection.Open();
-                cmnd = thisConnection.CreateCommand();
-                cmnd.CommandText = "select prod_nombre from tb_cat_producto where prod_clave = '" + prod_clave.ToUpper() + "'";
-                string prod_nombre = Convert.ToString(cmnd.ExecuteScalar()).Trim();
-                thisConnection.Close();
-                //detalle_pedidos.productos_leidos.Rows.Add(row);
-                productoscapturados productoscapturados = new productoscapturados { folio = folio, prod_clave = prod_clave.ToUpper(), tipo = tipo, tarima = tarima, tarima_final = 0, caja = caja, num_cajas = 1, prod_nombre = prod_nombre.Trim(), orden_venta = Pedidos.pedido.ToString().Trim(), fecha_captura = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), Origen = "M" };
-                //Registra en la base de datos SQLite
-                detalle_pedidos.db.Insert(productoscapturados);
-                Toast.MakeText(this, "El producto se agrego con éxito", ToastLength.Short).Show();
-                prod_clave = ""; tarima = 0; folio = ""; caja = 0; tipo = "PTC";
-                find = false;
-                box.Text = "";
-                tar.Text = "";
+                    // Reinicio de datos de spinners
+                    strFrutas = new String[] { "Ingrese un Folio válido" };
+                    strTarima = new String[] { "Ingrese un Folio válido" };
+                    strCajas = new String[] { "Ingrese un Folio válido" };
 
-                fol.RequestFocus();
-            }*/
+                    Collections.AddAll(listaFrutas, strFrutas);
+
+                    comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strFrutas);
+                    comboAdapterTarima = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strTarima);
+                    comboAdapterCaja = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strCajas);
+
+                    spinner.Adapter = comboAdapter;
+                    spinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
+
+                    spinnerT.Adapter = comboAdapterTarima;
+                    spinnerT.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnertarima_ItemSelected);
+
+                    spinnerC.Adapter = comboAdapterCaja;
+                    spinnerC.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnercaja_ItemSelected);
+                });
         }
 
 
@@ -649,52 +578,11 @@ namespace SplitTrailers
 
             if (estado == "C")
             {
-                #region MATERIAL DIALOG
-                // Construimos el título con color y negritas
-                var titleSpannable = new SpannableStringBuilder("Orden de Producción Cancelada");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5FBDD5")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con color y negritas para palabras clave
-                var mensajeSpannable = new SpannableStringBuilder();
-                mensajeSpannable.Append("La solicitud de ");
-                int startReimp = mensajeSpannable.Length();
-                mensajeSpannable.Append("reimpresión");
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startReimp, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                mensajeSpannable.Append(" no se puede realizar debido a que la ");
-                int startOrden = mensajeSpannable.Length();
-                mensajeSpannable.Append("orden de producción");
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startOrden, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                mensajeSpannable.Append(" fue cancelada.");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Creamos el diálogo con el tema Material Design 3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.exito);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botón principal
-                builder.SetPositiveButton("Entendido", (s, e) =>
-                {
-                    myEditText.Text = "";
-                });
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalizar el botón después de mostrarlo
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    positiveButton?.SetTextColor(Color.ParseColor("#5FBDD5")); // Azul coherente con el título
-                    positiveButton?.SetAllCaps(false);
-                });
-                #endregion
+                // Diálogo de advertencia con Helper
+                DialogHelper.ShowWarningDialog(this,
+                    message: "La solicitud de reimpresión no se puede realizar debido a que la orden de producción fue cancelada.",
+                    positiveText: "Entendido",
+                    positiveAction: (s, e) => { myEditText.Text = ""; });
                 return;
             }
 
@@ -752,52 +640,11 @@ namespace SplitTrailers
 
             if (estado == "F")
             {
-                #region MATERIAL DIALOG
-                // Construimos el título con color y negritas
-                var titleSpannable = new SpannableStringBuilder("Recepción de Producto Terminado Cancelada");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5FBDD5")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con color y negritas para partes clave
-                var mensajeSpannable = new SpannableStringBuilder();
-                mensajeSpannable.Append("La solicitud de ");
-                int startReimp = mensajeSpannable.Length();
-                mensajeSpannable.Append("reimpresión");
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startReimp, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                mensajeSpannable.Append(" no se puede realizar debido a que la ");
-                int startRecep = mensajeSpannable.Length();
-                mensajeSpannable.Append("recepción de producto terminado");
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startRecep, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                mensajeSpannable.Append(" fue cancelada.");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Creamos el diálogo con Material Design 3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.exito);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botón principal
-                builder.SetPositiveButton("Entendido", (s, e) =>
-                {
-                    myEditText.Text = "";
-                });
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalizar el botón después de mostrarlo
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    positiveButton?.SetTextColor(Color.ParseColor("#5FBDD5")); // Azul Material coherente
-                    positiveButton?.SetAllCaps(false);
-                });
-                #endregion
+                // Diálogo de advertencia con Helper
+                DialogHelper.ShowWarningDialog(this,
+                    message: "La solicitud de reimpresión no se puede realizar debido a que la recepción de producto terminado fue cancelada.",
+                    positiveText: "Entendido",
+                    positiveAction: (s, e) => { myEditText.Text = ""; });
                 return;
             }
 
@@ -866,7 +713,7 @@ namespace SplitTrailers
         {
             /*string Cadena = "Select fecha_cap From tb_Det_Etiqueta " +
                            "Where Eti_Lectura = '" + cadena + "' AND Estatus != 'C'";
-            SqlCommand cmd = new SqlCommand(Cadena, thisConnection); ValidaCajasolreetiqueta*/
+            SqlCommand cmd = new SqlCommand(Cadena, thisConnection); */
             string Valor = "";
 
             DataRow[] datos = foliosleidos.Select("Eti_Lectura = '" + cadena + "'");
