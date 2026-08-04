@@ -23,6 +23,7 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
+using SplitTrailers.Helpers;
 
 namespace SplitTrailers
 {
@@ -375,9 +376,37 @@ namespace SplitTrailers
                 }
                 */
                 thisConnection.Close();
-
-                #region MATERIAL DIALOG
                 RunOnUiThread(() =>
+                {
+                    DialogHelper.ShowSuccessDialog(this,
+                        message: "Las cajas han sido liberadas correctamente.\n\nFavor de acomodarlas donde corresponda.",
+                        positiveText: "OK",
+                        positiveAction: (s, e) =>
+                        {
+                            try
+                            {
+                                db.Query<Pedidos>("DELETE FROM [Pedidos]");
+                                db.Query<ConPedidos>("DELETE FROM [ConPedidos]");
+                                db.Query<xLote>("DELETE FROM [xLote]");
+                                db.Query<xLoteFinal>("DELETE FROM [xLoteFinal]");
+                                db.Query<xprod>("DELETE FROM [xprod]");
+                                var intent = new Intent(this, typeof(SolicitarPed));
+                                intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
+                                intent.PutExtra("cvresponsable", cveresponsplit.ToString());
+                                intent.PutExtra("responsable", responsplit.ToString());
+                                StartActivity(intent);
+                                Finish();
+                            }
+                            catch (Java.Lang.Exception ex)
+                            {
+                                Toast.MakeText(this, "Error al limpiar datos: " + ex.Message, ToastLength.Long).Show();
+                            }
+                        });
+                    Toast.MakeText(this, "Etiquetas liberadas correctamente.", ToastLength.Long).Show();
+                    progressDialog.Hide();
+                });
+                #region MATERIAL DIALOG
+                /*RunOnUiThread(() =>
                 {
                     var alertDialog = new AndroidX.AppCompat.App.AlertDialog.Builder(this);
                     alertDialog.SetTitle(Html.FromHtml("<font color='#28A745'><b>ETIQUETAS LIBERADAS</b></font>", FromHtmlOptions.ModeLegacy));
@@ -420,7 +449,7 @@ namespace SplitTrailers
                     // Toast y ocultar progress dialog
                     Toast.MakeText(this, "Etiquetas liberadas correctamente.", ToastLength.Long).Show();
                     progressDialog.Hide();
-                });
+                });*/
                 #endregion
 
                 #region ALERT GIALOG
@@ -732,8 +761,14 @@ namespace SplitTrailers
                     }
                     else
                     {
-                        #region MATERIAL DIALOG
                         RunOnUiThread(() =>
+                        {
+                            DialogHelper.ShowErrorDialog(this,
+                                message: "No existen productos capturados para validar.",
+                                positiveText: "OK");
+                        });
+                        #region MATERIAL DIALOG
+                        /*RunOnUiThread(() =>
                         {
                             var alertDialog = new AndroidX.AppCompat.App.AlertDialog.Builder(this);
                             alertDialog.SetTitle(Html.FromHtml("<font color='#DC3545'><b>SIN PRODUCTOS CAPTURADOS</b></font>", FromHtmlOptions.ModeLegacy));
@@ -752,7 +787,7 @@ namespace SplitTrailers
                             // Personalización visual del botón (color, estilo)
                             dialog.GetButton((int)Android.Content.DialogButtonType.Positive)?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                             dialog.GetButton((int)Android.Content.DialogButtonType.Positive)?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
 
                         #region ALERT DIALOG
@@ -832,6 +867,51 @@ namespace SplitTrailers
             {
                 if (mensajeactual == mensaje)
                 {
+                    RunOnUiThread(() =>
+                    {
+                        if (captu.titulo.Trim() == "Existe un folio anterior disponible")
+                        {
+                            DialogHelper.ShowWarningDialog(this,
+                                message: captu.mensaje,
+                                positiveText: "Ok",
+                                positiveAction: (s, e) => ImprimirDialogs(mensaje + 1));
+                        }
+                        else if (captu.titulo.Trim() == "Etiqueta ya capturada" || captu.titulo.Trim() == "Etiqueta ya capturada En PreSplit")
+                        {
+                            DialogHelper.ShowInfoDialog(this,
+                                title: captu.titulo,
+                                message: captu.mensaje,
+                                positiveText: "Ok",
+                                iconRes: Resource.Drawable.Info,
+                                positiveAction: (s, e) => ImprimirDialogs(mensaje + 1));
+                        }
+                        else if (captu.titulo.Trim() == "Tarima Surtida Completamente")
+                        {
+                            DialogHelper.ShowWarningDialog(this,
+                                message: captu.mensaje,
+                                positiveText: "Ok",
+                                positiveAction: (s, e) => ImprimirDialogs(mensaje + 1));
+                        }
+                        else
+                        {
+                            DialogHelper.ShowErrorDialog(this,
+                                message: captu.mensaje,
+                                positiveText: "Ok",
+                                positiveAction: (s, e) => ImprimirDialogs(mensaje + 1));
+                        }
+                    });
+                }
+                mensajeactual++;
+            }
+        }
+        private void ImprimirDialogsLEGACY(int mensaje)
+        {
+            int mensajeactual = 0;
+            var query = db.Table<Mensajes>();
+            foreach (var captu in query)
+            {
+                if (mensajeactual == mensaje)
+                {
                     if (captu.titulo.Trim() == "Existe un folio anterior disponible")
                     {
                         #region MATERIAL DIALOG
@@ -867,6 +947,7 @@ namespace SplitTrailers
                             btn?.SetAllCaps(false);
                         });
                         #endregion
+
                         #region ALERT DIALOG
                         /*Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
                         alertDialog.SetTitle(Html.FromHtml("<font color='#ffc107' size = 10>" + captu.titulo.ToString() + "</font>"));
@@ -1208,8 +1289,23 @@ namespace SplitTrailers
                 }
                 catch (System.Exception ex)
                 {
-                    #region MATERIAL DIALOG
                     RunOnUiThread(() =>
+                    {
+                        DialogHelper.ShowInfoDialog(this,
+                            title: "Error en la estructura de Etiqueta",
+                            message: $"La etiqueta del producto {mcod} - {NOmprod} Recibo: {mfol} / Tarima {mtar} / Caja: {mcaj} " +
+                                      "contiene un error en la tarima, recibo o folio, favor de informar al supervisor, validar la información, " +
+                                      "retirar y reetiquetar la caja y leer la nueva etiqueta",
+                            positiveText: "OK",
+                            iconRes: Resource.Drawable.Info,
+                            positiveAction: (s, e) =>
+                            {
+                                db.Query<xprod>($"DELETE FROM [xprod] WHERE Tipo = '{mtip}' AND Folio = '{mfol}' AND Codigo = '{mcod}' AND Tarima = '{mtar}' AND Cajas = '{mcaj}'");
+                                db.Query<ConPedidos>($"UPDATE [ConPedidos] SET surtido = surtido - 1 WHERE prod_clave = '{mcod.Trim()}'");
+                            });
+                    });
+                    #region MATERIAL DIALOG
+                    /*RunOnUiThread(() =>
                     {
                         var alertDialog = new AndroidX.AppCompat.App.AlertDialog.Builder(this);
 
@@ -1257,7 +1353,7 @@ namespace SplitTrailers
                         var btn = dialog.GetButton((int)Android.Content.DialogButtonType.Positive);
                         btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                         btn?.SetAllCaps(false);
-                    });
+                    });*/
                     #endregion
 
                     #region ALERT DIALOG
@@ -2210,8 +2306,20 @@ namespace SplitTrailers
                 // Validar si está en modo concentrado
                 if (mconcen == "2")
                 {
-                    #region MATERIAL DIALOG
                     RunOnUiThread(() =>
+                    {
+                        DialogHelper.ShowWarningDialog(this,
+                            message: "Está consultando el modo concentrado. No es posible capturar códigos en este modo.",
+                            positiveText: "Entendido",
+                            positiveAction: (s, e) =>
+                            {
+                                foliocaptura.SetSelection(0, foliocaptura.Text.Length);
+                                foliocaptura.RequestFocus();
+                                valorfinal = foliocaptura.Text;
+                            });
+                    });
+                    #region MATERIAL DIALOG
+                    /*RunOnUiThread(() =>
                     {
                         // Construimos el título con color y negritas
                         var titleSpannable = new SpannableStringBuilder("Modo Concentrado Activado");
@@ -2252,7 +2360,7 @@ namespace SplitTrailers
                             positiveButton?.SetTextColor(Color.ParseColor("#DC3545"));
                             positiveButton?.SetAllCaps(false);
                         });
-                    });
+                    });*/
                     #endregion
 
                     e.Handled = true; // Evita que el Enter inserte salto de línea

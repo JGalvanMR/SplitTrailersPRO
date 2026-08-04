@@ -8,6 +8,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Google.Android.Material.Dialog;
 using Plugin.DeviceInfo;
+using SplitTrailers.Helpers; // <--- Agregado
 using SplitTrailers.Modal;
 using SplitTrailers.Models;
 using SQLite;
@@ -16,7 +17,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using SplitTrailers.Helpers;
 
 namespace SplitTrailers
 {
@@ -38,7 +38,6 @@ namespace SplitTrailers
         TextView textoSplit;
         Button CapturarCancelados;
 
-        //Radio button
         RadioButton splitCompleto;
         RadioButton SplitParcial;
 
@@ -63,10 +62,8 @@ namespace SplitTrailers
             CapturarCancelados = FindViewById<Button>(Resource.Id.capturacancelacion);
             textoSplit = FindViewById<TextView>(Resource.Id.textosplit);
 
-
             splitCompleto = FindViewById<RadioButton>(Resource.Id.radio_Completa);
             SplitParcial = FindViewById<RadioButton>(Resource.Id.radio_Parcial);
-
 
             if (parcial == "B")
             {
@@ -74,76 +71,29 @@ namespace SplitTrailers
             }
 
             CapturarCancelados.Visibility = ViewStates.Invisible;
-
             CapturarCancelados.Click += Btnlogin_Click;
 
             pedidocan.EditorAction += (sender, e) =>
             {
                 if (e.ActionId == ImeAction.Done || e.ActionId == ImeAction.Next)
                 {
-
                     if (splitCompleto.Checked == true)
                     {
-
                         thisConnection.Open();
                         string Cadena = "Select emb_folio from tb_mstr_embarque Where emb_folio = '" + pedidocan.Text.Trim() + "' AND sts = 'T' AND hora_fin != '--:--'";
                         SqlCommand embcerr = new SqlCommand(Cadena, thisConnection);
                         string embcer = Convert.ToString(embcerr.ExecuteScalar());
                         thisConnection.Close();
+
                         if (embcer.Trim().Length > 0)
                         {
-                            #region MATERIAL DIALOG
+                            // Diálogo de embarque cerrado (advertencia)
                             RunOnUiThread(() =>
                             {
-                                var alertDialog = new AndroidX.AppCompat.App.AlertDialog.Builder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-
-                                // Título en amarillo ámbar
-                                alertDialog.SetTitle(Html.FromHtml(
-                                    "<font color='#FFC409'><b>Embarque Cerrado</b></font>",
-                                    FromHtmlOptions.ModeLegacy
-                                ));
-
-                                alertDialog.SetIcon(Resource.Drawable.warning);
-
-                                // Mensaje con tono ligeramente más claro
-                                alertDialog.SetMessage(Html.FromHtml(
-                                    $"<font color='#FFCA22'>El Embarque: {pedidocan.Text.Trim()} está cerrado y no se puede cargar</font>",
-                                    FromHtmlOptions.ModeLegacy
-                                ));
-
-                                alertDialog.SetCancelable(false);
-
-                                // Botón principal
-                                alertDialog.SetPositiveButton(Html.FromHtml(
-                                    "<font color='#FFC409'><b>OK</b></font>",
-                                    FromHtmlOptions.ModeLegacy
-                                ), delegate
-                                {
-                                    alertDialog.Dispose();
-                                });
-
-                                var dialog = alertDialog.Create();
-                                dialog.Show();
-
-                                // Personalización del botón
-                                var btn = dialog.GetButton((int)Android.Content.DialogButtonType.Positive);
-                                btn?.SetTextColor(Android.Graphics.Color.ParseColor("#FFC409"));
-                                btn?.SetAllCaps(false);
+                                DialogHelper.ShowWarningDialog(this,
+                                    message: $"El Embarque: {pedidocan.Text.Trim()} está cerrado y no se puede cargar",
+                                    positiveText: "OK");
                             });
-                            #endregion
-
-                            #region ALERT DIALOG
-                            /*Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
-                            alertDialog.SetTitle(Html.FromHtml("<font color='#ffc409' size = 10>Embarque Cerrado</font>"));
-                            alertDialog.SetIcon(Resource.Drawable.warning);
-                            alertDialog.SetCancelable(false);
-                            alertDialog.SetMessage(Html.FromHtml("<font color='#ffca22' size = 10>El Embarque: " + pedidocan.Text.Trim() + " Esta Cerrado y no se puede cargar</font>"));
-                            alertDialog.SetNeutralButton("Ok", delegate
-                            {
-                                alertDialog.Dispose();
-                            });
-                            alertDialog.Show();*/
-                            #endregion
 
                             pedidocan.Text = "";
                             pedidocan.RequestFocus();
@@ -153,37 +103,31 @@ namespace SplitTrailers
                         List<FlimStarInfo> lstFlimStar = ConsSplit();
                         var gvObject = FindViewById<GridView>(Resource.Id.gvCtrCancel);
                         gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-                        gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked); ; //detalle_pedido
+                        gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked);
 
                         pedidocan.SetSelection(0, pedidocan.Text.Length);
                         pedidocan.RequestFocus();
-
-
                     }
                     else
                     {
-
                         db.Query<Pedidos>("delete from  [Pedidos]");
                         db.Query<ConPedidos>("delete from  [ConPedidos]");
                         db.Query<xLote>("delete from  [xLote]");
                         db.Query<xLoteFinal>("delete from  [xLoteFinal]");
                         db.Query<xprod>("delete from  [xprod]");
 
-
                         textoSplit.Text = "Detalle de Desfase En Split Capturado";
-
 
                         List<FlimStarInfo> lstFlimStar = ConsSplitParcial();
                         var gvObject = FindViewById<GridView>(Resource.Id.gvCtrCancel);
                         gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-                        gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked); ; //detalle_pedido
+                        gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked);
 
                         pedidocan.SetSelection(0, pedidocan.Text.Length);
                         pedidocan.RequestFocus();
                     }
                 }
             };
-
         }
 
         private void LoadConnection()
@@ -196,7 +140,6 @@ namespace SplitTrailers
 
             if (!exist)
             {
-                //Crea la tabla en base al modelo si es la primera vez
                 db.CreateTable<Pedidos>();
                 db.CreateTable<ConPedidos>();
                 db.CreateTable<xLote>();
@@ -209,7 +152,6 @@ namespace SplitTrailers
 
         void Btnlogin_Click(object sender, EventArgs e)
         {
-            //ConsPedSur(pedido.Text.ToString());
             Intent intent = new Intent(this, typeof(CancelarParcial));
             intent.PutExtra("cvresponsable", crcancelar.ToString());
             intent.PutExtra("pedidocancelar", pedidocan.Text.Trim());
@@ -217,10 +159,8 @@ namespace SplitTrailers
             intent.PutExtra("cveresponsplit", cveresponsplit.Trim());
             intent.PutExtra("imei", imei.Trim());
             intent.PutExtra("currentVersionName", currentVersionName.Trim());
-
             StartActivity(intent);
         }
-
 
         private void OnGridView_ItemClicked(object sender, AdapterView.ItemClickEventArgs e)
         {
@@ -228,68 +168,19 @@ namespace SplitTrailers
             {
                 split = e.View.FindViewById<TextView>(Resource.Id.txtName).Text;
                 split = split.Replace("Split Numero: ", "");
-
                 pedidocancelar = pedidocan.Text.Trim();
-                #region MATERIAL DIALOG
+
+                // Diálogo de confirmación para cancelar split
                 RunOnUiThread(() =>
                 {
-                    var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-
-                    // Título en rojo
-                    builder.SetTitle(Html.FromHtml(
-                        "<font color='#DC3545'><b>Cancelar Split</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ));
-
-                    builder.SetIcon(Resource.Drawable.question);
-
-                    // Mensaje en blanco
-                    builder.SetMessage(Html.FromHtml(
-                        $"<font color='#FFFFFF'>¿Desea Cancelar el Split Número {split}?</font>",
-                        FromHtmlOptions.ModeLegacy
-                    ));
-
-                    builder.SetCancelable(false);
-
-                    // Botón Sí
-                    builder.SetPositiveButton(Html.FromHtml(
-                        "<font color='#DC3545'><b>Sí</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ), SaveAction);
-
-                    // Botón No
-                    builder.SetNegativeButton(Html.FromHtml(
-                        "<font color='#DC3545'><b>No</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ), CancelaAction);
-
-                    var dialog = builder.Create();
-                    dialog.Show();
-
-                    // Personalizamos los botones después de mostrar el diálogo
-                    dialog.Window.DecorView.Post(() =>
-                    {
-                        var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                        positiveButton?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
-                        positiveButton?.SetAllCaps(false);
-
-                        var negativeButton = dialog.GetButton((int)DialogButtonType.Negative);
-                        negativeButton?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
-                        negativeButton?.SetAllCaps(false);
-                    });
+                    DialogHelper.ShowConfirmDialog(this,
+                        title: "Cancelar Split",
+                        message: $"¿Desea Cancelar el Split Número {split}?",
+                        positiveText: "Sí",
+                        negativeText: "No",
+                        positiveAction: SaveAction,
+                        negativeAction: CancelaAction);
                 });
-                #endregion
-
-                #region ALERT DIALOG
-                /*Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
-                alertDialog.SetTitle(Html.FromHtml("<font color='#dc3545' size = 10>Cancelar Split</font>"));
-                alertDialog.SetIcon(Resource.Drawable.question);
-                alertDialog.SetMessage(Html.FromHtml("<font color='#fff' size = 10>¿Desea Cancelar el Splir Numero " + split + "?</font>"));
-                alertDialog.SetPositiveButton(Html.FromHtml("<font face = 'Comic Sans MS, arial' color='#dc3545' size = '10'>Sí</font>"), SaveAction);
-                alertDialog.SetNegativeButton(Html.FromHtml("<font face = 'Comic Sans MS, arial' color='#dc3545' size = '10'>No</font>"), CancelaAction);
-                alertDialog.Create();
-                alertDialog.Show();*/
-                #endregion
             }
         }
 
@@ -300,16 +191,16 @@ namespace SplitTrailers
             string cadena = "";
             SqlCommand cmd;
 
-
             string Cadena = "Select * From tb_det_split WHERE emb_folio = '" + ordven.ToString() + "' AND tarima = '" + split.ToString() + "' AND estatus != 'C' ";
             SqlDataAdapter da = new SqlDataAdapter(Cadena, thisConnection);
             DataSet ds = new DataSet();
             da.Fill(ds, "Ped");
             DataTable Ped = ds.Tables["Ped"];
+
             foreach (DataRow row in Ped.Rows)
             {
                 string sts = row["estatus"].ToString().Trim();
-                string tarima = "";
+
                 if (row["tipo_rec"].ToString().Trim() == "PTC")
                 {
                     cadena = "UPDATE TB_DET_TRAZABILIDAD SET SURTIDO = SURTIDO - " + row["cajas"].ToString().Trim() + ",  pti_estatus_sur = '' WHERE PROD_CLAVE = '" + row["prod_clave"].ToString().Trim() + "' AND RECIBO = '" + row["no_lote"].ToString().Trim() + "' " +
@@ -322,14 +213,10 @@ namespace SplitTrailers
                 }
 
                 cadena += " UPDATE tb_det_split SET estatus = 'C' WHERE emb_folio = '" + ordven.ToString() + "' AND tarima = '" + split.ToString() + "' AND no_lote =  '" + row["no_lote"].ToString().Trim() + "' AND prod_clave = '" + row["prod_clave"].ToString().Trim() + "' AND TARINI = '" + row["TARINI"].ToString().Trim() + "' ";
-
-
                 cadena += " UPDATE tb_det_Etiqueta SET Estatus = 'C' WHERE emb_folio = '" + pedidocancelar.ToString() + "' AND Split = '" + split.ToString() + "' AND Eti_Recibo = '" + row["no_lote"].ToString().Trim() + "' AND Eti_Producto  = '" + row["prod_clave"].ToString().Trim() + "'AND Eti_TarIni = '" + Convert.ToInt32(row["TARINI"].ToString().Trim()).ToString() + "' ";
 
                 cmd = new SqlCommand(cadena, thisConnection);
                 cmd.ExecuteNonQuery();
-
-
 
                 if (sts == "S")
                 {
@@ -358,10 +245,8 @@ namespace SplitTrailers
 
                         if (cantidad_actual == 0)
                         {
-
                             complemento = ", Estatus = 'C'";
                         }
-
 
                         cadena = "UPDATE  tb_det_embarque SET cajas = '" + cantidad_actual + "'" + complemento + "  WHERE prod_clave = '" + row["prod_clave"].ToString().Trim() + "' AND recibo  = '" + row["no_lote"].ToString().Trim() + "' " +
                                "AND tarima  = '" + Convert.ToInt32(row["TARINI"].ToString().Trim()).ToString() + "' AND emb_folio = '" + pedidocancelar.ToString().Trim() + "' AND Estatus != 'C' AND OpCap = 'X'  AND seccion = '" + seccion + "'";
@@ -371,111 +256,39 @@ namespace SplitTrailers
                 }
             }
 
-            //Android.Telephony.TelephonyManager mTelephonyMgr;
-            //mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
-            //IMEI number  
-            //imei = GetDeviceID();
-
-
             string cadenas = "INSERT INTO TB_REGISTRO_MOVIMIENTOS(FECHA,NOM_COMPU,NOM_USU,TIPO_MOV,OP_CLAVE,FOLIO,DETALLE,SISTEMA,MOV_FOLIO) " +
                             "VALUES('" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "','CEL " + imei + "','" + crcancelar.Trim() + "','C','7.10','" +
                             pedidocancelar.ToString().Trim() + "','Cancelacion Split " + split.ToString() + "','SPLIT','" + pedidocancelar.ToString().Trim() + "')";
-            //MessageBox.Show(cadena);
             SqlCommand cmds = new SqlCommand(cadenas, thisConnection);
             cmds.ExecuteNonQuery();
 
-
             thisConnection.Close();
 
-            #region MATERIAL DIALOG
+            // Diálogo de éxito (Split Cancelado)
             RunOnUiThread(() =>
             {
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
+                DialogHelper.ShowSuccessDialog(this,
+                    message: "Split Cancelado Correctamente!!!",
+                    positiveText: "OK",
+                    positiveAction: (s, ev) =>
+                    {
+                        Intent databack = new Intent();
+                        databack.PutExtra("pedido_cancelar", pedidocan.Text.Trim());
 
-                // Título en rojo
-                builder.SetTitle(Html.FromHtml(
-                    "<font color='#DC3545'><b>Split Cancelado</b></font>",
-                    FromHtmlOptions.ModeLegacy
-                ));
+                        pedidocan.Text = "";
+                        cansplit.Text = "000|000";
 
-                builder.SetIcon(Resource.Drawable.exito);
+                        List<FlimStarInfo> lstFlimStar = ConsSplit();
+                        lstFlimStar.Clear();
+                        var gvObject = FindViewById<GridView>(Resource.Id.gvCtrCancel);
+                        gvObject.Adapter = new myGVItemAdapter(this, null);
+                        gvObject.Adapter = null;
+                        gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
 
-                // Mensaje en blanco
-                builder.SetMessage(Html.FromHtml(
-                    "<font color='#FFFFFF'>Split Cancelado Correctamente!!!</font>",
-                    FromHtmlOptions.ModeLegacy
-                ));
-
-                builder.SetCancelable(false);
-
-                // Botón OK
-                builder.SetPositiveButton(Html.FromHtml(
-                    "<font color='#DC3545'><b>OK</b></font>",
-                    FromHtmlOptions.ModeLegacy
-                ), delegate
-                {
-                    // Cierre del diálogo
-                    builder.Dispose();
-
-                    // Preparación de datos para regreso
-                    Intent databack = new Intent();
-                    databack.PutExtra("pedido_cancelar", pedidocan.Text.Trim());
-
-                    // Limpieza de UI
-                    pedidocan.Text = "";
-                    cansplit.Text = "000|000";
-
-                    var lstFlimStar = ConsSplit();
-                    lstFlimStar.Clear();
-                    var gvObject = FindViewById<GridView>(Resource.Id.gvCtrCancel);
-                    gvObject.Adapter = new myGVItemAdapter(this, null);
-                    gvObject.Adapter = null;
-                    gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-
-                    // Retorno al Activity anterior
-                    SetResult(Result.Ok, databack);
-                    Finish();
-                });
-
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalización del botón
-                var btn = dialog.GetButton((int)DialogButtonType.Positive);
-                btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
-                btn?.SetAllCaps(false);
+                        SetResult(Result.Ok, databack);
+                        Finish();
+                    });
             });
-            #endregion
-
-            #region ALERT DIALOG
-            /*Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
-            alertDialog.SetTitle(Html.FromHtml("<font color='#dc3545' size = 10>Split Cancelado</font>"));
-            alertDialog.SetIcon(Resource.Drawable.exito);
-            alertDialog.SetMessage(Html.FromHtml("<font color='#FFFFFF' size = 10>Split Cancelado Correctamente!!! </font>"));
-            alertDialog.SetCancelable(false);
-            alertDialog.SetNeutralButton("Ok", delegate
-            {
-                alertDialog.Dispose();
-                Intent databack = new Intent();
-                databack.PutExtra("pedido_cancelar", pedidocan.Text.Trim());
-
-                pedidocan.Text = "";
-                cansplit.Text = "000|000";
-                List<FlimStarInfo> lstFlimStar = ConsSplit();
-                lstFlimStar.Clear();
-                var gvObject = FindViewById<GridView>(Resource.Id.gvCtrCancel);
-                gvObject.Adapter = new myGVItemAdapter(this, null);
-                gvObject.Adapter = null;
-                gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-
-                //intent de regreso
-
-                SetResult(Result.Ok, databack);
-                Finish();
-
-            });
-            alertDialog.Show();*/
-            #endregion
         }
 
         public string GetDeviceID()
@@ -515,7 +328,6 @@ namespace SplitTrailers
             thisConnection.Open();
             listItem.Clear();
             string contenido = "";
-            //thisConnection.Open();
             ordven = pedidocan.Text.ToString();
 
             if (ordven.Length > 0)
@@ -523,7 +335,6 @@ namespace SplitTrailers
                 if (Convert.ToInt32(ordven) < 300000)
                 {
                     ordven = "0" + ordven.ToString().Trim();
-
                 }
             }
 
@@ -549,63 +360,16 @@ namespace SplitTrailers
 
             if (Existe != "S")
             {
-                #region MATERIAL DIALOG
+                // Diálogo de error (Pedido sin Split)
                 RunOnUiThread(() =>
                 {
-                    var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-
-                    // Título en rojo
-                    builder.SetTitle(Html.FromHtml(
-                        "<font color='#DC3545'><b>Pedido Sin Split</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ));
-
-                    builder.SetIcon(Resource.Drawable.no);
-
-                    // Mensaje en blanco
-                    builder.SetMessage(Html.FromHtml(
-                        $"<font color='#FFFFFF'>El pedido: {pedidocan.Text.Trim()} no cuenta con split disponible</font>",
-                        FromHtmlOptions.ModeLegacy
-                    ));
-
-                    builder.SetCancelable(false);
-
-                    // Botón OK
-                    builder.SetPositiveButton(Html.FromHtml(
-                        "<font color='#DC3545'><b>OK</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ), delegate
-                    {
-                        builder.Dispose();
-                    });
-
-                    var dialog = builder.Create();
-                    dialog.Show();
-
-                    // Personalizamos el botón
-                    var btn = dialog.GetButton((int)DialogButtonType.Positive);
-                    btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
-                    btn?.SetAllCaps(false);
+                    DialogHelper.ShowErrorDialog(this,
+                        message: $"El pedido: {pedidocan.Text.Trim()} no cuenta con split disponible",
+                        positiveText: "OK");
                 });
-                #endregion
-
-                #region ALERT DIALOG
-                /*Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
-                alertDialog.SetTitle(Html.FromHtml("<font color='#dc3545' size = 10>Pedido Sin Split</font>"));
-                alertDialog.SetIcon(Resource.Drawable.no);
-                alertDialog.SetCancelable(false);
-                alertDialog.SetMessage(Html.FromHtml("<font color='#FFFFFF' size = 10>El pedido: " + pedidocan.Text.Trim() + " No cuenta con split disponible</font>"));
-                alertDialog.SetNeutralButton("Ok", delegate
-                {
-                    alertDialog.Dispose();
-                });
-                alertDialog.Show();*/
-                #endregion
             }
 
-            //LbxCons.Font = new Font(LbxCons.Font.Name, 7);   ;
             thisConnection.Close();
-
             return listItem;
         }
 
@@ -621,7 +385,6 @@ namespace SplitTrailers
                 if (Convert.ToInt32(pedidocan.Text) < 300000)
                 {
                     Tipoped = "EXP";
-
                 }
             }
 
@@ -638,58 +401,13 @@ namespace SplitTrailers
 
             if (Ped.Rows.Count == 0)
             {
-                #region MATERIAL DIALOG
+                // Diálogo de error (Pedido Inexistente)
                 RunOnUiThread(() =>
                 {
-                    var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-
-                    // Título en rojo
-                    builder.SetTitle(Html.FromHtml(
-                        "<font color='#DC3545'><b>Pedido Inexistente</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ));
-
-                    builder.SetIcon(Resource.Drawable.no);
-
-                    // Mensaje en blanco
-                    builder.SetMessage(Html.FromHtml(
-                        $"<font color='#FFFFFF'>El pedido: {pedidocan.Text.Trim()} no existe o no se ha dado de alta</font>",
-                        FromHtmlOptions.ModeLegacy
-                    ));
-
-                    builder.SetCancelable(false);
-
-                    // Botón OK
-                    builder.SetPositiveButton(Html.FromHtml(
-                        "<font color='#DC3545'><b>OK</b></font>",
-                        FromHtmlOptions.ModeLegacy
-                    ), delegate
-                    {
-                        builder.Dispose();
-                    });
-
-                    var dialog = builder.Create();
-                    dialog.Show();
-
-                    // Personalización del botón
-                    var btn = dialog.GetButton((int)DialogButtonType.Positive);
-                    btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
-                    btn?.SetAllCaps(false);
+                    DialogHelper.ShowErrorDialog(this,
+                        message: $"El pedido: {pedidocan.Text.Trim()} no existe o no se ha dado de alta",
+                        positiveText: "OK");
                 });
-                #endregion
-
-                #region ALERT DIALOG
-                /*Android.App.AlertDialog.Builder alertDialog = new Android.App.AlertDialog.Builder(this);
-                alertDialog.SetTitle(Html.FromHtml("<font color='#dc3545' size = 10>Pedido Inexistente</font>"));
-                alertDialog.SetIcon(Resource.Drawable.no);
-                alertDialog.SetCancelable(false);
-                alertDialog.SetMessage(Html.FromHtml("<font color='#FFFFFF' size = 10>El pedido: " + pedidocan.Text.Trim() + " No Existe o No se ha dado de alta</font>"));
-                alertDialog.SetNeutralButton("Ok", delegate
-                {
-                    alertDialog.Dispose();
-                });
-                alertDialog.Show();*/
-                #endregion
 
                 pedidocan.Text = "";
                 pedidocan.RequestFocus();
@@ -701,7 +419,6 @@ namespace SplitTrailers
                 mnom = mnom.Replace("'", " ");
 
                 Pedidos Pedidoscapturados = new Pedidos { folio = row["pdn_folio"].ToString().Trim(), prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                //Registra en la base de datos SQLite
                 db.Insert(Pedidoscapturados);
 
                 var encontrado = 0;
@@ -718,11 +435,8 @@ namespace SplitTrailers
 
                 if (encontrado == 0)
                 {
-
                     ConPedidos consecutivo = new ConPedidos { prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                    //Registra en la base de datos SQLite
                     db.Insert(consecutivo);
-
                 }
 
                 hay = "S";
@@ -782,7 +496,7 @@ namespace SplitTrailers
             List<FlimStarInfo> lstFlimStar = detalle_pedido(pedidocan.Text.Trim(), "Acumulado");
             var gvObject = FindViewById<GridView>(Resource.Id.gvCtrCancel);
             gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-            gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked); //detalle_pedido
+            gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked);
 
             return listItem;
         }
@@ -794,8 +508,6 @@ namespace SplitTrailers
 
             if (mov != "Acumulado")
             {
-
-
                 var query = db.Table<Pedidos>();
                 foreach (var captu in query)
                 {
@@ -809,16 +521,9 @@ namespace SplitTrailers
                         });
                     }
                 }
-
             }
             else
             {
-
-                //Borrar la informacion que no se debe cancelarConPedidos
-                //db.Query<Pedidos>("Delete FROM ConPedidos Where pedido >= surtido");
-                //var queryCancelar = db.Query<Pedidos>("Delete FROM Pedidos Where pedido >= surtido");
-
-
                 var query = db.Table<Pedidos>();
                 foreach (var captu in query)
                 {
@@ -829,16 +534,11 @@ namespace SplitTrailers
                         Age = "Pedidos: " + captu.pedido + " Surtido: " + captu.surtido,
                         ImageID = Resource.Drawable.producto
                     });
-
                 }
-
             }
 
-            //LbxCons.Font = new Font(LbxCons.Font.Name, 7);   ;
             thisConnection.Close();
-
             return listItem;
         }
-
     }
 }

@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Google.Android.Material.Dialog;
 using Java.Util;
+using SplitTrailers.Helpers; // <-- AGREGADO
 using SplitTrailers.Modal;
 using SQLite;
 using System;
@@ -157,51 +158,14 @@ namespace SplitTrailers
             }
             else
             {
-                #region MATERIAL DIALOG - ACEPTAR ORDEN DE REASIGNACIÓN
-                // Construimos el título con color rojo y negritas
-                var titleSpannable = new SpannableStringBuilder("Aceptar Orden de Reasignación");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con partes destacadas
-                var mensajeSpannable = new SpannableStringBuilder();
-                mensajeSpannable.Append("¿Desea aceptar la orden ");
-                int startOrden = mensajeSpannable.Length();
-                mensajeSpannable.Append(ordenacerrarreasignar.Trim());
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startOrden, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                mensajeSpannable.Append(" para concluir con la carga?");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Creamos el diálogo Material3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.question);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botones de acción
-                builder.SetPositiveButton("Sí", ReasignarCarga);
-                builder.SetNegativeButton("No", CancelaAction);
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalización de botones
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    var negativeButton = dialog.GetButton((int)DialogButtonType.Negative);
-
-                    positiveButton?.SetTextColor(Color.ParseColor("#C62828")); // Rojo Material
-                    positiveButton?.SetAllCaps(false);
-
-                    negativeButton?.SetTextColor(Color.ParseColor("#5F6368")); // Gris neutro
-                    negativeButton?.SetAllCaps(false);
-                });
-                #endregion
-
-
+                // Diálogo de confirmación simplificado con Helper
+                DialogHelper.ShowConfirmDialog(this,
+                    title: "Aceptar Orden de Reasignación",
+                    message: $"¿Desea aceptar la orden {ordenacerrarreasignar.Trim()} para concluir con la carga?",
+                    positiveText: "Sí",
+                    negativeText: "No",
+                    positiveAction: ReasignarCarga,
+                    negativeAction: CancelaAction);
             }
         }
 
@@ -271,68 +235,42 @@ namespace SplitTrailers
             }
             else
             {
-                #region MATERIAL DIALOG - TERMINAR CARGA EN LECTORA
-                // Construimos el título con color rojo y negritas
-                var titleSpannable = new SpannableStringBuilder("Terminar Carga en Lectora");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con parte destacada
-                var mensajeSpannable = new SpannableStringBuilder();
-                mensajeSpannable.Append("¿Desea terminar la carga en la orden ");
-                int startOrden = mensajeSpannable.Length();
-                mensajeSpannable.Append(ordenacerrarreasignar.Trim());
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startOrden, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                mensajeSpannable.Append(" para todas las lectoras?");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Creamos el diálogo Material3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.question);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botones de acción
-                builder.SetPositiveButton("Sí", TerminarCarga);
-                builder.SetNegativeButton("No", CancelaAction);
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalizamos los botones después de mostrar el diálogo
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    var negativeButton = dialog.GetButton((int)DialogButtonType.Negative);
-
-                    positiveButton?.SetTextColor(Color.ParseColor("#C62828")); // Rojo Material
-                    positiveButton?.SetAllCaps(false);
-
-                    negativeButton?.SetTextColor(Color.ParseColor("#5F6368")); // Gris neutro
-                    negativeButton?.SetAllCaps(false);
-                });
-                #endregion
-
+                // Diálogo de confirmación simplificado con Helper
+                DialogHelper.ShowConfirmDialog(this,
+                    title: "Terminar Carga en Lectora",
+                    message: $"¿Desea terminar la carga en la orden {ordenacerrarreasignar.Trim()} para todas las lectoras?",
+                    positiveText: "Sí",
+                    negativeText: "No",
+                    positiveAction: TerminarCarga,
+                    negativeAction: CancelaAction);
             }
         }
 
         void fnShowCustomAlertDialog()
         {
-            //Inflate layout
+            // Inflamos el layout
             View view = LayoutInflater.Inflate(Resource.Layout.frmsupervisor, null);
-            AlertDialog builder = new AlertDialog.Builder(this).Create();
+
+            // Usamos MaterialAlertDialogBuilder con el tema correcto
+            var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
             builder.SetView(view);
-            builder.SetCanceledOnTouchOutside(false);
+            builder.SetCancelable(false);
+
+            var dialog = builder.Create();
+            dialog.Show();
+
+            // Referencias a los controles
             EditText password = view.FindViewById<EditText>(Resource.Id.txtPassword);
             Button buttonaceptar = view.FindViewById<Button>(Resource.Id.btnLoginLL);
-            Button button = view.FindViewById<Button>(Resource.Id.btnClearLL);
-            button.Click += delegate
-            {
-                builder.Dismiss();
+            Button buttonClear = view.FindViewById<Button>(Resource.Id.btnClearLL);
 
+            // Botón Cancelar / Cerrar
+            buttonClear.Click += delegate
+            {
+                dialog.Dismiss();
             };
+
+            // Botón Aceptar
             buttonaceptar.Click += delegate
             {
                 thisConnection.Open();
@@ -347,10 +285,10 @@ namespace SplitTrailers
                 }
                 else
                 {
-
+                    // La lógica original se mantiene igual
+                    thisConnection.Close();
                 }
             };
-            builder.Show();
         }
 
 

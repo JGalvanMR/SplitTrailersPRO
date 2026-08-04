@@ -7,6 +7,7 @@ using Android.Text.Style;
 using Android.Widget;
 using Google.Android.Material.Dialog;
 using Java.Util;
+using SplitTrailers.Helpers; // <-- AGREGADO
 using SplitTrailers.Models;
 using SQLite;
 using System;
@@ -197,48 +198,11 @@ namespace SplitTrailers
 
                 if (productoexistente > 0)
                 {
-                    #region MATERIAL DIALOG - PRODUCTO DISPONIBLE EN INVENTARIO
-                    // Construimos el título con color y negritas
-                    var titleSpannable = new SpannableStringBuilder("Producto Disponible en Inventario");
-                    titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FF7800")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                    titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                    // Construimos el mensaje con colores y negritas
-                    var mensajeSpannable = new SpannableStringBuilder();
-                    mensajeSpannable.Append("Existen ");
-                    int startCantidad = mensajeSpannable.Length();
-                    mensajeSpannable.Append((Char)productoexistente);
-                    mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startCantidad, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                    mensajeSpannable.Append(" disponibles para carga. ");
-                    mensajeSpannable.Append("Por favor, cargue el producto y reinicie el proceso.");
-                    mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                    // Creamos el diálogo usando el estilo Material 3
-                    var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                    builder.SetTitle(titleSpannable);
-                    builder.SetIcon(Resource.Drawable.warning);
-                    builder.SetMessage(mensajeSpannable);
-                    builder.SetCancelable(false);
-
-                    // Botón principal
-                    builder.SetPositiveButton("Entendido", (s, e) => { });
-
-                    // Crear y mostrar el diálogo
-                    var dialog = builder.Create();
-                    dialog.Show();
-
-                    // Personalizamos el botón después de mostrarlo
-                    dialog.Window.DecorView.Post(() =>
-                    {
-                        var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                        positiveButton?.SetTextColor(Color.ParseColor("#FF7800")); // Naranja Material
-                        positiveButton?.SetAllCaps(false);
-                    });
-                    #endregion
-
+                    // DIÁLOGO: Producto Disponible en Inventario
+                    DialogHelper.ShowWarningDialog(this,
+                        message: "Existen " + productoexistente + " disponibles para carga. Por favor, cargue el producto y reinicie el proceso.",
+                        positiveText: "Entendido");
                     return;
-
                 }
                 else
                 {
@@ -270,78 +234,21 @@ namespace SplitTrailers
                     thisConnection.Close();
 
 
-                    #region MATERIAL DIALOG - SOLICITUD ENVIADA
-                    // Construimos el título con color y negritas
-                    var titleSpannable = new SpannableStringBuilder("Solicitud Enviada");
-                    titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#81DF01")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                    titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                    // Construimos el mensaje con color suave y coherencia visual
-                    var mensajeSpannable = new SpannableStringBuilder("El correo fue enviado correctamente.");
-                    mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                    // Creamos el diálogo con estilo Material 3
-                    var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                    builder.SetTitle(titleSpannable);
-                    builder.SetIcon(Resource.Drawable.exito);
-                    builder.SetMessage(mensajeSpannable);
-                    builder.SetCancelable(false);
-
-                    // Botón principal
-                    builder.SetPositiveButton("Entendido", (s, e) => { Finish(); });
-
-                    // Crear y mostrar el diálogo
-                    var dialog = builder.Create();
-                    dialog.Show();
-
-                    // Personalizamos el botón después de mostrarlo
-                    dialog.Window.DecorView.Post(() =>
-                    {
-                        var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                        positiveButton?.SetTextColor(Color.ParseColor("#558B2F")); // Verde éxito Material
-                        positiveButton?.SetAllCaps(false);
-                    });
-                    #endregion
-
+                    // DIÁLOGO: Solicitud Enviada
+                    DialogHelper.ShowSuccessDialog(this,
+                        message: "El correo fue enviado correctamente.",
+                        positiveText: "Entendido",
+                        positiveAction: (s, e) => { Finish(); });
                     return;
                 }
 
             }
             else
             {
-                #region MATERIAL DIALOG - NO SE PUEDE ENVIAR SOLICITUD
-                // Construimos el título con color rojo y negritas
-                var titleSpannable = new SpannableStringBuilder("No se puede enviar solicitud");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con tono gris claro y buena legibilidad
-                var mensajeSpannable = new SpannableStringBuilder("La solicitud no se puede completar debido a que aún no han pasado 15 minutos.");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Creamos el diálogo usando el tema oficial de Material Design 3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.no);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botón principal
-                builder.SetPositiveButton("Entendido", (s, e) => { });
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalizamos el botón después de mostrarlo
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    positiveButton?.SetTextColor(Color.ParseColor("#C62828")); // Rojo Material (error)
-                    positiveButton?.SetAllCaps(false);
-                });
-                #endregion
-
+                // DIÁLOGO: No se puede enviar solicitud (por tiempo)
+                DialogHelper.ShowErrorDialog(this,
+                    message: "La solicitud no se puede completar debido a que aún no han pasado 15 minutos.",
+                    positiveText: "Entendido");
                 return;
             }
         }
@@ -866,43 +773,11 @@ namespace SplitTrailers
 
             if (Ped.Rows.Count == 0)
             {
-                #region MATERIAL DIALOG - PEDIDO INEXISTENTE
-                // Construimos el título con color rojo y negritas
-                var titleSpannable = new SpannableStringBuilder("Pedido Inexistente");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con formato claro y contraste adecuado
-                var mensajeSpannable = new SpannableStringBuilder();
-                mensajeSpannable.Append("El pedido ");
-                int startPedido = mensajeSpannable.Length();
-                mensajeSpannable.Append(pedidoprincipal.Trim());
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startPedido, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                mensajeSpannable.Append(" no existe o no se ha dado de alta.");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#5F6368")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Creamos el diálogo con el tema oficial Material 3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.no);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botón principal
-                builder.SetPositiveButton("Entendido", (s, e) => { });
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalizamos el botón tras mostrar el diálogo
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    positiveButton?.SetTextColor(Color.ParseColor("#C62828")); // Rojo Material
-                    positiveButton?.SetAllCaps(false);
-                });
-                #endregion
+                // Diálogo: Pedido Inexistente
+                DialogHelper.ShowErrorDialog(this,
+                    message: "El pedido " + pedidoprincipal.Trim() + " no existe o no se ha dado de alta.",
+                    positiveText: "Entendido");
+                return;
             }
 
             foreach (DataRow row in Ped.Rows)

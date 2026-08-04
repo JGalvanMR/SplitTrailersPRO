@@ -8,6 +8,7 @@ using Android.Text.Style;
 using Android.Widget;
 using Google.Android.Material.Dialog;
 using Plugin.DeviceInfo;
+using SplitTrailers.Helpers;
 using SplitTrailers.Modal;
 using SplitTrailers.Models;
 using SQLite;
@@ -220,7 +221,7 @@ namespace SplitTrailers
             if (Ped.Rows.Count == 0)
             {
                 #region MATERIAL DIALOG - Pedido Inexistente
-                // Construimos el título con color rojo y negritas
+                /*// Construimos el título con color rojo y negritas
                 var titleSpannable = new SpannableStringBuilder("Pedido Inexistente");
                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -254,9 +255,11 @@ namespace SplitTrailers
                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                     positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material (consistente con tus otros diálogos)
                     positiveButton?.SetAllCaps(false);
-                });
+                }); */
                 #endregion
-
+                DialogHelper.ShowErrorDialog(this,
+    message: $"El pedido {pedido.Text.Trim()} no existe o no se ha dado de alta.",
+    positiveText: "Ok");
             }
 
 
@@ -418,16 +421,5 @@ namespace SplitTrailers
 
             return listItem;
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 }
