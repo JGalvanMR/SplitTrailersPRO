@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 //using Plugin.LocalNotifications;
 using System.Timers;
 using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
+using SplitTrailers.Helpers;
 
 namespace SplitTrailers
 
@@ -199,7 +200,7 @@ namespace SplitTrailers
                             if (nombrecapturaactual.Trim() != responsable.Trim())
                             {
                                 #region MATERIAL DIALOG
-                                // Construimos el título con color y negritas
+                                /*// Construimos el título con color y negritas
                                 var titleSpannable = new SpannableStringBuilder("Pedido en Captura Ocupado");
                                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -238,9 +239,13 @@ namespace SplitTrailers
                                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                                     positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material
                                     positiveButton?.SetAllCaps(false);
-                                });
+                                });*/
                                 #endregion
-
+                                // Diálogo: Pedido en Captura Ocupado
+                                DialogHelper.ShowInfoDialog(this,
+                                    title: "Pedido en Captura Ocupado",
+                                    message: $"El pedido {pedido.Text.Trim()} está activo con el armador {nombrecapturaactual.Trim()}. Solicite una transferencia si se trata de un cambio de turno.",
+                                    iconRes: Resource.Drawable.no);
                                 pedido.SetSelection(0, pedido.Text.Length);
                                 pedido.RequestFocus();
                                 return;
@@ -256,7 +261,7 @@ namespace SplitTrailers
                     if (pedPendientes > 0)
                     {
                         #region MATERIAL DIALOG
-                        // Construimos el título con color rojo y negritas
+                        /*// Construimos el título con color rojo y negritas
                         var titleSpannable = new SpannableStringBuilder("Cuenta con Split Pendientes");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -295,9 +300,12 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
-
+                        DialogHelper.ShowInfoDialog(this,
+                            title: "Cuenta con Split Pendientes",
+                            message: $"Usted tiene {pedPendientes} Split sin cargar del pedido: {emb_folioPEndiente}. Favor de consultar la orden en el monitor de embarques y solicitar al supervisor la carga del Split o cancelarlo si no se ha cargado.",
+                            iconRes: Resource.Drawable.no);
                         pedido.SetSelection(0, pedido.Text.Length);
                         pedido.RequestFocus();
                         return;
@@ -352,7 +360,7 @@ namespace SplitTrailers
                             hay = "S";
 
                             #region MATERIAL DIALOG
-                            // Construimos el título con color y negritas
+                            /*// Construimos el título con color y negritas
                             var titleSpannable = new SpannableStringBuilder("Pedido ya agregado para captura");
                             titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                             titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -387,10 +395,13 @@ namespace SplitTrailers
                                 var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                                 positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material
                                 positiveButton?.SetAllCaps(false);
-                            });
+                            });*/
                             #endregion
 
-
+                            DialogHelper.ShowInfoDialog(this,
+                                title: "Pedido ya agregado para captura",
+                                message: $"El pedido {captu.folio} ya se agregó para capturar.",
+                                iconRes: Resource.Drawable.no);
                             pedido.SetSelection(0, pedido.Text.Length);
                             pedido.RequestFocus();
                             ConsPedSur(pedido.Text.ToString());
@@ -432,7 +443,7 @@ namespace SplitTrailers
                     if (Emb.Trim().Length > 0)
                     {
                         #region MATERIAL DIALOG
-                        // 🔹 Título con color rojo y negritas
+                        /*// 🔹 Título con color rojo y negritas
                         var titleSpannable = new SpannableStringBuilder("Pedido ya capturado");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -466,9 +477,12 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
-
+                        DialogHelper.ShowInfoDialog(this,
+                            title: "Pedido ya capturado",
+                            message: $"El pedido: {pedido.Text.Trim()} ya ha sido capturado.",
+                            iconRes: Resource.Drawable.no);
                         //pedido.Text = "";
                         //pedido.RequestFocus();
 
@@ -514,7 +528,7 @@ namespace SplitTrailers
                     if (dias > 15)
                     {
                         #region MATERIAL DIALOG
-                        // 🔹 Construimos el título con color y negritas
+                        /*// 🔹 Construimos el título con color y negritas
                         var titleSpannable = new SpannableStringBuilder("Pedido mayor a 15 Días");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FA993E")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -554,9 +568,11 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#FF8C00")); // Naranja Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
-
+                        DialogHelper.ShowWarningDialog(this,
+                            message: $"El pedido {pedido.Text.Trim()} tiene una fecha de {FechaPedido.ToString("dd/MM/yyyy")} que supera los 15 días de validez. Favor de informar a ventas.",
+                            positiveText: "Entendido");
                         pedido.Text = "";
                         pedido.RequestFocus();
                         capturar.Enabled = false;
@@ -571,8 +587,7 @@ namespace SplitTrailers
                     if (embcer.Trim().Length > 0)
                     {
                         #region MATERIAL DIALOG
-
-                        // 🔹 Construimos el título con color y negritas
+                        /*// 🔹 Construimos el título con color y negritas
                         var titleSpannable = new SpannableStringBuilder("Embarque Cerrado");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FA993E")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -607,9 +622,11 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#FF8C00")); // Naranja Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
-
+                        DialogHelper.ShowWarningDialog(this,
+                            message: $"El embarque {pedido.Text.Trim()} está cerrado y no se puede cargar.",
+                            positiveText: "Entendido");
                         pedido.Text = "";
                         capturar.Enabled = false;
                         pedido.RequestFocus();
@@ -624,7 +641,7 @@ namespace SplitTrailers
                     if (Embx.Trim().Length > 0)
                     {
                         #region MATERIAL DIALOG
-                        // 🔹 Construimos el título con color y negritas
+                        /*// 🔹 Construimos el título con color y negritas
                         var titleSpannable = new SpannableStringBuilder("Pedido Cancelado");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FA993E")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -659,9 +676,12 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#FF8C00")); // Naranja Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
-
+                        DialogHelper.ShowWarningDialog(this,
+                            message: $"El pedido {pedido.Text.Trim()} está cancelado y no se puede cargar.",
+                            positiveText: "Entendido");
+                        pedido.Text = "";
                         pedido.Text = "";
                         capturar.Enabled = false;
                         pedido.RequestFocus();
@@ -683,7 +703,7 @@ namespace SplitTrailers
                         if (Ped.Rows.Count == 0)
                         {
                             #region MATERIAL DIALOG
-                            // 🔹 Construimos el título con color rojo y negritas
+                            /*// 🔹 Construimos el título con color rojo y negritas
                             var titleSpannable = new SpannableStringBuilder("Pedido Inexistente");
                             titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                             titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -718,9 +738,11 @@ namespace SplitTrailers
                                 var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                                 positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material
                                 positiveButton?.SetAllCaps(false);
-                            });
+                            });*/
                             #endregion
-
+                            DialogHelper.ShowErrorDialog(this,
+                            message: $"El pedido {pedido.Text.Trim()} no existe o no se ha dado de alta.",
+                            positiveText: "Entendido");
                             pedido.Text = "";
                             capturar.Enabled = false;
                             pedido.RequestFocus();
@@ -742,8 +764,7 @@ namespace SplitTrailers
                             if (color != "1" && validasupervisor != "1")
                             {
                                 #region MATERIAL DIALOG
-
-                                // 🔹 Construimos el título con color amarillo y negritas
+                                /*// 🔹 Construimos el título con color amarillo y negritas
                                 var titleSpannable = new SpannableStringBuilder("NO SE PUEDE CONTINUAR CON EL ARMADO");
                                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#E5FA7A")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -773,9 +794,11 @@ namespace SplitTrailers
                                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                                     positiveButton?.SetTextColor(Color.ParseColor("#FFA000")); // Naranja Material
                                     positiveButton?.SetAllCaps(false);
-                                });
+                                });*/
                                 #endregion
-
+                                DialogHelper.ShowWarningDialog(this,
+                                message: color,
+                                positiveText: "Entendido");
                                 pedido.Text = "";
                                 capturar.Enabled = false;
                                 pedido.RequestFocus();
@@ -886,8 +909,6 @@ namespace SplitTrailers
                     //}
 
                     LoadConnection();
-
-
                 }
             };
 
@@ -1348,8 +1369,7 @@ namespace SplitTrailers
             else if (Convert.ToString(item.TitleFormatted) == "Cerrar Sesion")
             {
                 #region MATERIAL DIALOG — Cerrar Sesión (con colores dinámicos)
-
-                // Obtener colores del tema actual (Material 3 dinámico)
+                /*// Obtener colores del tema actual (Material 3 dinámico)
                 var primaryColorAttr = new TypedValue();
                 var onSurfaceColorAttr = new TypedValue();
                 var errorColorAttr = new TypedValue();
@@ -1394,11 +1414,17 @@ namespace SplitTrailers
 
                     negativeButton?.SetTextColor(colorError);
                     negativeButton?.SetAllCaps(false);
-                });
-
+                });*/
                 #endregion
 
-
+                // Diálogo de confirmación
+                DialogHelper.ShowConfirmDialog(this,
+                    title: "Cerrar Sesión",
+                    message: "¿Desea cerrar su sesión en este equipo?",
+                    positiveText: "Sí",
+                    negativeText: "No",
+                    positiveAction: SaveAction,
+                    negativeAction: CancelaAction);
 
             }
             return base.OnOptionsItemSelected(item);
@@ -1776,8 +1802,11 @@ namespace SplitTrailers
             var querydif = db.Query<ConPedidos>("Select * FROM ConPedidos WHERE surtido > pedido");
             foreach (var captu in querydif)
             {
+                DialogHelper.ShowWarningDialog(this,
+                    message: $"El pedido: {folio} contiene un desfase en el producto {captu.nombre}, Surtido: {captu.surtido} / Pedido: {captu.pedido}; Favor de ingresar a Cancelación Parcial y ajustar la diferencia.",
+                    positiveText: "Entendido");
                 #region MATERIAL DIALOG
-                // 🔹 Construimos el título con color naranja y negritas
+                /*// 🔹 Construimos el título con color naranja y negritas
                 var titleSpannable = new SpannableStringBuilder("Se ha detectado un Cambio en la orden");
                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#F96810")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -1827,13 +1856,99 @@ namespace SplitTrailers
                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                     positiveButton?.SetTextColor(Color.ParseColor("#FF8C00")); // Naranja Material
                     positiveButton?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
             }
 
         }
 
+        // ========== MÉTODO fnShowCustomAlertDialog (diálogo de cancelación) ==========
         void fnShowCustomAlertDialog()
+        {
+            // Inflamos la vista personalizada
+            View view = LayoutInflater.Inflate(Resource.Layout.frmsupervisor, null);
+            EditText password = view.FindViewById<EditText>(Resource.Id.txtPassword);
+            Button buttonaceptar = view.FindViewById<Button>(Resource.Id.btnLoginLL);
+            Button button = view.FindViewById<Button>(Resource.Id.btnClearLL);
+
+            // Creamos el diálogo con MaterialAlertDialogBuilder y vista personalizada
+            var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
+            builder.SetView(view);
+            builder.SetCancelable(false);
+
+            // Como queremos colores dinámicos en el título, lo personalizamos
+            var colorPrimary = ThemeHelper.GetColorFromTheme(this, Resource.Attribute.colorPrimary);
+            var titleSpannable = new SpannableStringBuilder("Autorización de Cancelación");
+            titleSpannable.SetSpan(new ForegroundColorSpan(colorPrimary), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
+            titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
+            builder.SetTitle(titleSpannable);
+
+            var dialog = builder.Create();
+
+            // Eventos de los botones
+            button.Click += delegate
+            {
+                dialog.Dismiss();
+            };
+
+            buttonaceptar.Click += delegate
+            {
+                thisConnection.Open();
+                string cadena = "Select usuario From tb_Autoriza_OdeP Where clave = 'EM' and password = '" + password.Text.Trim() + "' AND Obs = 'C'";
+                SqlCommand cmd = new SqlCommand(cadena, thisConnection);
+                var mAutoriza = Convert.ToString(cmd.ExecuteScalar());
+
+                if (string.IsNullOrWhiteSpace(mAutoriza))
+                {
+                    string cadenax = "Select CONCAT (nom_capsplit, '*', status_parcial) From tb_Respon_Split Where cve_cancel = '" + password.Text.Trim() + "' AND status = 'A'";
+                    SqlCommand cmdx = new SqlCommand(cadenax, thisConnection);
+                    var mAutorizax = Convert.ToString(cmdx.ExecuteScalar());
+
+                    if (string.IsNullOrWhiteSpace(mAutorizax))
+                    {
+                        Toast.MakeText(this, "USUARIO Y PASSWORD INCORRECTO!!!", ToastLength.Short).Show();
+                        thisConnection.Close();
+                    }
+                    else
+                    {
+                        string[] separadas = mAutorizax.Split('*');
+                        thisConnection.Close();
+                        Intent intent = new Intent(this, typeof(CancelarSplit));
+                        intent.PutExtra("respcancel", separadas[0].Trim());
+                        intent.PutExtra("cvresponsable", cvresponsable.Trim());
+                        intent.PutExtra("responsable", responsable.Trim());
+                        intent.PutExtra("Parcial", separadas[1].Trim());
+                        intent.PutExtra("currentVersionName", currentVersionName.Trim());
+                        intent.PutExtra("imei", imei.Trim());
+                        StartActivityForResult(intent, PICK_CONTACT_REQUEST);
+                        dialog.Dismiss();
+                    }
+                }
+                else
+                {
+                    thisConnection.Close();
+                    Intent intent = new Intent(this, typeof(CancelarSplit));
+                    intent.PutExtra("respcancel", mAutoriza.Trim());
+                    intent.PutExtra("cvresponsable", cvresponsable.Trim());
+                    intent.PutExtra("responsable", responsable.Trim());
+                    intent.PutExtra("Parcial", "B");
+                    intent.PutExtra("currentVersionName", currentVersionName.Trim());
+                    intent.PutExtra("imei", imei.Trim());
+                    StartActivityForResult(intent, PICK_CONTACT_REQUEST);
+                    dialog.Dismiss();
+                }
+            };
+
+            dialog.Show();
+
+            // Personalizar botones del diálogo principal (los que no están en el layout)
+            dialog.Window.DecorView.Post(() =>
+            {
+                // No hay botones Positive/Negative en el diálogo porque usamos vista personalizada,
+                // pero podemos personalizar los botones de la vista si es necesario.
+            });
+        }
+        void fnShowCustomAlertDialogLEGACY()
         {
             #region MATERIAL DIALOG
             // Infla la vista personalizada
@@ -2322,7 +2437,68 @@ namespace SplitTrailers
             }
         }
 
+        // ========== MÉTODO fnShowCustomAlertDialogReasignar ==========
         void fnShowCustomAlertDialogReasignar()
+        {
+            View view = LayoutInflater.Inflate(Resource.Layout.frmsupervisor, null);
+            EditText password = view.FindViewById<EditText>(Resource.Id.txtPassword);
+            Button buttonaceptar = view.FindViewById<Button>(Resource.Id.btnLoginLL);
+            Button button = view.FindViewById<Button>(Resource.Id.btnClearLL);
+
+            var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
+            builder.SetView(view);
+            builder.SetCancelable(false);
+
+            var colorPrimary = ThemeHelper.GetColorFromTheme(this, Resource.Attribute.colorPrimary);
+            var titleSpannable = new SpannableStringBuilder("Autorización de Reasignación");
+            titleSpannable.SetSpan(new ForegroundColorSpan(colorPrimary), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
+            titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
+            builder.SetTitle(titleSpannable);
+
+            var dialog = builder.Create();
+
+            button.Click += delegate
+            {
+                dialog.Dismiss();
+            };
+
+            buttonaceptar.Click += delegate
+            {
+                thisConnection.Open();
+                string cadenax = "Select nom_capsplit From tb_Respon_Split Where cve_cancel = '" + password.Text.Trim() + "' AND status = 'A'";
+                SqlCommand cmdx = new SqlCommand(cadenax, thisConnection);
+                var mAutorizax = Convert.ToString(cmdx.ExecuteScalar());
+
+                if (mAutorizax.Trim().Length == 0)
+                {
+                    Toast.MakeText(this, "USUARIO Y PASSWORD INCORRECTO!!!", ToastLength.Short).Show();
+                    thisConnection.Close();
+                }
+                else
+                {
+                    if (mAutorizax.Trim() == responsable.Trim())
+                    {
+                        thisConnection.Close();
+                        Toast.MakeText(this, "No puede Asignarse Ordenes a usted mismo", ToastLength.Long).Show();
+                    }
+                    else
+                    {
+                        thisConnection.Close();
+                        Intent intent = new Intent(this, typeof(reasignarterminar));
+                        intent.PutExtra("respreasig", mAutorizax.ToString().Trim());
+                        intent.PutExtra("cvresponsable", cvresponsable.ToString().Trim());
+                        intent.PutExtra("responsable", responsable.ToString().Trim());
+                        intent.PutExtra("currentVersionName", currentVersionName.ToString().Trim());
+                        intent.PutExtra("imei", imei.ToString().Trim());
+                        StartActivityForResult(intent, PICK_CONTACT_REQUEST);
+                        dialog.Dismiss();
+                    }
+                }
+            };
+
+            dialog.Show();
+        }
+        void fnShowCustomAlertDialogReasignarLEGACY()
         {
             //Inflate layout
             View view = LayoutInflater.Inflate(Resource.Layout.frmsupervisor, null);
@@ -2481,8 +2657,11 @@ namespace SplitTrailers
             }
             if (pedidopendiente == "0")
             {
+                DialogHelper.ShowWarningDialog(this,
+                    message: $"No puede cambiar de orden hasta concluir los split faltantes de esta orden: {Pedidoembarque}",
+                    positiveText: "Entendido");
                 #region MATERIAL DIALOG
-                // 🔹 Construimos el título con color amarillo claro y negritas
+                /*// 🔹 Construimos el título con color amarillo claro y negritas
                 var titleSpannable = new SpannableStringBuilder("Faltan Split Por Armar");
                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#E5FA7A")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -2514,7 +2693,7 @@ namespace SplitTrailers
                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                     positiveButton?.SetTextColor(Color.ParseColor("#FFA000")); // Naranja Material
                     positiveButton?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
             }
             return pedidopendiente;//

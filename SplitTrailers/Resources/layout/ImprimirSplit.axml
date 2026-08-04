@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,11 +8,13 @@
     android:background="?attr/colorSurface"
     android:gravity="top"
     android:clipToPadding="false">
-	<include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-	<!-- Encabezado -->
-	<TextView
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <!-- Encabezado -->
+    <TextView
         android:id="@+id/userprint"
         android:text="Usuario: Supervisor"
         style="@style/label_primary"
@@ -21,37 +24,45 @@
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="?attr/colorSurfaceContainerHigh" />
+        android:background="?attr/colorSurfaceContainerHigh" />
 
-	<!-- Campo Pedido -->
-	<TextView
+    <!-- Campo Pedido con TextInputLayout -->
+    <TextView
         android:text="Pedido a imprimir"
         style="@style/label_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginBottom="4dp" />
 
-	<EditText
-        android:id="@+id/pedidoprint"
-        style="@style/entry_m3"
-        android:inputType="number"
-        android:hint="Ingrese número de pedido"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayout_Outlined"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:placeholderText="Ingrese número de pedido">
 
-	<!-- Título splits -->
-	<TextView
+        <EditText
+            android:id="@+id/pedidoprint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Ingrese número de pedido"
+            android:background="@null"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Título splits -->
+    <TextView
         android:id="@+id/textosplit"
         android:text="Splits capturados"
         style="@style/label_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp" />
 
-	<!-- Contenedor de la lista -->
-	<LinearLayout
+    <!-- Contenedor de la lista -->
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -63,19 +74,19 @@
         android:layout_marginBottom="12dp"
         android:layout_marginTop="4dp">
 
-		<GridView
+        <GridView
             android:id="@+id/gvCtrimprimir"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:numColumns="1"
             android:verticalSpacing="6dp"
             android:horizontalSpacing="6dp"
-            android:padding="4dp"
+            android:padding="8dp"
             android:clipToPadding="false" />
-	</LinearLayout>
+    </LinearLayout>
 
-	<!-- Total -->
-	<TextView
+    <!-- Total -->
+    <TextView
         android:id="@+id/totalsplitimp"
         android:text="Total de Splits: 0"
         style="@style/label_primary"

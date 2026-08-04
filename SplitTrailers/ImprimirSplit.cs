@@ -24,6 +24,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using SplitTrailers.Helpers;
 
 
 namespace SplitTrailers
@@ -86,8 +87,14 @@ namespace SplitTrailers
                     thisConnection.Close();
                     if (embcer.Trim().Length > 0)
                     {
+                        // Diálogo de embarque cerrado(advertencia)
+                        DialogHelper.ShowWarningDialog(this,
+                            message: $"El embarque {pedidoImp.Text.Trim()} está cerrado y no se puede imprimir.",
+                            positiveText: "Ok");
+                        pedidoImp.Text = "";
+                        pedidoImp.RequestFocus();
                         #region MATERIAL DIALOG - Embarque Cerrado
-                        // Construcción del título con color naranja y negritas
+                        /*// Construcción del título con color naranja y negritas
                         var titleSpannable = new SpannableStringBuilder("Embarque Cerrado");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FA993E")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -121,12 +128,8 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#E65100")); // Naranja Material (coherente con advertencias)
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
-
-                        pedidoImp.Text = "";
-                        pedidoImp.RequestFocus();
-                        return;
                     }
 
 
@@ -165,8 +168,16 @@ namespace SplitTrailers
 
             pedidocancelar = pedidoImp.Text.Trim();
 
+            // Diálogo de confirmación para imprimir
+            DialogHelper.ShowConfirmDialog(this,
+                title: "Imprimir Split",
+                message: $"¿Desea imprimir el Split número {split}?",
+                positiveText: "Sí",
+                negativeText: "No",
+                positiveAction: SaveAction,
+                negativeAction: CancelaAction);
             #region MATERIAL DIALOG - Imprimir Split
-            // Construcción del título con color rojo Material y negritas
+            /*// Construcción del título con color rojo Material y negritas
             var titleSpannable = new SpannableStringBuilder("Imprimir Split");
             titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
             titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -205,7 +216,7 @@ namespace SplitTrailers
 
                 positiveButton?.SetAllCaps(false);
                 negativeButton?.SetAllCaps(false);
-            });
+            });*/
             #endregion
 
 
@@ -239,9 +250,28 @@ namespace SplitTrailers
             cmds.ExecuteNonQuery();
             thisConnection.Close();
 
-
+            // Diálogo de éxito
+            DialogHelper.ShowSuccessDialog(this,
+                message: "¡Split impreso correctamente!",
+                positiveText: "Aceptar",
+                positiveAction: (s, ev) =>
+                {
+                    // Lógica de limpieza y regreso
+                    Intent databack = new Intent();
+                    databack.PutExtra("pedido_cancelar", pedidoImp.Text.Trim());
+                    pedidoImp.Text = "";
+                    totalsplitimp.Text = "000|000";
+                    List<FlimStarInfo> lstFlimStar = ConsSplit();
+                    lstFlimStar.Clear();
+                    var gvObject = FindViewById<GridView>(Resource.Id.gvCtrimprimir);
+                    gvObject.Adapter = new myGVItemAdapter(this, null);
+                    gvObject.Adapter = null;
+                    gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
+                    SetResult(Result.Ok, databack);
+                    Finish();
+                });
             #region MATERIAL DIALOG - Split Impreso
-            // Construcción del título (color rojo + negritas)
+            /*// Construcción del título (color rojo + negritas)
             var titleSpannable = new SpannableStringBuilder("Split Impreso");
             titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
             titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -290,7 +320,7 @@ namespace SplitTrailers
                 var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                 positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material (éxito)
                 positiveButton?.SetAllCaps(false);
-            });
+            });*/
             #endregion
 
 
@@ -387,8 +417,12 @@ namespace SplitTrailers
 
             if (Existe != "S")
             {
+                // Diálogo de error (pedido sin split)
+                DialogHelper.ShowErrorDialog(this,
+                    message: $"El pedido: {pedidoImp.Text.Trim()} no cuenta con split disponible.",
+                    positiveText: "Ok");
                 #region MATERIAL DIALOG - Pedido sin Split
-                // Construcción del título (color rojo + negritas)
+                /*// Construcción del título (color rojo + negritas)
                 var titleSpannable = new SpannableStringBuilder("Pedido sin Split");
                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -422,7 +456,7 @@ namespace SplitTrailers
                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                     positiveButton?.SetTextColor(Color.ParseColor("#B71C1C")); // Rojo oscuro Material
                     positiveButton?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
 
             }

@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/md_theme_background">
+    android:background="?attr/colorSurface">
 
-	<LinearLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,13 +15,13 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="@dimen/marginTop">
 
-		<!-- Toolbar -->
-		<include
+        <!-- Toolbar -->
+        <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-		<!-- Logos principales -->
-		<ImageView
+        <!-- Logos principales -->
+        <ImageView
             android:id="@+id/iVlogos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:scaleType="centerInside"
             android:adjustViewBounds="true" />
 
-		<ImageView
+        <ImageView
             android:id="@+id/iVlogo"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -39,8 +39,8 @@
             android:scaleType="centerInside"
             android:adjustViewBounds="true" />
 
-		<!-- Título -->
-		<TextView
+        <!-- Título -->
+        <TextView
             android:id="@+id/tvlogin"
             style="@style/label_primary"
             android:layout_width="match_parent"
@@ -50,8 +50,8 @@
             android:gravity="center"
             android:layout_marginTop="16dp" />
 
-		<!-- Responsable -->
-		<TextView
+        <!-- Responsable -->
+        <TextView
             android:id="@+id/textView2"
             style="@style/label_secondary"
             android:layout_width="match_parent"
@@ -59,36 +59,29 @@
             android:text="Responsable:"
             android:layout_marginTop="24dp" />
 
-		<!-- Spinner moderno con ripple -->
-		<FrameLayout
+        <!-- Spinner moderno con ripple -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:foreground="?attr/selectableItemBackground"
-            android:background="@drawable/bg_spinner_moderno"
             android:layout_marginTop="8dp">
 
-			<Spinner
+            <Spinner
                 android:id="@+id/spinner2"
                 style="@style/spinner_moderno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp" />
-		</FrameLayout>
+        </FrameLayout>
 
-		<!-- Contraseña con elevación y ripple -->
-		<com.google.android.material.textfield.TextInputLayout
+        <!-- Contraseña con TextInputLayout dinámico -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            style="@style/entry_m3"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/md_theme_outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
+            style="@style/TextInputLayout_Outlined">
 
-			<EditText
+            <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,12 +89,12 @@
                 android:inputType="textPassword"
                 android:background="@null"
                 android:padding="12dp"
-                android:textColor="@color/md_theme_onBackground"
+                android:textColor="?attr/colorOnSurface"
                 android:fontFamily="sans-serif-medium" />
-		</com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-		<!-- Botón Login con ripple y elevación -->
-		<Button
+        <!-- Botón Login con MaterialButton -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnlogin"
             style="@style/btn_m3"
             android:layout_width="match_parent"
@@ -110,8 +103,8 @@
             android:layout_marginTop="24dp"
             android:stateListAnimator="@animator/button_elevation_anim" />
 
-		<!-- Versión de la app -->
-		<TextView
+        <!-- Versión de la app -->
+        <TextView
             android:id="@+id/versionapp"
             style="@style/label_secondary"
             android:layout_width="match_parent"
@@ -122,5 +115,5 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp" />
 
-	</LinearLayout>
+    </LinearLayout>
 </ScrollView>

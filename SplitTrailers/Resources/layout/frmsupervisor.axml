@@ -8,84 +8,62 @@
     android:background="?attr/colorSurfaceInverse"
     android:clipToPadding="false"
     android:gravity="center_horizontal">
-	<TextView
-		android:id="@+id/titleLogin"
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:text="AUTORIZACION"
-		android:textSize="20sp"
-		android:paddingTop="4dp"
-		android:layout_marginBottom="30dp"
-		android:gravity="center"
-		style="@style/label_dialog"/>
 
-	<!--<TextView
-        android:layout_below="@+id/txtUsername"
-        android:layout_height="25dp"
-        android:layout_width="170dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text=""
-        android:textColor="#FFFFFF"
-        android:textSize="14dp"
-        android:paddingLeft="5dp"
-        android:paddingTop="2dp"
-        android:typeface="sans" />
     <TextView
-        android:id="@+id/lblPassword"
-        android:layout_below="@+id/txtUsername"
-        android:layout_height="25dp"
-        android:layout_width="170dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Password"
-        android:textColor="#000000"
-        android:textSize="14dp"
-        android:paddingLeft="5dp"
-        android:paddingTop="20dp"
-        android:typeface="sans" />-->
+        android:id="@+id/titleLogin"
+        style="@style/label_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AUTORIZACION"
+        android:textSize="20sp"
+        android:paddingTop="4dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center" />
 
+    <!-- Contraseña con TextInputLayout -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayout_Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password">
 
-	<EditText
-		android:id="@+id/txtPassword"
-		android:layout_below="@+id/lblPassword"
-		android:inputType="textPassword"
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:layout_marginLeft="20dp"
-		android:hint="Password"
-		android:paddingLeft="5dp"
-		android:paddingTop="1dp"
-		android:textSize="14sp"
-		android:paddingBottom="9dp"
-		android:layout_marginRight="20dp"
-		android:longClickable="false"
-		style="@style/TextInputLayout_Outlined"/>
-	<LinearLayout
-		android:id="@+id/linearLayoutBtns"
-		android:layout_below="@+id/txtPassword"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="30dp"
-		android:layout_gravity="center"
-		android:layout_marginBottom="20dp"
-		android:orientation="horizontal">
-		<Button
-			android:background="@drawable/buttonOK"
-			android:id="@+id/btnLoginLL"
-			android:layout_width="125dp"
-			android:layout_height="35dp"
-			android:text="Aceptar"
-			android:textStyle="bold"
-			android:gravity="center"/>
-		<Button
-			android:background="@drawable/buttonCancelar"
-			android:id="@+id/btnClearLL"
-			android:layout_width="125dp"
-			android:layout_height="35dp"
-			android:text="Cancelar"
-			android:layout_marginLeft="5dp"
-			android:textStyle="bold"
-			android:gravity="center"/>
-	</LinearLayout>
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:background="@null"
+            android:padding="12dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutBtns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLoginLL"
+            style="@style/btn_m3"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:text="Aceptar"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearLL"
+            style="@style/btn_m3"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"
+            android:gravity="center" />
+    </LinearLayout>
 </LinearLayout>

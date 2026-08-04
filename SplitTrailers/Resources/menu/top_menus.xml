@@ -1,40 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto">
+	<!-- Nuevo -->
 	<item
-		 android:id="@+id/menu_edit"
-		 android:icon="@mipmap/ic_action_content_create"
-		 android:showAsAction="ifRoom"
-		 android:title="Nuevo" />
+        android:id="@+id/menu_nuevo"
+        android:icon="@drawable/ic_add"
+        android:title="Nuevo"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
+	<!-- Consultar -->
 	<item
-		 android:id="@+id/menu_save"
-		 android:icon="@mipmap/ic_menu_search_holo_dark"
-		 android:showAsAction="ifRoom"
-		 android:title="Consultar" />
+        android:id="@+id/menu_consultar"
+        android:icon="@drawable/ic_scanner"
+        android:title="Consultar"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
+
+	<!-- Cancelar -->
 	<item
-		 android:id="@+id/menu_save"
-		 android:icon="@mipmap/ic_menu_paste_holo_dark"
-		 android:showAsAction="ifRoom"
-		 android:title="Cancelar" />
+        android:id="@+id/menu_cancelar"
+        android:icon="@drawable/ic_close"
+        android:title="Cancelar"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
+
+	<!-- Imprimir Split -->
 	<item
-		android:id="@+id/menu_save"
-		android:icon="@mipmap/ic_menu_paste_holo_dark"
-		android:showAsAction="ifRoom"
-		android:title="Imprimir Split" />
+        android:id="@+id/menu_imprimir_split"
+        android:icon="@drawable/ic_print"
+        android:title="Imprimir Split"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
+
+	<!-- Reasignar Orden -->
 	<item
-	   android:id="@+id/reasignar"
-	   android:icon="@mipmap/ic_menu_paste_holo_dark"
-	   android:showAsAction="ifRoom"
-	   android:title="Reasignar Orden" />
+        android:id="@+id/menu_reasignar"
+        android:icon="@drawable/ic_reasignar"
+        android:title="Reasignar Orden"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
+
+	<!-- Solicitar Producto -->
 	<item
-	   android:id="@+id/Solicitarproducto"
-	   android:icon="@mipmap/ic_menu_paste_holo_dark"
-	   android:showAsAction="ifRoom"
-	   android:title="Solicitar Producto" />
+        android:id="@+id/menu_solicitar_producto"
+        android:icon="@drawable/ic_email"
+        android:title="Solicitar Producto"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
+
+	<!-- Cerrar Sesión -->
 	<item
-	   android:id="@+id/cerrarSesion"
-	   android:icon="@mipmap/ic_menu_paste_holo_dark"
-	   android:showAsAction="ifRoom"
-	   android:title="Cerrar Sesion" />
+        android:id="@+id/menu_cerrar_sesion"
+        android:icon="@drawable/ic_logout"
+        android:title="Cerrar Sesión"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
 </menu>
 <!-- Code to implement into Activity:
 

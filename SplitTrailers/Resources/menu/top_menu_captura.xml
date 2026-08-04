@@ -1,23 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<!--<item
-       android:id="@+id/menu_reetiqueta"
-       android:icon="@mipmap/ic_menu_copy_holo_dark"
-       android:showAsAction="ifRoom"
-       android:title="Reetiquetar" />-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto">
 	<item
-		 android:id="@+id/menu_save"
-		 android:icon="@mipmap/ic_menu_validar_holo_dark"
-		 android:showAsAction="ifRoom"
-		 android:title="Validar" />
+        android:id="@+id/menu_validar"
+        android:icon="@drawable/ic_check"
+        android:title="Validar"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface" />
 	<item
-	   android:id="@+id/menu_preferences"
-	   android:showAsAction="never"
-	   android:title="Concentrado" />
+        android:id="@+id/menu_concentrado"
+        android:icon="@drawable/ic_list"
+        android:title="Concentrado"
+        app:showAsAction="never"
+        app:iconTint="?attr/colorOnSurface" />
 	<item
-	 android:id="@+id/menu_edit"
-	 android:showAsAction="never"
-	 android:title="Limpiar" />
+        android:id="@+id/menu_limpiar"
+        android:icon="@drawable/ic_clear"
+        android:title="Limpiar"
+        app:showAsAction="never"
+        app:iconTint="?attr/colorOnSurface" />
 </menu>
 
 <!-- Code to implement into Activity:

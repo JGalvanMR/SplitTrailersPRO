@@ -3,32 +3,42 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/marginTop">
-	<TextView
-        android:text="Productos En Split"
+    android:background="?attr/colorSurface"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView1"
         style="@style/label_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
+        android:text="Productos En Split"
         android:gravity="center" />
-	<GridView
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="1"
-        android:id="@+id/gvCtrcapturasplit"
+
+    <androidx.cardview.widget.CardView
+        style="@style/card_m3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:columnWidth="150dp"
-		style="@style/card_m3"/>
-	<Button
-        android:textSize="16sp"
-        android:text="Cancelar Split Completo"
+        android:layout_marginTop="8dp">
+
+        <GridView
+            android:id="@+id/gvCtrcapturasplit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="1"
+            android:columnWidth="150dp"
+            android:padding="8dp"
+            android:clipToPadding="false" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnbclose"
+        style="@style/btn_m3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnbclose"
-        android:layout_weight="0"
+        android:layout_marginTop="16dp"
+        android:text="Cancelar Split Completo"
+        android:textSize="16sp"
         android:drawableLeft="@drawable/cerrar"
-		style="@style/btn_m3"
-		android:stateListAnimator="@animator/button_elevation_anim"/>
+        android:stateListAnimator="@animator/button_elevation_anim" />
 </LinearLayout>

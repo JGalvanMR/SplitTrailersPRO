@@ -1,63 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-			  android:layout_marginTop="@dimen/marginTop">
-	<EditText
-        android:inputType="number"
+    android:background="?attr/colorSurface"
+    android:padding="16dp">
+
+    <!-- Folio -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayout_Outlined"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/folio"
-        android:hint="Folio de la etiqueta"
-        style="@style/entry_m3"
-		/>
-	<TextView
-		android:text="Clave del Producto"
-		style="@style/label_primary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textView1" />
-	<Spinner
+        app:placeholderText="Folio de la etiqueta">
+
+        <EditText
+            android:id="@+id/folio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:background="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/label_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Clave del Producto"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
         android:id="@+id/spinner3"
-        android:spinnerMode="dropdown"/>
-	<TextView
-        
-		android:text="Numero de Tarima"
-		style="@style/label_primary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textView2" />
-	<Spinner
+        style="@style/spinner_moderno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/label_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Numero de Tarima"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
         android:id="@+id/tarimareim"
-        android:spinnerMode="dropdown"/>
-	<TextView
-		android:text="Numero de Caja"
-		style="@style/label_primary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textView3" />
-	<Spinner
+        style="@style/spinner_moderno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/textView3"
+        style="@style/label_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Numero de Caja"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
         android:id="@+id/cajareim"
-        android:spinnerMode="dropdown"/>
-	<RadioGroup
+        style="@style/spinner_moderno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <RadioGroup
         android:id="@+id/radioGroup1"
-        android:minWidth="25px"
-        android:minHeight="25px" />
-	<Button
-        android:text="MANDAR A REIMPRESION"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:buttonTint="?attr/colorPrimary">
+        <!-- Aquí se agregarán los RadioButtons desde código -->
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnsave"
+        style="@style/btn_m3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="MANDAR A REIMPRESION"
         android:drawableLeft="@drawable/save"
-		style="@style/btn_m3"
-		android:stateListAnimator="@animator/button_elevation_anim"/>
+        android:stateListAnimator="@animator/button_elevation_anim" />
 </LinearLayout>

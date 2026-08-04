@@ -1,66 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:layout_marginTop="@dimen/marginTop">
-	<TextView
+    android:background="?attr/colorSurface"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textsolicitud"
         style="@style/label_primary"
-		android:text="SOLICITUD POR FALTA DE PRODUCTO"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textsolicitud"/>
-	<TextView
-        style="@style/label_primary"
-		android:text="NUMERO DE PEDIDO"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textpedsol"/>
-	<TextView
-        style="@style/label_primary"
-		android:text="Clave del Producto"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textView1"/>
-	<Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="SOLICITUD POR FALTA DE PRODUCTO"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textpedsol"
+        style="@style/label_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO DE PEDIDO"
+        android:layout_marginTop="12dp" />
+
+    <!-- Aquí se espera un EditText o Spinner, pero en el original solo hay TextView.
+         Se mantiene igual, solo se agrega un EditText oculto? No, es mejor dejar como estaba.
+         El código original solo tiene TextView, así que lo dejamos así. -->
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/label_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clave del Producto"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
         android:id="@+id/spinnerprodfal"
-        android:spinnerMode="dropdown"/>
-	<TextView
-        style="@style/label_primary"
-		android:text="Cantidad por Armar"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/porarmar"/>
-	<EditText
-		style="@style/entry_m3"
-        android:inputType="number"
+        style="@style/spinner_moderno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cantidadfaltante" />
-	<TextView
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/porarmar"
         style="@style/label_primary"
-		android:text="Observaciones/Comentarios"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/textobsprod"/>
-	<EditText
-		style="@style/entry_m3"
-		android:inputType="textMultiLine"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/obsprod" />
-	<Button
-        android:text="SOLICITAR PRODUCTO"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Cantidad por Armar"
+        android:layout_marginTop="12dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayout_Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:placeholderText="Cantidad">
+
+        <EditText
+            android:id="@+id/cantidadfaltante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:background="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textobsprod"
+        style="@style/label_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Observaciones/Comentarios"
+        android:layout_marginTop="12dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayout_Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:placeholderText="Observaciones">
+
+        <EditText
+            android:id="@+id/obsprod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:background="@null"
+            android:gravity="top" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnsolicitarprod"
+        style="@style/btn_m3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="SOLICITAR PRODUCTO"
         android:drawableLeft="@drawable/email"
-		style="@style/btn_m3"
-		android:stateListAnimator="@animator/button_elevation_anim"/>
+        android:stateListAnimator="@animator/button_elevation_anim" />
 </LinearLayout>

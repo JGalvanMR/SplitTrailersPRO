@@ -3,44 +3,56 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-			  android:layout_marginTop="@dimen/marginTop">
-	<TextView
-        
-        android:text="Small Text"
+    android:background="?attr/colorSurface"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/usuarioInf"
         style="@style/label_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/usuarioInf" />
-	<TextView
-        
-        android:text="Pedido:"
-        style="@style/label_primary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:text="Usuario" />
+
+    <TextView
         android:id="@+id/PedidoInf"
+        style="@style/label_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pedido:"
         android:singleLine="true"
         android:imeOptions="actionDone" />
-	<TextView
-        
+
+    <TextView
+        style="@style/label_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="DETALLE DE PRODUCTO:"
-        style="@style/label_primary"
+        android:layout_marginTop="8dp" />
+
+    <!-- Contenedor del GridView con estilo de card -->
+    <androidx.cardview.widget.CardView
+        style="@style/card_m3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-	<GridView
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="1"
-        android:id="@+id/gvCtrlInf"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:columnWidth="150dp"
-		style="@style/card_m3"/>
-	<TextView
-        
-        android:text="000|000:"
+        android:layout_marginTop="8dp">
+
+        <GridView
+            android:id="@+id/gvCtrlInf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="1"
+            android:columnWidth="150dp"
+            android:padding="8dp"
+            android:clipToPadding="false" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textTOTALESCA"
         style="@style/label_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textTOTALESCA" />
+        android:text="000|000:"
+        android:layout_marginTop="8dp"
+        android:gravity="end" />
 </LinearLayout>

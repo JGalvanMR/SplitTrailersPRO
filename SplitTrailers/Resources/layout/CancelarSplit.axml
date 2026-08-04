@@ -1,34 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:layout_marginTop="@dimen/marginTop">
-	<TextView
+    android:background="?attr/colorSurface"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/usercancel"
         style="@style/label_secondary"
-        android:text="Small Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/usercancel" />
-	<TextView
+        android:text="Usuario" />
+
+    <TextView
         style="@style/label_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Pedido A Cancelar:"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:singleLine="true"
-        android:imeOptions="actionDone" />
-	<EditText
-		style="@style/entry_m3"
-        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:layout_marginTop="8dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayout_Outlined"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pedidocancelar" />
-	<RadioGroup
+        app:placeholderText="Número de pedido">
+
+        <EditText
+            android:id="@+id/pedidocancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:background="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-		<RadioButton
+        android:orientation="horizontal"
+        android:buttonTint="?attr/colorPrimary"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
             android:id="@+id/radio_Completa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,40 +52,55 @@
             android:scaleY="0.9"
             android:checked="true"
             android:text="Split_Completo" />
-		<RadioButton
+
+        <RadioButton
             android:id="@+id/radio_Parcial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleX="0.9"
             android:scaleY="0.9"
             android:text="Split_Parcial" />
-	</RadioGroup>
-	<Button
-        android:text="Capturar Cancelacion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/capturacancelacion"
-        android:layout_marginTop="0.0dp" />
-	<TextView
-        style="@style/label_secondary"
+        style="@style/btn_m3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Capturar Cancelacion"
+        android:stateListAnimator="@animator/button_elevation_anim" />
+
+    <TextView
         android:id="@+id/textosplit"
-        android:text="Split Capturados:"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-	<GridView
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="1"
-        android:id="@+id/gvCtrCancel"
-        android:layout_weight="1"
-        android:columnWidth="150dp"
-		style="@style/card_m3"/>
-	<TextView
         style="@style/label_secondary"
-        android:text="Total de Splits: 000:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/SplitCargados" />
+        android:text="Split Capturados:"
+        android:layout_marginTop="12dp" />
+
+    <androidx.cardview.widget.CardView
+        style="@style/card_m3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp">
+
+        <GridView
+            android:id="@+id/gvCtrCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="1"
+            android:columnWidth="150dp"
+            android:padding="8dp"
+            android:clipToPadding="false" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/SplitCargados"
+        style="@style/label_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total de Splits: 000:"
+        android:layout_marginTop="8dp" />
 </LinearLayout>

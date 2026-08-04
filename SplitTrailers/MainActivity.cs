@@ -26,6 +26,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Net;
 using System.Threading;
+using SplitTrailers.Helpers;
 
 namespace SplitTrailers
 {
@@ -197,8 +198,16 @@ namespace SplitTrailers
                 msj += "\nDesea Actualizar?";
                 //Crea ventana de alerta.
 
+                DialogHelper.ShowConfirmDialog(this,
+                    title: "Actualización Disponible",
+                    message: msj,
+                    positiveText: "Sí",
+                    negativeText: "No",
+                    positiveAction: SaveAction,
+                    negativeAction: CancelaAction);
+
                 #region MATERIAL DIALOG
-                // 🔹 Construimos el título con color rojo y negritas
+                /*// 🔹 Construimos el título con color rojo y negritas
                 var titleSpannable = new SpannableStringBuilder("Actualización Disponible");
                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -233,10 +242,8 @@ namespace SplitTrailers
 
                     negativeButton?.SetTextColor(Color.ParseColor("#DC3545")); // Rojo Material
                     negativeButton?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
-
-
                 //Muestra la ventana esperando respuesta.
 
             }
@@ -254,8 +261,12 @@ namespace SplitTrailers
 
             if (totalhoras != 0)
             {
+                DialogHelper.ShowWarningDialog(this,
+                    message: "La fecha/Hora de la lectora es muy diferente a la fecha/Hora del servidor, no se puede utilizar el sistema hasta coincidir las horas",
+                    positiveText: "Entendido",
+                    positiveAction: (s, e) => { Finish(); });
                 #region MATERIAL DIALOG
-                // 🔹 Construimos el título con color amarillo claro y negritas
+                /*// 🔹 Construimos el título con color amarillo claro y negritas
                 var titleSpannable = new SpannableStringBuilder("DIFERENCIA EN FECHAS/HORAS");
                 titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#E5FA7A")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                 titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -285,7 +296,7 @@ namespace SplitTrailers
                     var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                     positiveButton?.SetTextColor(Color.ParseColor("#FFA000")); // Naranja Material
                     positiveButton?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
 
             }

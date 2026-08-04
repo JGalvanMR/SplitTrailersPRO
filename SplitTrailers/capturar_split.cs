@@ -34,6 +34,7 @@ using System.Net.Mail;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Threading;
 using static Android.Content.ClipData;
+using SplitTrailers.Helpers;
 
 namespace SplitTrailers
 {
@@ -336,11 +337,6 @@ namespace SplitTrailers
             return stringBuilder.ToString();
         }
 
-
-
-
-
-
         private void BtnGuardar_Click(object sender, EventArgs e)
         {
             try
@@ -502,6 +498,25 @@ namespace SplitTrailers
                 #region MATERIAL DIALOG
                 RunOnUiThread(() =>
                 {
+                    DialogHelper.ShowSuccessDialog(this,
+                        message: "Información Grabada Correctamente!!!",
+                        positiveText: "OK",
+                        positiveAction: (s, e) =>
+                        {
+                            Intent intent = new Intent(this, typeof(SolicitarPed));
+                            intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
+                            intent.PutExtra("cvresponsable", cvresponsable.ToString());
+                            intent.PutExtra("responsable", responsable.ToString());
+                            intent.PutExtra("currentVersionName", currentVersionName.ToString().Trim());
+                            intent.PutExtra("imei", imei.ToString().Trim());
+                            StartActivity(intent);
+                            Finish();
+                        });
+                });
+                #endregion
+                #region MATERIAL DIALOG LEGACY
+                /*RunOnUiThread(() =>
+                {
                     var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
 
                     // Título en rojo
@@ -546,7 +561,7 @@ namespace SplitTrailers
                     var btn = dialog.GetButton((int)DialogButtonType.Positive);
                     btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                     btn?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
 
                 #region ALERT DIALOG
@@ -586,8 +601,14 @@ namespace SplitTrailers
 
             if (_nfcAdapter == null)
             {
-                #region MATERIAL DIALOG
                 RunOnUiThread(() =>
+                {
+                    DialogHelper.ShowErrorDialog(this,
+                        message: "NFC no soportado en el dispositivo.",
+                        positiveText: "OK");
+                });
+                #region MATERIAL DIALOG
+                /*RunOnUiThread(() =>
                 {
                     var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
 
@@ -621,7 +642,7 @@ namespace SplitTrailers
                     var btn = dialog.GetButton((int)DialogButtonType.Positive);
                     btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                     btn?.SetAllCaps(false);
-                });
+                });*/
                 #endregion
 
                 #region ALERT DIALOG
@@ -820,8 +841,14 @@ namespace SplitTrailers
                 }
                 else
                 {
-                    #region MATERIAL DIALOG
                     RunOnUiThread(() =>
+                    {
+                        DialogHelper.ShowErrorDialog(this,
+                            message: "No existen productos capturados para validar",
+                            positiveText: "OK");
+                    });
+                    #region MATERIAL DIALOG
+                    /*RunOnUiThread(() =>
                     {
                         var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
 
@@ -857,7 +884,7 @@ namespace SplitTrailers
                         var btn = dialog.GetButton((int)DialogButtonType.Positive);
                         btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                         btn?.SetAllCaps(false);
-                    });
+                    });*/
                     #endregion
 
                     #region ALERT DIALOG
@@ -1067,8 +1094,14 @@ namespace SplitTrailers
             {
                 if (_nfcAdapter == null)
                 {
-                    #region MATERIAL DIALOG
                     RunOnUiThread(() =>
+                    {
+                        DialogHelper.ShowErrorDialog(this,
+                            message: "NFC no soportado en el dispositivo.",
+                            positiveText: "OK");
+                    });
+                    #region MATERIAL DIALOG
+                    /*RunOnUiThread(() =>
                     {
                         var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
 
@@ -1102,7 +1135,7 @@ namespace SplitTrailers
                         var btn = dialog.GetButton((int)DialogButtonType.Positive);
                         btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                         btn?.SetAllCaps(false);
-                    });
+                    });*/
                     #endregion
 
                     #region ALERT DIALOG
@@ -1300,8 +1333,14 @@ namespace SplitTrailers
                     }
                     else
                     {
-                        #region MATERIAL DIALOG
                         RunOnUiThread(() =>
+                        {
+                            DialogHelper.ShowErrorDialog(this,
+                                message: "No existen productos capturados para validar",
+                                positiveText: "OK");
+                        });
+                        #region MATERIAL DIALOG
+                        /*RunOnUiThread(() =>
                         {
                             var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
 
@@ -1337,7 +1376,7 @@ namespace SplitTrailers
                             var btn = dialog.GetButton((int)DialogButtonType.Positive);
                             btn?.SetTextColor(Android.Graphics.Color.ParseColor("#DC3545"));
                             btn?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
 
                         #region ALERT DIALOG
@@ -1660,8 +1699,14 @@ namespace SplitTrailers
                                 }
                                 else
                                 {
-                                    #region MATERIAL DIALOG - Usuario No Disponible
                                     RunOnUiThread(() =>
+                                    {
+                                        DialogHelper.ShowErrorDialog(this,
+                                            message: "El Usuario X estará disponible de 11:00 pm a 7:00 am, de 10:30 am a 11:00 am, para realizar autorizaciones. Por favor acuda con los encargados en turno.",
+                                            positiveText: "Ok");
+                                    });
+                                    #region MATERIAL DIALOG - Usuario No Disponible
+                                    /*RunOnUiThread(() =>
                                     {
                                         // Construimos el título con color rojo y negritas
                                         var titleSpannable = new SpannableStringBuilder("Usuario No Disponible para Autorizar Folio Adelantado");
@@ -1693,7 +1738,7 @@ namespace SplitTrailers
                                             positiveButton?.SetTextColor(Color.ParseColor("#DC3545")); // Rojo
                                             positiveButton?.SetAllCaps(false);
                                         });
-                                    });
+                                    });*/
                                     #endregion
 
                                     #region ALERT DIALOG
@@ -1719,9 +1764,24 @@ namespace SplitTrailers
                     thisConnection.Close();
                     AutoPed = "S";
                     Guardar.Enabled = true;
-
-                    #region MATERIAL DIALOG - Motivo de Folio Adelantado
                     RunOnUiThread(() =>
+                    {
+                        string[] items = new string[] { "Requerido Por Cliente", "Caja Inexistente", "Caja No Encontrada", "No Apto Para Carga" };
+                        DialogHelper.ShowSingleChoiceDialog(this,
+                            title: "Motivo de Folio Adelantado",
+                            items: items,
+                            checkedItem: 0,
+                            itemSelected: (senderx, erre) =>
+                            {
+                                var d = senderx as Android.App.AlertDialog;
+                                motfolade = items[erre.Which].Trim();
+                                Toast.MakeText(this, $"Seleccionado: {motfolade}", ToastLength.Short).Show();
+                                d?.Dismiss();
+                            },
+                            positiveText: "OK");
+                    });
+                    #region MATERIAL DIALOG - Motivo de Folio Adelantado
+                    /*RunOnUiThread(() =>
                     {
                         string[] items = new string[] { "Requerido Por Cliente", "Caja Inexistente", "Caja No Encontrada", "No Apto Para Carga" };
 
@@ -1759,7 +1819,7 @@ namespace SplitTrailers
                             positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material
                             positiveButton?.SetAllCaps(false);
                         });
-                    });
+                    });*/
                     #endregion
 
                     #region ALERTD DIALOG
@@ -1805,7 +1865,7 @@ namespace SplitTrailers
                 {
                     if (captu.titulo.Trim() == "Existe un folio anterior disponible")
                     {
-                        #region MATERIAL DIALOG - Mensaje de Advertencia
+                        #region MATERIAL DIALOG LEGACY - Mensaje de Advertencia
                         RunOnUiThread(() =>
                         {
                             // Construimos el título con color
@@ -3010,9 +3070,11 @@ namespace SplitTrailers
         {
             //Inflate layout
             View view = LayoutInflater.Inflate(Resource.Layout.frmsupervisor, null);
-            AndroidX.AppCompat.App.AlertDialog builder = new AndroidX.AppCompat.App.AlertDialog.Builder(this).Create();
+            var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
+            //AndroidX.AppCompat.App.AlertDialog builder = new AndroidX.AppCompat.App.AlertDialog.Builder(this).Create();
             builder.SetView(view);
-            builder.SetCanceledOnTouchOutside(false);
+            builder.SetCancelable(false);
+            //builder.SetCanceledOnTouchOutside(false);
             password = view.FindViewById<EditText>(Resource.Id.txtPassword);
             password.LongClickable = false;
             password.Enabled = false;
@@ -3020,7 +3082,7 @@ namespace SplitTrailers
             Button button = view.FindViewById<Button>(Resource.Id.btnClearLL);
             button.Click += delegate
             {
-                builder.Dismiss();
+                builder.Dispose();
 
             };
             buttonaceptar.Click += delegate
@@ -3040,7 +3102,7 @@ namespace SplitTrailers
 
                     AutoPed = "S";
                     Guardar.Enabled = true;
-                    builder.Dismiss();
+                    builder.Dispose();
                 }
 
             };
@@ -4098,7 +4160,7 @@ namespace SplitTrailers
             etiblan.Hint = "Lectura Etiqueta Blanca";
 
             #region MATERIAL DIALOG - Confirmacion Etiqueta Blanca
-            var ad = new MaterialAlertDialogBuilder(this);
+            var ad = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
             ad.SetTitle("Confirmación Etiqueta Blanca");
             ad.SetCancelable(false);
             ad.SetView(etiblan);
@@ -4331,8 +4393,13 @@ namespace SplitTrailers
                         foliocaptura.SetSelection(0, foliocaptura.Text.Length);
                         foliocaptura.RequestFocus();
                         valorfinal = foliocaptura.Text;
+                        DialogHelper.ShowInfoDialog(this,
+                            title: "LECTURA POR TARIMA",
+                            message: $"Se han capturado {total_caja_verde} cajas del folio {mfol}, de la tarima {mtar}, del producto {traenom(mcod.ToString().Trim())}.",
+                            positiveText: "Ok",
+                            iconRes: Resource.Drawable.nota);
                         //iMPRESION DE MENSAJE QUE INDICARA CUANTO DE CADA TARIMA SE LOGRO CARGAR Y SIMULAR
-                        var alertDialog = new Android.App.AlertDialog.Builder(this);
+                        /*var alertDialog = new Android.App.AlertDialog.Builder(this);
                         alertDialog.SetTitle(Html.FromHtml("<font color='#55F721' size=10>LECTURA POR TARIMA</font>"));
                         alertDialog.SetIcon(Resource.Drawable.nota);
                         alertDialog.SetMessage(Html.FromHtml("<font color='#9FFA7A' size=10>Se han capturado " + total_caja_verde +
@@ -4343,11 +4410,11 @@ namespace SplitTrailers
                         {
                             alertDialog.Dispose();
                         });
-                        alertDialog.Show();
+                        alertDialog.Show();*/
                     }
                     else
                     {
-                        var alertDialog = new Android.App.AlertDialog.Builder(this);
+                        /*var alertDialog = new Android.App.AlertDialog.Builder(this);
                         alertDialog.SetTitle(Html.FromHtml("<font color='#55F721' size=10>EXISTENCIA NO DISPONIBLE</font>"));
                         alertDialog.SetIcon(Resource.Drawable.nota);
                         alertDialog.SetMessage(Html.FromHtml("<font color='#9FFA7A' size=10>La tarima actual no cuenta con existencia disponible. Favor de depurar los folios correspondientes y volver a leer.</font>"));
@@ -4356,7 +4423,10 @@ namespace SplitTrailers
                         {
                             alertDialog.Dispose();
                         });
-                        alertDialog.Show();
+                        alertDialog.Show();*/
+                        DialogHelper.ShowWarningDialog(this,
+                            message: "La tarima actual no cuenta con existencia disponible. Favor de depurar los folios correspondientes y volver a leer.",
+                            positiveText: "Ok");
                         foliocaptura.SetSelection(0, foliocaptura.Text.Length);
                         foliocaptura.RequestFocus();
                         valorfinal = foliocaptura.Text;
@@ -4760,8 +4830,20 @@ namespace SplitTrailers
             {
                 if (mconcen == "2")
                 {
+                    RunOnUiThread(() =>
+                    {
+                        DialogHelper.ShowWarningDialog(this,
+                            message: "Está consultando el modo concentrado. No es posible capturar códigos en este modo.",
+                            positiveText: "Entendido",
+                            positiveAction: (s, e) =>
+                            {
+                                foliocaptura.SetSelection(0, foliocaptura.Text.Length);
+                                foliocaptura.RequestFocus();
+                                valorfinal = foliocaptura.Text;
+                            });
+                    });
                     #region MATERIAL DIALOG - MODO CONCENTRADO ACTIVADO
-                    // --- Construcción del título con color y negritas ---
+                    /*// --- Construcción del título con color y negritas ---
                     var titleSpannable = new SpannableStringBuilder("Modo Concentrado Activado");
                     titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                     titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -4801,7 +4883,7 @@ namespace SplitTrailers
                         var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                         positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material 600
                         positiveButton?.SetAllCaps(false);
-                    });
+                    });*/
                     #endregion
 
                 }
