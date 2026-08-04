@@ -61,20 +61,15 @@ namespace SplitTrailers
 
             comentario = FindViewById<EditText>(Resource.Id.obsprod);
 
-
             porarmartexto = FindViewById<TextView>(Resource.Id.porarmar);
             faltanteporarmar = FindViewById<EditText>(Resource.Id.cantidadfaltante);
-
 
             LoadConnection();
 
             CreaTable();
 
-
-
             pedidoprincipal = Intent.GetStringExtra("ordenventa");
             pedidoencaptura.Text = "Pedido Actual: " + pedidoprincipal.ToString();
-
 
             cvvehiculo = Intent.GetStringExtra("cvcamioneta");
             cvresponsable = Intent.GetStringExtra("cvresponsable");
@@ -83,7 +78,6 @@ namespace SplitTrailers
             currentVersionName = Intent.GetStringExtra("currentVersionName");
             imei = Intent.GetStringExtra("imei");
 
-
             db.Query<Pedidos>("delete from  [Pedidos]");
             db.Query<ConPedidos>("delete from  [ConPedidos]");
             db.Query<xLote>("delete from  [xLote]");
@@ -91,7 +85,6 @@ namespace SplitTrailers
             db.Query<xprod>("delete from  [xprod]");
 
             productosporsurtir();
-
 
             Guardar = FindViewById<Button>(Resource.Id.btnsolicitarprod);
             Guardar.Click += BtnGuardar_Click;
@@ -105,16 +98,11 @@ namespace SplitTrailers
 
             Semanas = ds.Tables["Semanas"];
             thisConnection.Close();
-
-
-
         }
 
         private void BtnGuardar_Click(object sender, EventArgs e)
         {
-
             int productoexistente = 0;
-            //validar si existe un envio previo del correo!
             DateTime horaenvio = DateTime.Now;
             DateTime horaactual = DateTime.Now;
             int existe = 0;
@@ -146,7 +134,6 @@ namespace SplitTrailers
                 differenceInMinuntos = ts.TotalMinutes;
             }
 
-
             if (faltanteporarmar.Text == "0")
             {
                 Toast.MakeText(this, "Debe Ingresar Un Valor Valido Para el Faltante\r\n", ToastLength.Short).Show();
@@ -161,7 +148,6 @@ namespace SplitTrailers
 
             if (existe == 0 || differenceInMinuntos > 15.00)
             {
-
                 String mBody = "";
                 mBody = "Buen dia <br/> Soy el armador " + responsable.ToString().Trim() + "<br/>";
                 mBody += "<p> Solicito el siguiente Producto Para Continuar con el armado de la orden " + pedidoprincipal.ToString().Trim() + "<br/>";
@@ -174,10 +160,7 @@ namespace SplitTrailers
                 Genera();
                 mBody += "<font style='color:blue'>Detalle del producto en el monitor de Caducidades:</font><br/>";
 
-
-
                 mBody += "<table style = 'width:100%'><tr><th style='font-size:70%;'>FOLIO</th><th style='font-size:70%;'>Fecha ELA</th><th style='font-size:70%;'>LOTE</th><th style='font-size:70%;'>FECHA CAD</th><th style='font-size:70%;'>DIAS/T</th><th style='font-size:70%;'>CANTFISICO</th><th style='font-size:70%;'>EXISTENCIA</th><th style='font-size:70%;'>UBICACION</th><th style='font-size:70%;'>PRESPLIT</th></tr>";
-
 
                 foreach (DataRow fila in Inven.Rows)
                 {
@@ -190,17 +173,13 @@ namespace SplitTrailers
 
                 mBody += "</table>";
 
-
                 mBody += "Para cualquier aclaracion, Informacion o comentario, favor de solicitar al Supervisor en turno<br/>Gracias<br/><font style='color:blue'>Correo Enviado Desde Sistema Split Trailer</font>";
-
-
-
 
                 if (productoexistente > 0)
                 {
-                    // DIÁLOGO: Producto Disponible en Inventario
+                    // Diálogo: Producto Disponible en Inventario
                     DialogHelper.ShowWarningDialog(this,
-                        message: "Existen " + productoexistente + " disponibles para carga. Por favor, cargue el producto y reinicie el proceso.",
+                        message: $"Existen {productoexistente} disponibles para carga. Por favor, cargue el producto y reinicie el proceso.",
                         positiveText: "Entendido");
                     return;
                 }
@@ -225,7 +204,6 @@ namespace SplitTrailers
                     thisConnection.Close();
 
                     SendMail("jgonzalez@mrlucky.com.mx; supervisorcamfrias@mrlucky.com.mx; produccion@mrlucky.com.mx; ensaladas@mrlucky.com.mx; embarques@mrlucky.com.mx; fresco@mrlucky.com.mx; mprima@mrlucky.com.mx; " + vendedor, mBody, "Solicitud de producto para Orden de Venta " + pedidoprincipal);
-                    //SendMail("dmunoz@mrlucky.com.mx; logistica@mrlucky.com.mx", mBody, "Solicitud de producto para Orden de Venta " + pedidoprincipal);
                     thisConnection.Open();
                     string cadena = "INSERT INTO   tb_det_sol_producto (fecha, imei, nom_usu, producto, observaciones, cantidad, ord_vent) " +
                                "VALUES(GETDATE(),'" + imei + "','" + responsable + "','" + claveprodcuto + "','" + comentario.Text.Trim() + "','" + faltante + "','" + pedidoprincipal.ToString().Trim() + "')";
@@ -233,19 +211,17 @@ namespace SplitTrailers
                     cmd.ExecuteNonQuery();
                     thisConnection.Close();
 
-
-                    // DIÁLOGO: Solicitud Enviada
+                    // Diálogo: Solicitud Enviada
                     DialogHelper.ShowSuccessDialog(this,
                         message: "El correo fue enviado correctamente.",
                         positiveText: "Entendido",
                         positiveAction: (s, e) => { Finish(); });
                     return;
                 }
-
             }
             else
             {
-                // DIÁLOGO: No se puede enviar solicitud (por tiempo)
+                // Diálogo: No se puede enviar solicitud
                 DialogHelper.ShowErrorDialog(this,
                     message: "La solicitud no se puede completar debido a que aún no han pasado 15 minutos.",
                     positiveText: "Entendido");
@@ -253,13 +229,12 @@ namespace SplitTrailers
             }
         }
 
-
         //***********************************************************************CODIGO EXPERIMENTAL PARA MANDAR UNA COPIA DEL PRODUCTO SEGUN EL MONITOR DE CADUCIADES***************************************************************************************************************************************
 
         private void CreaTable()
         {
             Inven.Columns.Add("Nombre", typeof(string));
-            Inven.Columns.Add("FechaEla", typeof(string)); //int
+            Inven.Columns.Add("FechaEla", typeof(string));
             Inven.Columns.Add("Lote", typeof(string));
             Inven.Columns.Add("FecCad", typeof(string));
             Inven.Columns.Add("FecCadTeo", typeof(string));
@@ -274,9 +249,7 @@ namespace SplitTrailers
             Inven.Columns.Add("Ubica", typeof(string));
             Inven.Columns.Add("Tarima", typeof(string));
             Inven.Columns.Add("Presplit", typeof(int));
-
         }
-
 
         private void Genera()
         {
@@ -308,7 +281,6 @@ namespace SplitTrailers
             da = new SqlDataAdapter(Cadena, thisConnection);
             da.Fill(ds, "PTC");
             PTC = ds.Tables["PTC"];
-            //string Cadena = "SELECT PROD_NOMBRE, RECIBO, TARIMA, PTI_FECHA, LOTE, FECHA_CAD, ETIQUETA, SURTIDO, PROD_CLAVE FROM TB_DET_TRAZABILIDAD WHERE PTI_ESTATUS_SUR =  ' ' AND TIPO = 'PTC'  ORDER BY PROD_NOMBRE,RECIBO,PTI_CLAVE ";
             Cadena = "SELECT C.PROD_NOMBRE, A.RECIBO, A.TARIMA, A.PTI_FECHA, A.LOTE, A.FECHA_CAD, A.ETIQUETA, A.SURTIDO, A.PROD_CLAVE, A.UBICACION " +
                             " FROM TB_DET_TRAZABILIDAD A, tb_mstr_recepcion_pt B, tb_cat_producto C " +
                             " WHERE A.PTI_ESTATUS_SUR =  ' ' AND A.prod_clave = '" + claveprodcuto + "' AND A.TIPO = 'PTC'  AND A.recibo = B.rpt_recibo AND A.PROD_CLAVE = C.PROD_CLAVE AND B.rpt_estatus = ' ' AND (B.rpt_tipo != 'TR' OR (B.rpt_tipo = 'TR' AND B.RPT_INVENTARIO = 'S'))" +
@@ -334,7 +306,6 @@ namespace SplitTrailers
             da.Fill(ds, "Teo");
             DataTable Teorico = new DataTable();
             Teorico = ds.Tables["Teo"];
-            //dataGridView2.DataSource = Inven ;
             string Mnom = "", Nprod = "";
             int INI = 1, totp = 0, totg = 0, tott = 0;
             int prodPTC = 0;
@@ -345,16 +316,11 @@ namespace SplitTrailers
                 {
                     Mnom = row["PROD_NOMBRE"].ToString();
                     Nprod = row["prod_clave"].ToString();
-                    //Inven.Rows.Add(Mnom, "", "", "", "", 0, 0, 0, 1, Mnom, Nprod, ""); se bloqueo el 8 de abril 2017 original
                     Inven.Rows.Add(Mnom, "", "", "", "", 0, 0, 0, 1, "", "", "");
                     INI = 0;
                 }
 
                 prodPTC = 1;
-                //if (Mnom == "TOMATE ORGANICO MR.LUCKY CHERRY 12/10 OZ          ")
-                //{ 
-                //}
-
                 string fol = row["RECIBO"].ToString();
                 if (Mnom != row["PROD_NOMBRE"].ToString())
                 {
@@ -376,19 +342,15 @@ namespace SplitTrailers
                     {
                         tott = Convert.ToInt32(Row["Cajas"]);
                     }
-                    //Inven.Rows.Add("TOTAL " + Mnom, "", "Teorico:", (Teo + tott).ToString(), "", Fisi + tott, 0, totp, 3, Mnom, Nprod, "", "99991231"); se bloqueo el 8 de abril 2017 original
                     Inven.Rows.Add("TOTAL " + Mnom, "", "", "", "", (Teo + tott - Surti).ToString(), Fisi + tott - Surti, totp, 3, Mnom, Nprod, "", "99991231");
                     Nprod = row["prod_clave"].ToString();
                     Mnom = row["PROD_NOMBRE"].ToString();
-                    //Inven.Rows.Add(Mnom, "", "", Mnom, "", 0, 0, 0, 1, Mnom, Nprod, ""); se bloqueo el 8 de abril 2017 original
                     Inven.Rows.Add(Mnom, "", "", "", "", 0, 0, 0, 1, "", "", "");
                     totp = 0; tott = 0;
                 }
 
                 totp = totp + (Convert.ToInt32(row["ETIQUETA"]) - Convert.ToInt32(row["SURTIDO"]));
                 totg = totg + (Convert.ToInt32(row["ETIQUETA"]) - Convert.ToInt32(row["SURTIDO"]));
-                //if (Convert.ToDateTime(row["PTI_FECHA"]).ToString("dd-MM-yyyy") == System.DateTime.Now.ToString("dd-MM-yyyy"))
-                //    tott = tott + (Convert.ToInt32(row["ETIQUETA"])); // - Convert.ToInt32(row["SURTIDO"]));
                 TimeSpan Mdias = TimeSpan.Zero;
                 DateTime FecCad = Convert.ToDateTime(row["PTI_FECHA"]);
                 string Ubica = Convert.ToString(row["ubicacion"]);
@@ -463,16 +425,13 @@ namespace SplitTrailers
             {
                 tott = Convert.ToInt32(Row["Cajas"]);
             }
-            //Inven.Rows.Add("TOTAL " + Mnom, "", "", "TOTAL " + Mnom, "", 0, 0, totp, 3, Mnom, Nprod, "", "99991231"); se bloqueo el 8 de abril 2017 original
             if (prodPTC > 0)
             {
                 Inven.Rows.Add("TOTAL " + Mnom, "", "", "", "", (Teo + tott - Surti).ToString(), Fisi + tott - Surti, totp, 3, Mnom, Nprod, "", "99991231");
             }
-            // RECIBOS DE PRODUCCION
             totp = 0;
-            //totg = 0;
             tott = 0;
-            INI = 1;//
+            INI = 1;
             Cadena = "SELECT  B.CVE_PROD,SUM(B.NUM_CAJAS) AS CAJAS FROM TB_DET_ETI_FINAL B WHERE B.FECHA =  '" + System.DateTime.Now.ToString("dd-MM-yyyy") + "' AND B.cve_prod = '" + claveprodcuto + "'" +
                      " GROUP BY CVE_PROD ORDER BY CVE_PROD ";
             ds = new DataSet();
@@ -486,12 +445,6 @@ namespace SplitTrailers
             da = new SqlDataAdapter(Cadena, thisConnection);
             da.Fill(ds, "Info2");
             Info2 = ds.Tables["Info2"];
-            //datos = cmd.ExecuteReader();
-            //while (datos.Read())
-            //{
-            //    Var_LoteSem = datos["semana"].ToString() + "-" + OleFE.Value.ToString("ddd").ToUpper();
-            //}
-            //Var_LoteSem = (Var_LoteSem.Trim().Length > 0) ? Var_LoteSem.Substring(0, 5) : ""; 
             int valorPTP = 0;
             foreach (DataRow row in Info2.Rows)
             {
@@ -524,21 +477,14 @@ namespace SplitTrailers
                     {
                         tott = Convert.ToInt32(Row["Cajas"]);
                     }
-                    //Inven.Rows.Add("TOTAL " + Mnom, "", "Teorico:", (Teo + tott).ToString(), "", Fisi + tott, 0, totp, 3, Mnom, Nprod, "", "99991231"); se bloqueo el 8 de abril 2017 original
-                    //if (Nprod == "16001LES18")
-                    //    MessageBox.Show("hOLA");
                     Inven.Rows.Add("TOTAL " + Mnom, "", "", "", "", (Teo + tott - Surti).ToString(), Fisi + tott - Surti, totp, 3, Mnom, Nprod, "", "99991231");
-                    //Inven.Rows.Add("TOTAL " + Mnom, "", "Teorico:", (Teo).ToString(), "", Fisi, 0, totp, 3, Mnom, Nprod, "", "99991231");
                     Mnom = row["PROD_NOMBRE"].ToString();
                     Nprod = row["cve_prod"].ToString();
-                    //Inven.Rows.Add(Mnom, "", "", "", "", 0, 0, 0, 1, Mnom, Nprod);se bloqueo el 8 de abril 2017 original
                     Inven.Rows.Add(Mnom, "", "", "", "", 0, 0, 0, 1, "", "");
                     totp = 0; tott = 0;
                 }
                 totp = totp + (Convert.ToInt32(row["NUM_CAJAS"]) - Convert.ToInt32(row["CAJAS_SUR"]));
                 totg = totg + (Convert.ToInt32(row["NUM_CAJAS"]) - Convert.ToInt32(row["CAJAS_SUR"]));
-                //if (Convert.ToDateTime(row["FECHA"]).ToString("dd-MM-yyyy") == System.DateTime.Now.ToString("dd-MM-yyyy"))
-                //   tott = tott + (Convert.ToInt32(row["NUM_CAJAS"])); // - Convert.ToInt32(row["CAJAS_SUR"]));
                 TimeSpan Mdias = TimeSpan.Zero;
                 DateTime FecCad = Convert.ToDateTime(row["FECHA"]);
                 string Ubica = Convert.ToString(row["ubicacion"]);
@@ -569,17 +515,13 @@ namespace SplitTrailers
                     Mdias = FecCad - System.DateTime.Now.AddDays(-1);
                     Mfeca = FecCad.ToString("MM-dd-yyyy");
                 }
-                Mlot = Lote(row["Fecha"].ToString());  //row["NUM_LOTE"].ToString().Substring(0, 4);
-                //    Mdias = Convert.ToDateTime(row["FECHA_CAD"]) - System.DateTime.Now;
+                Mlot = Lote(row["Fecha"].ToString());
                 string MNewFec = Convert.ToDateTime(Mfeca).ToString("yyyyMMdd");
                 int SURTISPRESPLIT = 0;
                 foreach (DataRow Row in TempPresplit.Select("Eti_Recibo = '" + row["FOLIO"].ToString().Trim() + "' AND Eti_Producto = '" + Nprod.Trim() + "' AND Eti_TarIni = '" + row["TARIMA"].ToString().Trim() + "' "))
                 {
                     SURTISPRESPLIT = Convert.ToInt32(Row["CAJAS"]);
                 }
-
-
-
 
                 Inven.Rows.Add(row["FOLIO"].ToString() + "-" + row["TARIMA"].ToString().Trim(), Convert.ToDateTime(row["FECHA"].ToString()).ToString("dd/MM/yyyy"), Mlot, Mfeca, "", Mdias.Days, row["NUM_CAJAS"], (Convert.ToInt32(row["NUM_CAJAS"]) - Convert.ToInt32(row["CAJAS_SUR"])), 2, Mnom, Nprod, "PTP", MNewFec, Ubica, row["TARIMA"].ToString().Trim(), SURTISPRESPLIT);
             }
@@ -607,14 +549,11 @@ namespace SplitTrailers
                 Inven.Rows.Add("TOTAL " + Mnom, "", "", "", "", (Teo + tott - Surti).ToString(), Fisi + tott - Surti, totp, 3, Mnom, Nprod, "", "99991231");
             }
 
-
             Inven.DefaultView.Sort = "Prod, Conse, FechaCad ASC";
             Inven = Inven.DefaultView.ToTable();
 
             thisConnection.Close();
         }
-
-
 
         private string ConviertetoFecha(string FEC)
         {
@@ -647,12 +586,9 @@ namespace SplitTrailers
                 nmes = "12";
             int MES = System.DateTime.Now.Month;
             int anio = System.DateTime.Now.Year + (MES == 12 && nmes == "01" ? 1 : 0);
-            //if (Convert.ToInt32(nmes) < MES)
-            //    anio++;
             string cad = mdia + "/" + nmes + "/" + anio.ToString();
             return cad;
         }
-
 
         private string Lote(string Fecha)
         {
@@ -665,10 +601,7 @@ namespace SplitTrailers
             return Cad;
         }
 
-
-
         //***********************************************************************CODIGO EXPERIMENTAL PARA MANDAR UNA COPIA DEL PRODUCTO SEGUN EL MONITOR DE CADUCIADES***************************************************************************************************************************************
-
 
         public void SendMail(string Dest, string mBody, string mAsunto)
         {
@@ -689,13 +622,11 @@ namespace SplitTrailers
 
             email.To.Add(new MailAddress("gcamacho@mrlucky.com.mx"));
 
-            email.From = new MailAddress("embarques@mrlucky.com.mx"); //
-            email.Subject = mAsunto; //"Mensaje de Prueba";
-            email.Body = mBody;  //"Información de la factura";
+            email.From = new MailAddress("embarques@mrlucky.com.mx");
+            email.Subject = mAsunto;
+            email.Body = mBody;
             email.IsBodyHtml = true;
             email.Priority = MailPriority.Normal;
-
-
 
             SmtpClient smtp = new SmtpClient();
             smtp.Host = "mail1.mrlucky.com.mx";
@@ -712,12 +643,9 @@ namespace SplitTrailers
             }
             catch (System.Exception ex)
             {
-
                 RunOnUiThread(() => Toast.MakeText(this, "correo no enviado\r\n" + ex.ToString(), ToastLength.Short).Show());
             }
         }
-
-
 
         private void LoadConnection()
         {
@@ -729,7 +657,6 @@ namespace SplitTrailers
 
             if (!exist)
             {
-                //Crea la tabla en base al modelo si es la primera vez
                 db.CreateTable<Pedidos>();
                 db.CreateTable<ConPedidos>();
                 db.CreateTable<xLote>();
@@ -739,7 +666,6 @@ namespace SplitTrailers
                 db.CreateTable<XLoteSug>();
             }
         }
-
 
         public void productosporsurtir()
         {
@@ -753,11 +679,8 @@ namespace SplitTrailers
                 if (Convert.ToInt32(pedidoprincipal) < 300000)
                 {
                     Tipoped = "EXP";
-
                 }
             }
-
-
 
             thisConnection.Open();
             string Cadena = "Select a.pdn_folio,a.prod_clave,b.prod_nombre,a.pdn_num_unidades From tb_det_pedidos A, tb_Cat_producto B " +
@@ -770,26 +693,21 @@ namespace SplitTrailers
 
             string hay = "N";
 
-
             if (Ped.Rows.Count == 0)
             {
                 // Diálogo: Pedido Inexistente
                 DialogHelper.ShowErrorDialog(this,
-                    message: "El pedido " + pedidoprincipal.Trim() + " no existe o no se ha dado de alta.",
+                    message: $"El pedido {pedidoprincipal.Trim()} no existe o no se ha dado de alta.",
                     positiveText: "Entendido");
-                return;
             }
 
             foreach (DataRow row in Ped.Rows)
             {
-
                 string mnom = row["prod_nombre"].ToString().Trim();
                 mnom = mnom.Replace("'", " ");
 
                 Pedidos Pedidoscapturados = new Pedidos { folio = row["pdn_folio"].ToString().Trim(), prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                //Registra en la base de datos SQLite
                 db.Insert(Pedidoscapturados);
-
 
                 var encontrado = 0;
                 var queryx = db.Table<ConPedidos>();
@@ -806,30 +724,18 @@ namespace SplitTrailers
                 if (encontrado == 0)
                 {
                     ConPedidos consecutivo = new ConPedidos { prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                    //Registra en la base de datos SQLite
                     db.Insert(consecutivo);
                 }
 
                 hay = "S";
             }
 
-
-
-
-
-
-
-
             thisConnection.Open();
-
 
             Cadena = "Select isnull(SUM(a.pdn_num_unidades), 0) AS Pedidos From tb_det_pedidos A, tb_Cat_producto B " +
                                 "where a.pdn_folio = '" + mped.Trim() + "' and a.prod_clave = b.prod_clave";
             SqlCommand cmd = new SqlCommand(Cadena, thisConnection);
             int cantped = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
 
             string cadena = "Select * From tb_det_pedidos A, tb_Cat_producto B where a.pdn_folio = '" + pedidoprincipal.Trim() + "' and a.prod_clave = b.prod_clave";
             da = new SqlDataAdapter(cadena, thisConnection);
@@ -844,7 +750,6 @@ namespace SplitTrailers
                     mped = "0" + mped;
                 }
             }
-
 
             cadena = "Select prod_clave, sum(cajas) as cajas from tb_det_split Where emb_folio = '" + mped.Trim() + "'" +
                      " AND estatus != 'C' Group By prod_clave Order by prod_clave";
@@ -876,27 +781,21 @@ namespace SplitTrailers
                 Cs += sur;
             }
 
-
             db.Query<Pedidos>("Delete FROM ConPedidos Where pedido = surtido");
             var queryCancelar = db.Query<Pedidos>("Delete FROM Pedidos Where pedido = surtido");
-
 
             Spinner spinner2 = FindViewById<Spinner>(Resource.Id.spinnerprodfal);
             System.Collections.ArrayList listaFrutas2 = new System.Collections.ArrayList();
 
             int i = 0;
-
-
             var query = db.Table<Pedidos>();
             foreach (var captu in query)
             {
                 i++;
             }
 
-
             strFrutas = new System.String[i + 1];
             int x = 0;
-
 
             strFrutas[x] = "Seleccione un Producto";
 
@@ -907,14 +806,11 @@ namespace SplitTrailers
                 strFrutas[x] = captu.prod_clave + "-" + captu.nombre;
             }
 
-
-
             Collections.AddAll(listaFrutas2, strFrutas);
             comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strFrutas);
             spinner2.Adapter = comboAdapter;
             spinner2.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected2);
         }
-
 
         private void spinner_ItemSelected2(object sender, AdapterView.ItemSelectedEventArgs e)
         {

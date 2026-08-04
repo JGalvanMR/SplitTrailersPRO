@@ -8,7 +8,7 @@ using Android.Text.Style;
 using Android.Widget;
 using Google.Android.Material.Dialog;
 using Plugin.DeviceInfo;
-using SplitTrailers.Helpers;
+using SplitTrailers.Helpers; // <-- AGREGADO
 using SplitTrailers.Modal;
 using SplitTrailers.Models;
 using SQLite;
@@ -20,7 +20,6 @@ using System.IO;
 
 namespace SplitTrailers
 {
-
     [Activity(Label = "Detalle de Orden", LaunchMode = LaunchMode.SingleTask)]
     public partial class DetalleCaptura : SolicitarPed
     {
@@ -49,7 +48,6 @@ namespace SplitTrailers
         public string tipoembarque = "NAL";
 
         int diasmincarga = 0;
-
 
         //traer los datos e id de cada uno de los elementos de la vista
         TextView pedido;
@@ -86,11 +84,6 @@ namespace SplitTrailers
 
             LoadConnection();
 
-            //Android.Telephony.TelephonyManager mTelephonyMgr;
-            //mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
-            //IMEI number  
-            //imei = GetDeviceID();
-
             pedido = FindViewById<TextView>(Resource.Id.PedidoInf);
             pedido.Text = ordenventa.ToString();
             PedidosSurtidos = FindViewById<TextView>(Resource.Id.textTOTALESCA);
@@ -103,12 +96,10 @@ namespace SplitTrailers
             db.Query<xLoteFinal>("delete from  [xLoteFinal]");
             db.Query<xprod>("delete from  [xprod]");
 
-
             List<FlimStarInfo> lstFlimStar = ConsSplitParcial();
             var gvObject = FindViewById<GridView>(Resource.Id.gvCtrlInf);
             gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-            gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked); ; //detalle_pedido
-
+            gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked);
 
             string consultaActualizar = "UPDATE tb_mstr_pedidos_nal SET pdn_situacion = '' WHERE pdn_folio = '" + ordenventa + "'";
             thisConnection.Open();
@@ -118,10 +109,8 @@ namespace SplitTrailers
             consultaActualizar = "INSERT INTO TB_REGISTRO_MOVIMIENTOS(FECHA,NOM_COMPU,NOM_USU,TIPO_MOV,OP_CLAVE,FOLIO,DETALLE,SISTEMA,MOV_FOLIO) " +
                             "VALUES(GETDATE(),'CEL " + imei + "','" + responsable.Trim() + "','V','7.10','" +
                             ordenventa + "','Revision Cambio','SPLITRA','" + ordenventa + "')";
-            //MessageBox.Show(cadena);
             cmd = new SqlCommand(consultaActualizar, thisConnection);
             cmd.ExecuteNonQuery();
-
             thisConnection.Close();
         }
 
@@ -153,7 +142,6 @@ namespace SplitTrailers
 
             if (!exist)
             {
-                //Crea la tabla en base al modelo si es la primera vez
                 db.CreateTable<Pedidos>();
                 db.CreateTable<ConPedidos>();
                 db.CreateTable<xLote>();
@@ -180,14 +168,12 @@ namespace SplitTrailers
             Finish();
         }
 
-
-
         private void OnGridView_ItemClicked(object sender, AdapterView.ItemClickEventArgs e)
         {
-
         }
 
         List<FlimStarInfo> listItem = new List<FlimStarInfo>();
+
         List<FlimStarInfo> ConsSplitParcial()
         {
             string mped = pedido.Text.ToString().Trim();
@@ -200,11 +186,8 @@ namespace SplitTrailers
                 if (Convert.ToInt32(pedido.Text) < 300000)
                 {
                     Tipoped = "EXP";
-
                 }
             }
-
-
 
             thisConnection.Open();
             string Cadena = "Select a.pdn_folio,a.prod_clave,b.prod_nombre,a.pdn_num_unidades From tb_det_pedidos A, tb_Cat_producto B " +
@@ -217,62 +200,21 @@ namespace SplitTrailers
 
             string hay = "N";
 
-
             if (Ped.Rows.Count == 0)
             {
-                #region MATERIAL DIALOG - Pedido Inexistente
-                /*// Construimos el título con color rojo y negritas
-                var titleSpannable = new SpannableStringBuilder("Pedido Inexistente");
-                titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#DC3545")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Construimos el mensaje con color neutro y negritas en el número de pedido
-                var mensajeSpannable = new SpannableStringBuilder();
-                mensajeSpannable.Append("El pedido ");
-                int startPedido = mensajeSpannable.Length();
-                mensajeSpannable.Append(pedido.Text.Trim());
-                mensajeSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), startPedido, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-                mensajeSpannable.Append(" no existe o no se ha dado de alta.");
-                mensajeSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#202124")), 0, mensajeSpannable.Length(), SpanTypes.ExclusiveExclusive);
-
-                // Crear el diálogo con estilo Material Design 3
-                var builder = new MaterialAlertDialogBuilder(this, Resource.Style.ThemeOverlay_Material3_MaterialAlertDialog);
-                builder.SetTitle(titleSpannable);
-                builder.SetIcon(Resource.Drawable.no);
-                builder.SetMessage(mensajeSpannable);
-                builder.SetCancelable(false);
-
-                // Botón principal
-                builder.SetPositiveButton("Ok", (s, e) => { });
-
-                // Crear y mostrar el diálogo
-                var dialog = builder.Create();
-                dialog.Show();
-
-                // Personalización del botón tras mostrar el diálogo
-                dialog.Window.DecorView.Post(() =>
-                {
-                    var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
-                    positiveButton?.SetTextColor(Color.ParseColor("#00695C")); // Verde Material (consistente con tus otros diálogos)
-                    positiveButton?.SetAllCaps(false);
-                }); */
-                #endregion
+                // Diálogo simplificado con Helper
                 DialogHelper.ShowErrorDialog(this,
-    message: $"El pedido {pedido.Text.Trim()} no existe o no se ha dado de alta.",
-    positiveText: "Ok");
+                    message: $"El pedido {pedido.Text.Trim()} no existe o no se ha dado de alta.",
+                    positiveText: "Ok");
             }
-
 
             foreach (DataRow row in Ped.Rows)
             {
-
                 string mnom = row["prod_nombre"].ToString().Trim();
                 mnom = mnom.Replace("'", " ");
 
                 Pedidos Pedidoscapturados = new Pedidos { folio = row["pdn_folio"].ToString().Trim(), prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                //Registra en la base de datos SQLite
                 db.Insert(Pedidoscapturados);
-
 
                 var encontrado = 0;
                 var query = db.Table<ConPedidos>();
@@ -288,33 +230,19 @@ namespace SplitTrailers
 
                 if (encontrado == 0)
                 {
-
                     ConPedidos consecutivo = new ConPedidos { prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                    //Registra en la base de datos SQLite
                     db.Insert(consecutivo);
-
                 }
 
                 hay = "S";
             }
 
-
-
-
-
-
-
-
             thisConnection.Open();
-
 
             Cadena = "Select isnull(SUM(a.pdn_num_unidades), 0) AS Pedidos From tb_det_pedidos A, tb_Cat_producto B " +
                                 "where a.pdn_folio = '" + mped.Trim() + "' and a.prod_clave = b.prod_clave";
             SqlCommand cmd = new SqlCommand(Cadena, thisConnection);
             int cantped = Convert.ToInt32(cmd.ExecuteScalar());
-
-
-
 
             string cadena = "Select * From tb_det_pedidos A, tb_Cat_producto B where a.pdn_folio = '" + pedido.Text.Trim() + "' and a.prod_clave = b.prod_clave";
             da = new SqlDataAdapter(cadena, thisConnection);
@@ -329,7 +257,6 @@ namespace SplitTrailers
                     mped = "0" + mped;
                 }
             }
-
 
             cadena = "Select prod_clave, sum(cajas) as cajas from tb_det_split Where emb_folio = '" + mped.Trim() + "'" +
                      " AND estatus != 'C' Group By prod_clave Order by prod_clave";
@@ -361,11 +288,10 @@ namespace SplitTrailers
                 Cs += sur;
             }
 
-
             List<FlimStarInfo> lstFlimStar = detalle_pedido(pedido.Text.ToString().Trim(), "Acumulado");
             var gvObject = FindViewById<GridView>(Resource.Id.gvCtrlInf);
             gvObject.Adapter = new myGVItemAdapter(this, lstFlimStar);
-            gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked); //detalle_pedido
+            gvObject.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(OnGridView_ItemClicked);
 
             return listItem;
         }
@@ -377,8 +303,6 @@ namespace SplitTrailers
 
             if (mov != "Acumulado")
             {
-
-
                 var query = db.Table<Pedidos>();
                 foreach (var captu in query)
                 {
@@ -392,16 +316,9 @@ namespace SplitTrailers
                         });
                     }
                 }
-
             }
             else
             {
-
-                //Borrar la informacion que no se debe cancelarConPedidos
-                //db.Query<Pedidos>("Delete FROM ConPedidos Where pedido >= surtido");
-                //var queryCancelar = db.Query<Pedidos>("Delete FROM Pedidos Where pedido >= surtido");
-
-
                 var query = db.Table<Pedidos>();
                 foreach (var captu in query)
                 {
@@ -411,14 +328,10 @@ namespace SplitTrailers
                         Age = "Pedidos: " + captu.pedido + " Surtido: " + captu.surtido,
                         ImageID = Resource.Drawable.producto
                     });
-
                 }
-
             }
 
-            //LbxCons.Font = new Font(LbxCons.Font.Name, 7);   ;
             thisConnection.Close();
-
             return listItem;
         }
     }

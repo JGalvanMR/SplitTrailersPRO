@@ -12,7 +12,6 @@ using SplitTrailers.Helpers; // <-- AGREGADO
 using SplitTrailers.Models;
 using SQLite;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -67,7 +66,6 @@ namespace SplitTrailers
             LoadConnection();
 
             myEditText = FindViewById<TextView>(Resource.Id.folio);
-            //myEditText.TextChanged += spinner_Click;
 
             thisConnection.Open();
             cmnd = thisConnection.CreateCommand();
@@ -76,13 +74,11 @@ namespace SplitTrailers
             ds.Clear();
             thisConnection.Close();
 
-
             cveresponsable = Intent.GetStringExtra("cvresponsable");
             embarque = Intent.GetStringExtra("embarque");
             responsable = Intent.GetStringExtra("responsable");
             imei = Intent.GetStringExtra("imei");
             currentVersionName = Intent.GetStringExtra("currentVersionName");
-
 
             myEditText.EditorAction += (sender, e) =>
             {
@@ -96,7 +92,6 @@ namespace SplitTrailers
                         {
                             //Buscar el numero del que parte si es campo o proceso
                             cmnd = thisConnection.CreateCommand();
-
 
                             if (foliox.Length == 5 || Convert.ToInt32(foliox) >= es_campo)
                             {
@@ -124,9 +119,7 @@ namespace SplitTrailers
                     }
                 }
             };
-
         }
-
 
         private void spinner_Click(object sender, EventArgs e)
         {
@@ -146,14 +139,12 @@ namespace SplitTrailers
                         tipo = "PTP";
                         ReciboPTP();
                     }
-
                 }
                 else
                 {
                     Spinner spinner = FindViewById<Spinner>(Resource.Id.spinner3);
                     ds.Clear();
                     System.Collections.ArrayList listaFrutas = new System.Collections.ArrayList();
-                    //Buscar el numero del que parte si es campo o proceso
                     strFrutas = new String[] { "Ingrese un Folio válido" };
                     Collections.AddAll(listaFrutas, strFrutas);
                     comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strFrutas);
@@ -163,32 +154,26 @@ namespace SplitTrailers
             }
         }
 
-
-
         private void Btnguardar_Click(object sender, EventArgs e)
         {
             find = false;
             TextView fol = FindViewById<TextView>(Resource.Id.folio);
             folio = fol.Text.Trim();
             int f = Convert.ToInt32(folio.Length);
-            //TextView prod = FindViewById<TextView>(Resource.Id.prod_clave);
             TextView tar = FindViewById<TextView>(Resource.Id.folio);
             if (tar.Text.Trim() == "")
             {
                 tar.Text = "0";
-
             }
             tarima = Convert.ToInt32(tar.Text.Trim());
             TextView box = FindViewById<TextView>(Resource.Id.folio);
             if (box.Text.Trim() == "")
             {
                 box.Text = "0";
-
             }
             caja = Convert.ToInt32(box.Text.Trim());
 
             prod_clave = prod_clave.Trim();
-
 
             if (Convert.ToString(folio).Trim() == "")
             {
@@ -203,8 +188,6 @@ namespace SplitTrailers
                 fol.SetSelectAllOnFocus(true);
                 return;
             }
-
-
             else if ((f != 5) && (f != 6))
             {
                 Toast.MakeText(this, "Ingrese un folio válido", ToastLength.Short).Show();
@@ -216,7 +199,6 @@ namespace SplitTrailers
             if (Convert.ToString(prod_clave).Trim() == "Ingrese un Folio válido" || Convert.ToString(prod_clave).Trim() == "Ingrese un Folio")
             {
                 Toast.MakeText(this, "Favor de escribir un folio válido", ToastLength.Short).Show();
-
                 return;
             }
 
@@ -264,7 +246,7 @@ namespace SplitTrailers
 
             thisConnection.Close();
 
-            // Diálogo de éxito con Helper
+            // Diálogo simplificado con Helper
             DialogHelper.ShowSuccessDialog(this,
                 message: "La solicitud de reimpresión se realizó correctamente.",
                 positiveText: "Entendido",
@@ -278,7 +260,6 @@ namespace SplitTrailers
                     ds.Clear();
                     System.Collections.ArrayList listaFrutas = new System.Collections.ArrayList();
 
-                    // Reinicio de datos de spinners
                     strFrutas = new String[] { "Ingrese un Folio válido" };
                     strTarima = new String[] { "Ingrese un Folio válido" };
                     strCajas = new String[] { "Ingrese un Folio válido" };
@@ -300,7 +281,6 @@ namespace SplitTrailers
                 });
         }
 
-
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             string canttabla = productosnew.Rows.Count.ToString();
@@ -316,7 +296,6 @@ namespace SplitTrailers
                 dstar.Clear();
                 System.Collections.ArrayList listaTarima = new System.Collections.ArrayList();
                 listaTarima.Clear();
-
 
                 thisConnection.Open();
                 if (tipo == "PTP")
@@ -349,13 +328,11 @@ namespace SplitTrailers
                     strTarima = new String[tarimas.Rows.Count];
                     for (int i = 0; i < tarimas.Rows.Count; i++)
                     {
-
                         int x = i;
                         strTarima[i] = tarimas.Rows[x]["TARIMA"].ToString().Trim() + " - Cad: " + tarimas.Rows[i]["FECHA_CAD"].ToString().Trim() + " - Prod: " + tarimas.Rows[x]["ETIQUETA"].ToString().Trim() + " - Surt: " + tarimas.Rows[x]["SURTIDO"].ToString().Trim();
                     }
                 }
                 thisConnection.Close();
-
 
                 Collections.AddAll(listaTarima, strTarima);
                 comboAdapterTarima = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strTarima);
@@ -364,12 +341,10 @@ namespace SplitTrailers
 
                 canttabla = productosnew.Rows.Count.ToString();
             }
-
         }
 
         private void spinnertarima_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
-
             Spinner spinnerT = (Spinner)sender;
             Tarima = spinnerT.GetItemAtPosition(e.Position).ToString();
 
@@ -391,7 +366,6 @@ namespace SplitTrailers
                 surtido = Convert.ToInt16(arr[3]);
 
                 string mcaj = "", mtar = "", mcod = prod_clave.Trim(), mfol = folio, mtip = tipo.Trim(), Ent = "N";
-
 
                 SqlCommand cmd;
                 string cadena = "";
@@ -430,7 +404,6 @@ namespace SplitTrailers
                 dapre.Fill(dspre, "FoliosleidosPresplit");
                 FoliosleidosPresplit = dspre.Tables["FoliosleidosPresplit"];
 
-
                 DataTable Foliossolreeti = new DataTable();
                 string CadenaFoliossolreeti = "Select Lectura, fecha_cap From Tb_Det_Sol_Reetiquetado " +
                                "WHERE (Producto = '" + mcod + "') AND (Recibo = '" + mfol + "') AND (TarIni = '" + mtar + "') AND Estatus = 'A'";
@@ -439,12 +412,8 @@ namespace SplitTrailers
                 dasolreeti.Fill(dssolreeti, "Foliossolreeti");
                 Foliossolreeti = dssolreeti.Tables["Foliossolreeti"];
 
-
-
                 if ((producido - surtido) > 0)
                 {
-
-                    //disponible++;
                     int n = 1;
                     while (n < disponible)
                     {
@@ -465,17 +434,14 @@ namespace SplitTrailers
                         thisConnection.Close();
                         if (fechacap.Length > 0)
                         {
-                            //disponible--;
                             n++;
                         }
                         else if (fechacappre.Length > 0)
                         {
-                            //disponible--;
                             n++;
                         }
                         else if (fechasol.Length > 0)
                         {
-                            //disponible--;
                             n++;
                         }
                         else
@@ -489,18 +455,13 @@ namespace SplitTrailers
                             {
                                 disponible--;
                             }
-
                             n++;
                         }
-
-
-
                     }
                     cajas = cajas.TrimEnd('*');
                     strCajas = cajas.Split('*');
                     Spinner spinnerCaja = FindViewById<Spinner>(Resource.Id.cajareim);
                     System.Collections.ArrayList listaCaja = new System.Collections.ArrayList();
-                    //Buscar el numero del que parte si es campo o proceso
                     strCajas = new String[] { };
                     string[] words = cajas.Split('*');
                     Collections.AddAll(listaCaja, words);
@@ -508,23 +469,12 @@ namespace SplitTrailers
                     spinnerCaja.Adapter = comboAdapter;
                     spinnerCaja.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnercaja_ItemSelected);
                     btnguardar.Enabled = true;
-
-                    /*Spinner spinnerCaja = FindViewById<Spinner>(Resource.Id.cajareim);
-                    System.Collections.ArrayList listaCaja = new System.Collections.ArrayList();
-                    listaCaja.Clear();
-
-                    Collections.AddAll(listaCaja, strCajas);
-                    comboAdapterTarima = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strCajas);
-                    spinnerCaja.Adapter = comboAdapterCaja;
-                    spinnerCaja.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnercaja_ItemSelected);*/
-
                 }
                 else
                 {
                     Spinner spinnerCaja = FindViewById<Spinner>(Resource.Id.cajareim);
                     ds.Clear();
                     System.Collections.ArrayList listaCaja = new System.Collections.ArrayList();
-                    //Buscar el numero del que parte si es campo o proceso
                     strCajas = new String[] { "Sin Cajas Disponibles" };
                     Collections.AddAll(listaCaja, strCajas);
                     comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strCajas);
@@ -532,10 +482,6 @@ namespace SplitTrailers
                     spinnerCaja.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinnercaja_ItemSelected);
                 }
             }
-
-
-
-
         }
 
         private void spinnercaja_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
@@ -572,20 +518,17 @@ namespace SplitTrailers
                 cadenaresponsable = cadenaresponsable + datos["ORDP_TURNO"].ToString() + " ";
                 cadenaresponsable = cadenaresponsable + Convert.ToDateTime(datos["ORDP_FECHA"]).ToString("dd");
                 estado = datos["ordp_estatus"].ToString().Trim();
-                //otrosdatos.Text = cadenaresponsable;
-                //responsable.Text = datos["ordp_responsable"].ToString() + " " + Convert.ToDateTime(datos["ORDP_FECHA"]).ToShortDateString();
             }
 
             if (estado == "C")
             {
-                // Diálogo de advertencia con Helper
+                // Diálogo: Orden de Producción Cancelada
                 DialogHelper.ShowWarningDialog(this,
                     message: "La solicitud de reimpresión no se puede realizar debido a que la orden de producción fue cancelada.",
                     positiveText: "Entendido",
                     positiveAction: (s, e) => { myEditText.Text = ""; });
                 return;
             }
-
 
             thisConnection.Close();
             Cadena = "Select A.PROD_CLAVE, B.PROD_NOMBRE, A.FODP_UNIDADES, B.PROD_NOMB_INGLES, B.PROD_CODEGTIN FROM TB_DET_FINAL_ODP A, TB_CAT_PRODUCTO B WHERE A.ORDP_FOLIO = '" + folio.Trim() + "' AND A.PROD_CLAVE = B.PROD_CLAVE";
@@ -602,18 +545,6 @@ namespace SplitTrailers
                 strFrutas[i] = productosnew.Rows[x]["PROD_CLAVE"].ToString().Trim();
             }
 
-            /*cmd = new SqlCommand(Cadena);
-            cmd.Connection = thisConnection;
-            datos = cmd.ExecuteReader();
-            int ii = 0;0.
-            strFrutas = new String[datos.ro.Rows.Count];
-            while (datos.Read())
-            {
-                int x = ii;
-                strFrutas[ii] = datos["PROD_CLAVE"].ToString().Trim() + " - " + datos["PROD_NOMBRE"].ToString();
-                ii++;
-            }*/
-
             Collections.AddAll(listaFrutas, strFrutas);
             comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strFrutas);
             spinner.Adapter = comboAdapter;
@@ -629,7 +560,6 @@ namespace SplitTrailers
 
             string estado = "S";
 
-
             thisConnection.Open();
             cmnd = thisConnection.CreateCommand();
             cmnd.CommandText = "select RPT_ESTATUS from tb_mstr_recepcion_pt WHERE A.RPT_RECIBO = '" + folio.Trim() + "'";
@@ -637,18 +567,15 @@ namespace SplitTrailers
             ds.Clear();
             thisConnection.Close();
 
-
             if (estado == "F")
             {
-                // Diálogo de advertencia con Helper
+                // Diálogo: Recepción de Producto Terminado Cancelada
                 DialogHelper.ShowWarningDialog(this,
                     message: "La solicitud de reimpresión no se puede realizar debido a que la recepción de producto terminado fue cancelada.",
                     positiveText: "Entendido",
                     positiveAction: (s, e) => { myEditText.Text = ""; });
                 return;
             }
-
-
 
             string Cadena = "Select A.PROD_CLAVE, B.PROD_NOMBRE, A.RPTD_CANTIDAD, B.PROD_NOMB_INGLES, B.PROD_CODEGTIN FROM TB_DET_RECEPCION_PT A, TB_CAT_PRODUCTO B WHERE A.RPT_RECIBO = '" + folio.Trim() + "' AND A.PROD_CLAVE = B.PROD_CLAVE";
 
@@ -665,93 +592,49 @@ namespace SplitTrailers
                 strFrutas[i] = productosnew.Rows[x]["PROD_CLAVE"].ToString().Trim();
             }
 
-
-
-
-            /*cmd = new SqlCommand(Cadena);
-            cmd.Connection = thisConnection;
-            datos = cmd.ExecuteReader();
-            int ii = 0;
-            strFrutas = new String[datos.ro.Rows.Count];
-            while (datos.Read())
-            {
-                int x = ii;
-                strFrutas[ii] = datos["PROD_CLAVE"].ToString().Trim() + " - " + datos["PROD_NOMBRE"].ToString();
-                ii++;
-            }*/
-
-
             Collections.AddAll(listaFrutas, strFrutas);
             comboAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerItem, strFrutas);
             spinner.Adapter = comboAdapter;
             spinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
-
-            //thisConnection.Close();
         }
-
-
 
         private string ValidaCajaEtiVerde(string cadena, DataTable foliosleidos)
         {
-            /*string Cadena = "Select fecha_cap From tb_Det_Etiqueta " +
-                           "Where Eti_Lectura = '" + cadena + "' AND Estatus != 'C'";
-            SqlCommand cmd = new SqlCommand(Cadena, thisConnection);*/
             string Valor = "";
-
             DataRow[] datos = foliosleidos.Select("Eti_Lectura = '" + cadena + "'");
-
             if (datos.Length > 0)
             {
                 Valor = datos[0].ItemArray[1].ToString();
             }
-
             return Valor;
-
         }
 
         private string ValidaCajaPreesplitVerde(string cadena, DataTable foliosleidos)
         {
-            /*string Cadena = "Select fecha_cap From tb_Det_Etiqueta " +
-                           "Where Eti_Lectura = '" + cadena + "' AND Estatus != 'C'";
-            SqlCommand cmd = new SqlCommand(Cadena, thisConnection); */
             string Valor = "";
-
             DataRow[] datos = foliosleidos.Select("Eti_Lectura = '" + cadena + "'");
-
             if (datos.Length > 0)
             {
                 Valor = datos[0].ItemArray[1].ToString();
             }
-
             return Valor;
-
         }
 
         private string ValidaCajasolreetiqueta(string cadena, DataTable foliosleidos)
         {
-            /*string Cadena = "Select fecha_cap From tb_Det_Etiqueta " +
-                           "Where Eti_Lectura = '" + cadena + "' AND Estatus != 'C'";
-            SqlCommand cmd = new SqlCommand(Cadena, thisConnection); */
             string Valor = "";
-
             DataRow[] datos = foliosleidos.Select("Lectura = '" + cadena + "'");
-
             if (datos.Length > 0)
             {
                 Valor = datos[0].ItemArray[1].ToString();
             }
-
             return Valor;
-
         }
-
-
 
         private string repetido(string mtip, string mfol, string mcod, string mtar, string mcaj)
         {
             string Ok = "N";
             var productoscapturados = db.Query<xprod>("Select * FROM xprod Where Codigo = '" + mcod + "' AND Folio = '" + mfol + "'  AND Tarima = '" + mtar + "' AND Cajas = '" + mcaj + "' AND Tipo = '" + mtip + "'");
-
             foreach (var captu in productoscapturados)
             {
                 Ok = "S";
@@ -759,7 +642,6 @@ namespace SplitTrailers
             }
             return Ok;
         }
-
 
         private void LoadConnection()
         {
@@ -771,7 +653,6 @@ namespace SplitTrailers
 
             if (!exist)
             {
-                //Crea la tabla en base al modelo si es la primera vez
                 db.CreateTable<Pedidos>();
                 db.CreateTable<ConPedidos>();
                 db.CreateTable<xLote>();
@@ -780,9 +661,7 @@ namespace SplitTrailers
                 db.CreateTable<Mensajes>();
                 db.CreateTable<XLoteSug>();
             }
-
         }
-
 
         private int traetotal(string mcod)
         {
@@ -795,8 +674,5 @@ namespace SplitTrailers
             }
             return total;
         }
-
-
     }
-
 }
