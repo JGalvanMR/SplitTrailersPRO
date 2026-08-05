@@ -3,7 +3,7 @@
 
 	<!-- ================== TEMA CLARO ================== -->
 	<style name="AppTheme" parent="@style/Theme.Material3.Light.NoActionBar">
-		
+
 
 		<!-- Colores principales -->
 		<item name="colorPrimary">@color/md_theme_primary</item>
@@ -88,8 +88,8 @@
 		<!-- Componentes específicos -->
 		<item name="materialButtonStyle">@style/Widget.Material3.Button.Filled</item>
 		<item name="textInputStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>
-		
-		
+
+
 
 		<!-- Diálogos Material 3 -->
 		<item name="materialAlertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
@@ -171,7 +171,7 @@
 		<item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
 
 		<item name="android:forceDarkAllowed">false</item>
-		
+
 		<!-- Tipografía -->
 		<item name="fontFamily">@font/roboto_flex</item>
 
@@ -188,9 +188,9 @@
 	<style name="Widget.Material3.Button.Filled" parent="@style/Widget.Material3.Button.ElevatedButton">
 		<item name="android:backgroundTint">@color/md_theme_primary</item>
 		<item name="android:textColor">@color/md_theme_onPrimary</item>
-		<item name="android:minHeight">48dp</item>
-		<item name="android:paddingLeft">16dp</item>
-		<item name="android:paddingRight">16dp</item>
+		<item name="android:minHeight">12dp</item>
+		<item name="android:paddingLeft">4dp</item>
+		<item name="android:paddingRight">4dp</item>
 		<item name="android:elevation">2dp</item>
 		<item name="shapeAppearanceOverlay">@style/shape_btn_rounded</item>
 	</style>
@@ -199,7 +199,7 @@
 
 	<style name="shape_btn_rounded">
 		<item name="cornerFamily">rounded</item>
-		<item name="cornerSize">12dp</item>
+		<item name="cornerSize">6dp</item>
 	</style>
 
 	<!-- ================== DIALOG ================== -->
@@ -220,19 +220,19 @@
 	<!-- 🟢 Esquinas redondeadas personalizadas -->
 	<style name="ShapeAppearanceOverlay.Custom.Medium" parent="ShapeAppearance.Material3.MediumComponent">
 		<item name="cornerFamily">rounded</item>
-		<item name="cornerSize">16dp</item>
+		<item name="cornerSize">8dp</item>
 	</style>
 
 	<!-- Alias adicional para compatibilidad con referencias antiguas -->
 	<style name="ShapeAppearanceOverlay.Custom" parent="ShapeAppearance.Material3.MediumComponent">
 		<item name="cornerFamily">rounded</item>
-		<item name="cornerSize">16dp</item>
+		<item name="cornerSize">8dp</item>
 	</style>
 
 	<!-- 🔧 Define un estilo vacío para ShapeAppearanceOverlay (resuelve tu error actual) -->
 	<style name="ShapeAppearanceOverlay">
 		<item name="cornerFamily">rounded</item>
-		<item name="cornerSize">8dp</item>
+		<item name="cornerSize">4dp</item>
 	</style>
 
 
@@ -241,41 +241,41 @@
 		<item name="android:textColor">?attr/colorOnSurface</item>
 		<item name="android:backgroundTint">?attr/colorSurfaceVariant</item>
 		<item name="shapeAppearanceOverlay">@style/shape_entry_rounded</item>
-		<item name="android:padding">12dp</item>
-		<item name="android:layout_height">56dp</item>
+		<item name="android:padding">3dp</item>
+		<item name="android:layout_height">14dp</item>
 	</style>
 
 	<style name="shape_entry_rounded">
 		<item name="cornerFamily">rounded</item>
-		<item name="cornerSize">8dp</item>
+		<item name="cornerSize">4dp</item>
 	</style>
 
 	<style name="TextInputLayout_Outlined" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 		<item name="android:textColorHint">?attr/colorOnSurfaceVariant</item>
 		<item name="boxBackgroundMode">outline</item>
 		<!-- Eliminamos boxStrokeColor para que herede del tema dinámicamente -->
-		<item name="boxCornerRadiusTopStart">12dp</item>
-		<item name="boxCornerRadiusTopEnd">12dp</item>
-		<item name="boxCornerRadiusBottomStart">12dp</item>
-		<item name="boxCornerRadiusBottomEnd">12dp</item>
-		<item name="android:padding">12dp</item>
+		<item name="boxCornerRadiusTopStart">6dp</item>
+		<item name="boxCornerRadiusTopEnd">6dp</item>
+		<item name="boxCornerRadiusBottomStart">6dp</item>
+		<item name="boxCornerRadiusBottomEnd">6dp</item>
+		<item name="android:padding">3dp</item>
 	</style>
 
 	<!-- ================== SPINNER ================== -->
 	<style name="spinner_moderno" parent="@style/Widget.AppCompat.Spinner">
 		<item name="android:background">@drawable/bg_spinner_moderno</item>
 		<item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
-		<item name="android:padding">8dp</item>
+		<item name="android:padding">2dp</item>
 		<item name="android:popupBackground">@color/md_theme_surfaceContainer</item>
-		<item name="android:dropDownVerticalOffset">4dp</item>
+		<item name="android:dropDownVerticalOffset">2dp</item>
 	</style>
 
 	<!-- ================== CARDS ================== -->
 	<style name="card_m3" parent="@style/Widget.Material3.CardView.Elevated">
 		<item name="cardBackgroundColor">@color/md_theme_surfaceContainer</item>
-		<item name="cardCornerRadius">12dp</item>
-		<item name="cardElevation">4dp</item>
-		<item name="contentPadding">12dp</item>
+		<item name="cardCornerRadius">6dp</item>
+		<item name="cardElevation">2dp</item>
+		<item name="contentPadding">3dp</item>
 	</style>
 
 	<!-- ================== TOOLBAR ================== -->

@@ -64,11 +64,12 @@ namespace SplitTrailers.Helpers
         }
 
         /// <summary>
-        /// Muestra un diálogo de advertencia (título en color amarillo, icono de "warning").
+        /// Muestra un diálogo de advertencia (título en color ámbar, icono de "warning").
         /// </summary>
         public static void ShowWarningDialog(Context context, string message, string positiveText = "Entendido", EventHandler<DialogClickEventArgs> positiveAction = null)
         {
-            var colorWarning = Color.ParseColor("#F57C00"); // Naranja Material para advertencias
+            // Usamos un color ámbar que tiene buen contraste en ambos modos
+            var colorWarning = Color.ParseColor("#FF8F00");
             var titleSpannable = new SpannableStringBuilder("Advertencia");
             titleSpannable.SetSpan(new ForegroundColorSpan(colorWarning), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
             titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);

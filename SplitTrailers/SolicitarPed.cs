@@ -709,7 +709,7 @@ namespace SplitTrailers
                     pedido.RequestFocus();
                 }
             }
-            else if (Convert.ToString(item.TitleFormatted) == "Cerrar Sesion")
+            else if (Convert.ToString(item.TitleFormatted) == "Cerrar Sesión")
             {
                 // Diálogo de confirmación
                 DialogHelper.ShowConfirmDialog(this,

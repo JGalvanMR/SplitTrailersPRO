@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="4dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="4dp">
 
 		<LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/linearLayoutHorizontal"
-            android:padding="8dp">
+            android:padding="4dp">
 
 			<ImageView
                 android:id="@+id/imgPers"

@@ -463,6 +463,134 @@ namespace SplitTrailers
             }
 
             EditText pass = FindViewById<EditText>(Resource.Id.password);
+            if (pass.Text.Length == 0)
+            {
+                Toast.MakeText(this, "Por favor, asegurese de ingresar una contraseña y volver intentarlo", ToastLength.Long).Show();
+                return;
+            }
+
+            var responsable = "";
+            if (responsables.Rows.Count != 0)
+            {
+                for (int i = 0; i < responsables.Rows.Count; i++)
+                {
+                    if ((responsables.Rows[i]["nom_capsplit"].ToString() == responsablesplit) && (responsables.Rows[i]["cve_cancel"].ToString() == pass.Text.ToString().Trim()))
+                    {
+                        responsable = responsables.Rows[i]["cve_capsplit"].ToString();
+                    }
+                }
+            }
+            else
+            {
+                Toast.MakeText(this, "Por favor, Seleccione un responsable", ToastLength.Long).Show();
+                return;
+            }
+
+            if (responsable.Trim().Length > 0)
+            {
+                //obtener Ip del telefono
+                WifiManager wifiManager = (WifiManager)this.GetSystemService(Service.WifiService);
+                ip = GetIPAddress();
+                //obtener Imei del telefono
+                imei = GetDeviceID();
+                //Termina obtener datos
+
+                //Valido inicio de sesion activa********************************************************************************
+                thisConnection.Open();
+                string Cadena = "Select imei from tb_det_acceso_celulares where nom_usu = '" + responsablesplit.Trim() + "' AND folio = '' AND estado = 'A'";
+                SqlCommand cmdx = new SqlCommand(Cadena, thisConnection);
+                string valor = Convert.ToString(cmdx.ExecuteScalar());
+                thisConnection.Close();
+
+                if (valor.Trim().Length > 0)
+                {
+                    if (valor == imei)
+                    {
+                        thisConnection.Open();
+                        string cadena = "INSERT INTO TB_REGISTRO_MOVIMIENTOS(FECHA,NOM_COMPU,NOM_USU,TIPO_MOV,OP_CLAVE,FOLIO,DETALLE,SISTEMA,MOV_FOLIO) " +
+                                    "VALUES('" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "','CEL " + imei + "','" + responsablesplit + "','E','" + ip + "','','Ingreso a sistema SPLIT TRAILER Imei: " + imei + ", Ip: " + ip + " ','SPLITTRAIL','')";
+                        SqlCommand cmd = new SqlCommand(cadena, thisConnection);
+                        cmd.ExecuteNonQuery();
+                        thisConnection.Close();
+
+                        Intent intent = new Intent(this, typeof(SolicitarPed));
+                        intent.PutExtra("cvresponsable", responsable.ToString());
+                        intent.PutExtra("responsable", responsablesplit.ToString());
+                        intent.PutExtra("currentVersionName", currentVersionName.ToString().Trim());
+                        intent.PutExtra("imei", imei.ToString().Trim());
+                        StartActivity(intent);
+                        Finish();
+                    }
+                    else
+                    {
+                        // Diálogo reemplazado por DialogHelper
+                        DialogHelper.ShowWarningDialog(this,
+                            message: "No puede iniciar otra sesión, debido a que hay un equipo con su sesión activa, favor de cerrar su sesión anterior e intentarlo de nuevo",
+                            positiveText: "Entendido");
+                    }
+                }
+                else
+                {
+                    thisConnection.Open();
+                    Cadena = "Select nom_usu from tb_det_acceso_celulares where imei = '" + imei.Trim() + "' AND Folio = '' AND estado = 'A'";
+                    cmdx = new SqlCommand(Cadena, thisConnection);
+                    string nombre = Convert.ToString(cmdx.ExecuteScalar());
+                    thisConnection.Close();
+
+                    if (nombre.Trim().Length > 0)
+                    {
+                        // Diálogo reemplazado por DialogHelper
+                        DialogHelper.ShowWarningDialog(this,
+                            message: $"No puede iniciar sesión debido a que este equipo se encuentra actualmente en uso por {nombre}",
+                            positiveText: "Entendido");
+                    }
+                    else
+                    {
+                        //Registro de Ingreso Al Sistema.
+                        thisConnection.Open();
+                        string cadena = "INSERT INTO TB_REGISTRO_MOVIMIENTOS(FECHA,NOM_COMPU,NOM_USU,TIPO_MOV,OP_CLAVE,FOLIO,DETALLE,SISTEMA,MOV_FOLIO) " +
+                                    "VALUES('" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "','CEL " + imei + "','" + responsablesplit + "','E','" + ip + "','','Ingreso a sistema SPLIT TRAILER Imei: " + imei + ", Ip: " + ip + " ','SPLITTRAIL','')";
+                        SqlCommand cmd = new SqlCommand(cadena, thisConnection);
+                        cmd.ExecuteNonQuery();
+
+                        cadena = "INSERT INTO  tb_det_acceso_celulares ( fecha, imei, nom_usu, sistema, folio, version, estado) " +
+                                    "VALUES('" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "','" + imei + "','" + responsablesplit + "','SplitTrailer','','" + currentVersionName + "','A')";
+                        cmd = new SqlCommand(cadena, thisConnection);
+                        cmd.ExecuteNonQuery();
+
+                        thisConnection.Close();
+
+                        Intent intent = new Intent(this, typeof(SolicitarPed));
+                        intent.PutExtra("cvresponsable", responsable.ToString());
+                        intent.PutExtra("responsable", responsablesplit.ToString());
+                        intent.PutExtra("currentVersionName", currentVersionName.ToString().Trim());
+                        intent.PutExtra("imei", imei.ToString().Trim());
+                        StartActivity(intent);
+                        Finish();
+                    }
+                }
+            }
+            else
+            {
+                Toast.MakeText(this, "Contraseña Invalida para este usuario", ToastLength.Long).Show();
+                return;
+            }
+        }
+        void Btnlogin_ClickLEGACY(object sender, EventArgs e)
+        {
+            if (responsablesplit == "Seleccione un Responsable")
+            {
+                Toast.MakeText(this, "Por favor, asegurese de seleccionar un responsable y volver a intentarlo", ToastLength.Long).Show();
+                return;
+            }
+
+            if (vehiculo == "Seleccione un vehiculo")
+            {
+                Toast.MakeText(this, "Por favor, asegurese de seleccionar un vehiculo y volver a intentarlo", ToastLength.Long).Show();
+                return;
+            }
+
+            EditText pass = FindViewById<EditText>(Resource.Id.password);
 
             if (pass.Text.Length == 0)
             {
@@ -528,7 +656,7 @@ namespace SplitTrailers
                     else
                     {
                         #region MATERIAL DIALOG
-                        // 🔹 Construimos el título con color amarillo y negritas
+                        /*// 🔹 Construimos el título con color amarillo y negritas
                         var titleSpannable = new SpannableStringBuilder("Sesión Activa en otro Equipo");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FCEC70")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -557,8 +685,11 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#FFA000")); // Naranja Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
+                        DialogHelper.ShowWarningDialog(this,
+                            message: "No puede iniciar otra sesión, debido a que hay un equipo con su sesión activa, favor de cerrar su sesión anterior e intentarlo de nuevo",
+                            positiveText: "Entendido");
 
                     }
                 }
@@ -574,7 +705,7 @@ namespace SplitTrailers
                     if (nombre.Trim().Length > 0)
                     {
                         #region MATERIAL DIALOG
-                        // 🔹 Construimos el título con color amarillo y negritas
+                        /*// 🔹 Construimos el título con color amarillo y negritas
                         var titleSpannable = new SpannableStringBuilder("Sesión Activa en Este Equipo");
                         titleSpannable.SetSpan(new ForegroundColorSpan(Color.ParseColor("#FCEC70")), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
                         titleSpannable.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, titleSpannable.Length(), SpanTypes.ExclusiveExclusive);
@@ -606,8 +737,11 @@ namespace SplitTrailers
                             var positiveButton = dialog.GetButton((int)DialogButtonType.Positive);
                             positiveButton?.SetTextColor(Color.ParseColor("#FFA000")); // Naranja Material
                             positiveButton?.SetAllCaps(false);
-                        });
+                        });*/
                         #endregion
+                        DialogHelper.ShowWarningDialog(this,
+                            message: $"No puede iniciar sesión debido a que este equipo se encuentra actualmente en uso por {nombre}",
+                            positiveText: "Entendido");
                     }
                     else
                     {
