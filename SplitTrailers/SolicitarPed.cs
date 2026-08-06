@@ -82,8 +82,10 @@ namespace SplitTrailers
         internal static readonly string RESPON_SABLE = "Responable";
         int count = 0;
 
-        public string Cancelado { get; private set; }
+        ProgressBar progressBar;  // <-- NUEVO
 
+
+        public string Cancelado { get; private set; }
         protected override void OnCreate(Bundle savedInstanceState)
         {
             string contenido = "";
@@ -97,6 +99,7 @@ namespace SplitTrailers
             capturar = FindViewById<Button>(Resource.Id.button1);
             capturar.Click += Btnlogin_Click;
             capturar.Enabled = false;
+            progressBar = FindViewById<ProgressBar>(Resource.Id.progressBar);
 
             //Recuperar datos de la pantalla anterior
             cvvehiculo = Intent.GetStringExtra("cvcamioneta");
@@ -108,6 +111,11 @@ namespace SplitTrailers
 
             TextView usuario = FindViewById<TextView>(Resource.Id.usuario);
             usuario.Text = responsable.Trim() + " - Split Trailer";
+
+            // ======== CONFIGURAR RECYCLERVIEW CON ADAPTADOR VACÍO INICIAL ========
+            var recyclerView = FindViewById<RecyclerView>(Resource.Id.gvCtrl);
+            recyclerView.SetLayoutManager(new LinearLayoutManager(this));
+            recyclerView.SetAdapter(new MyRecyclerAdapter(this, new List<FlimStarInfo>()));
 
             var quexi = db.Query<Pedidos>("SELECT DISTINCT Folio FROM Pedidos");
             foreach (var captu in quexi)
@@ -158,294 +166,479 @@ namespace SplitTrailers
                 thisConnection.Close();
             }
 
+            // ======== EDITOR ACTION OPTIMIZADO CON CONEXIONES LOCALES ========
             pedido.EditorAction += (sender, e) =>
             {
                 if (e.ActionId == ImeAction.Done || e.ActionId == ImeAction.Next)
                 {
-                    string nombrecapturaactual = pedidoasignadoalta(pedido.Text.Trim());
-                    if (responsable.Trim().Contains("SUPERVISOR") != true)
+                    pedido.Enabled = false;
+                    progressBar.Visibility = ViewStates.Visible;
+                    string pedidoTexto = pedido.Text.Trim();
+
+                    Task.Run(() =>
                     {
-                        if (nombrecapturaactual.Trim().Length > 0)
+                        try
                         {
-                            if (nombrecapturaactual.Trim() != responsable.Trim())
+                            // ========== 1. Validar si el pedido está ocupado ==========
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
                             {
-                                // Diálogo: Pedido en captura ocupado
-                                DialogHelper.ShowWarningDialog(this,
-                                    message: $"El pedido {pedido.Text.Trim()} está activo con el armador {nombrecapturaactual.Trim()}. Solicite una transferencia si se trata de un cambio de turno.",
-                                    positiveText: "Entendido");
-                                pedido.SetSelection(0, pedido.Text.Length);
-                                pedido.RequestFocus();
-                                return;
-                            }
-                        }
-                    }
-
-                    int pedPendientes = Splitpendiente();
-                    List<string> emb_folios = new List<string>();
-                    emb_folios = emb_folioPendiente();
-                    string emb_folioPEndiente = string.Join(", ", emb_folios);
-
-                    if (pedPendientes > 0)
-                    {
-                        // Diálogo: Cuenta con Split Pendientes
-                        DialogHelper.ShowWarningDialog(this,
-                            message: $"Usted tiene {pedPendientes} Split sin cargar del pedido: {emb_folioPEndiente}. Favor de consultar la orden en el monitor de embarques y solicitar al supervisor la carga del Split o cancelarlo si no se ha cargado.",
-                            positiveText: "Entendido");
-                        pedido.SetSelection(0, pedido.Text.Length);
-                        pedido.RequestFocus();
-                        return;
-                    }
-
-                    thisConnection.Open();
-                    string Validapdn = "Select prov_clave from tb_mstr_pedidos_nal Where pdn_folio = '" + pedido.Text.Trim() + "'";
-                    SqlCommand cmdvalida = new SqlCommand(Validapdn, thisConnection);
-                    string provedor = Convert.ToString(cmdvalida.ExecuteScalar());
-                    thisConnection.Close();
-
-                    string hay = "N";
-                    string Cadena = "";
-
-                    var queryqe = db.Table<Pedidos>();
-                    foreach (var captu in queryqe)
-                    {
-                        if (captu.folio == pedido.Text.Trim())
-                        {
-                            hay = "S";
-                            // Diálogo: Pedido ya agregado para captura
-                            DialogHelper.ShowWarningDialog(this,
-                                message: $"El pedido {captu.folio} ya se agregó para capturar.",
-                                positiveText: "Entendido");
-                            pedido.SetSelection(0, pedido.Text.Length);
-                            pedido.RequestFocus();
-                            ConsPedSur(pedido.Text.ToString());
-                            Toast.MakeText(this, "Actualizacion de Pedido Exitoso", ToastLength.Short).Show();
-                            return;
-                        }
-                    }
-
-                    string Tipoped = "NAL";
-                    tb_tabla = "tb_mstr_pedidos_nal";
-
-                    if (pedido.Text.Length > 0)
-                    {
-                        if (Convert.ToInt32(pedido.Text) < 300000)
-                        {
-                            Tipoped = "EXP";
-                            tb_tabla = "tb_mstr_pedidos_exp";
-                        }
-                    }
-
-                    //Borrar datos almacenados de la bd local
-                    db.Query<Pedidos>("delete from  [Pedidos]");
-                    db.Query<ConPedidos>("delete from  [ConPedidos]");
-                    db.Query<xLote>("delete from  [xLote]");
-                    db.Query<xLoteFinal>("delete from  [xLoteFinal]");
-                    db.Query<xprod>("delete from  [xprod]");
-
-                    thisConnection.Open();
-                    Cadena = "Select emb_folio from tb_det_split Where emb_folio = '" + pedido.Text.Trim() + "'";
-                    SqlCommand cmd = new SqlCommand(Cadena, thisConnection);
-                    string Emb = Convert.ToString(cmd.ExecuteScalar());
-                    thisConnection.Close();
-                    if (Emb.Trim().Length > 0)
-                    {
-                        // Diálogo: Pedido ya capturado
-                        DialogHelper.ShowWarningDialog(this,
-                            message: $"El pedido: {folio} ya ha sido capturado.",
-                            positiveText: "Ok");
-                        string StPed = EstatusPed(pedido.Text);
-                        if (StPed != "--:--" || StPed.Trim().Length == 0)
-                            capturar.Enabled = true;
-                        mOp = "C";
-                    }
-
-                    DateTime FechaHoy = DateTime.Now;
-                    thisConnection.Open();
-                    Cadena = "Select pdn_fecha from " + tb_tabla + " Where pdn_folio = '" + pedido.Text.Trim() + "' AND pdn_estatus != 'C'";
-                    SqlCommand cmdxi = new SqlCommand(Cadena, thisConnection);
-                    DateTime FechaPedido = Convert.ToDateTime(cmdxi.ExecuteScalar());
-                    Cadena = "Select pdn_diasmin from " + tb_tabla + " Where pdn_folio = '" + pedido.Text.Trim() + "' AND pdn_estatus != 'C'";
-                    cmdxi = new SqlCommand(Cadena, thisConnection);
-                    try
-                    {
-                        diasmincarga = Convert.ToInt32(cmdxi.ExecuteScalar());
-                    }
-                    catch
-                    {
-                        diasmincarga = 12;
-                    }
-                    TimeSpan tspan = FechaHoy - FechaPedido;
-                    int dias = tspan.Days;
-                    thisConnection.Close();
-
-                    if (dias > 15)
-                    {
-                        // Diálogo: Pedido mayor a 15 Días
-                        DialogHelper.ShowWarningDialog(this,
-                            message: $"El pedido {pedido.Text.Trim()} tiene una fecha de {FechaPedido.ToString("dd/MM/yyyy")} que supera los 15 días de validez. Favor de informar a ventas.",
-                            positiveText: "Entendido");
-                        pedido.Text = "";
-                        pedido.RequestFocus();
-                        capturar.Enabled = false;
-                        return;
-                    }
-
-                    thisConnection.Open();
-                    Cadena = "Select emb_folio from tb_mstr_embarque Where emb_folio = '" + pedido.Text.Trim() + "' AND sts = 'T' AND hora_fin != '--:--'";
-                    SqlCommand embcerr = new SqlCommand(Cadena, thisConnection);
-                    string embcer = Convert.ToString(embcerr.ExecuteScalar());
-                    thisConnection.Close();
-                    if (embcer.Trim().Length > 0)
-                    {
-                        // Diálogo: Embarque Cerrado
-                        DialogHelper.ShowWarningDialog(this,
-                            message: $"El embarque {pedido.Text.Trim()} está cerrado y no se puede cargar.",
-                            positiveText: "Entendido");
-                        pedido.Text = "";
-                        capturar.Enabled = false;
-                        pedido.RequestFocus();
-                        return;
-                    }
-
-                    thisConnection.Open();
-                    Cadena = "Select pdn_folio from " + tb_tabla + " Where pdn_folio = '" + pedido.Text.Trim() + "' AND pdn_estatus = 'C'";
-                    SqlCommand cmdx = new SqlCommand(Cadena, thisConnection);
-                    string Embx = Convert.ToString(cmdx.ExecuteScalar());
-                    thisConnection.Close();
-                    if (Embx.Trim().Length > 0)
-                    {
-                        // Diálogo: Pedido Cancelado
-                        DialogHelper.ShowWarningDialog(this,
-                            message: $"El pedido {pedido.Text.Trim()} está cancelado y no se puede cargar.",
-                            positiveText: "Entendido");
-                        pedido.Text = "";
-                        capturar.Enabled = false;
-                        pedido.RequestFocus();
-                        return;
-                    }
-
-                    if (hay == "N")
-                    {
-                        thisConnection.Open();
-                        Cadena = "Select a.pdn_folio,a.prod_clave,b.prod_nombre,a.pdn_num_unidades From tb_det_pedidos A, tb_Cat_producto B " +
-                            "where a.pdn_folio = '" + pedido.Text.Trim() + "' and a.prod_clave = b.prod_clave and A.pdn_Tipo = '" + Tipoped + "'";
-                        SqlDataAdapter da = new SqlDataAdapter(Cadena, thisConnection);
-                        DataSet ds = new DataSet();
-                        da.Fill(ds, "Ped");
-                        DataTable Ped = ds.Tables["Ped"];
-                        hay = "N";
-                        thisConnection.Close();
-
-                        if (Ped.Rows.Count == 0)
-                        {
-                            // Diálogo: Pedido Inexistente
-                            DialogHelper.ShowErrorDialog(this,
-                                message: $"El pedido {pedido.Text.Trim()} no existe o no se ha dado de alta.",
-                                positiveText: "Entendido");
-                            pedido.Text = "";
-                            capturar.Enabled = false;
-                            pedido.RequestFocus();
-                            return;
-                        }
-
-                        if (Tipoped == "NAL")
-                        {
-                            llenarpedidos();
-                            string color = ValidarHoras(pedido.Text.Trim());
-                            thisConnection.Open();
-                            string Cadenasup = "Select top(1) isNull(supervisor, 0) from  tb_Respon_Split where nom_capsplit = '" + responsable.Trim() + "' AND status = 'A'";
-                            SqlCommand cmdxsup = new SqlCommand(Cadenasup, thisConnection);
-                            string validasupervisor = Convert.ToString(cmdxsup.ExecuteScalar());
-                            thisConnection.Close();
-
-                            if (color != "1" && validasupervisor != "1")
-                            {
-                                // Diálogo: NO SE PUEDE CONTINUAR CON EL ARMADO
-                                DialogHelper.ShowWarningDialog(this,
-                                    message: color,
-                                    positiveText: "Entendido");
-                                pedido.Text = "";
-                                capturar.Enabled = false;
-                                pedido.RequestFocus();
-                                return;
-                            }
-                        }
-
-                        if (nombrecapturaactual.Trim().Length == 0)
-                        {
-                            string StPed = EstatusPed(pedido.Text);
-                            if (StPed != "--:--" || StPed.Trim().Length == 0)
-                            {
-                                thisConnection.Open();
-                                string cadena = "INSERT INTO  tb_det_acceso_celulares ( fecha, imei, nom_usu, sistema, folio, version, estado) " +
-                                           "VALUES(GETDATE(),'" + imei + "','" + responsable + "','SplitTrailer','" + pedido.Text.Trim() + "','" + currentVersionName + "','A')";
-                                cmd = new SqlCommand(cadena, thisConnection);
-                                cmd.ExecuteNonQuery();
-                                thisConnection.Close();
-                            }
-                        }
-
-                        foreach (DataRow row in Ped.Rows)
-                        {
-                            string mnom = row["prod_nombre"].ToString().Trim();
-                            mnom = mnom.Replace("'", " ");
-                            Pedidos Pedidoscapturados = new Pedidos { folio = pedido.Text.Trim(), prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                            db.Insert(Pedidoscapturados);
-
-                            var encontrado = 0;
-                            var query = db.Table<ConPedidos>();
-                            foreach (var captu in query)
-                            {
-                                if (captu.prod_clave.ToString().Trim() == row["prod_clave"].ToString().Trim())
+                                conn.Open();
+                                string sql = "SELECT nom_usu FROM tb_det_acceso_celulares WHERE folio = @folio AND estado = 'A'";
+                                using (var cmd = new SqlCommand(sql, conn))
                                 {
-                                    encontrado = 1;
-                                    var total = Convert.ToInt16(row["pdn_num_unidades"]) + Convert.ToInt16(captu.pedido);
-                                    db.Query<ConPedidos>("UPDATE [ConPedidos] SET pedido = '" + total + "' WHERE prod_clave = '" + captu.prod_clave.ToString().Trim() + "'");
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    var nombrecapturaactual = Convert.ToString(cmd.ExecuteScalar()) ?? "";
+                                    if (responsable.Trim().Contains("SUPERVISOR") != true &&
+                                        !string.IsNullOrEmpty(nombrecapturaactual.Trim()) &&
+                                        nombrecapturaactual.Trim() != responsable.Trim())
+                                    {
+                                        RunOnUiThread(() =>
+                                        {
+                                            if (!IsDestroyed)
+                                            {
+                                                DialogHelper.ShowWarningDialog(this,
+                                                    message: $"El pedido {pedidoTexto} está activo con el armador {nombrecapturaactual}. Solicite una transferencia si se trata de un cambio de turno.",
+                                                    positiveText: "Entendido");
+                                                pedido.SetSelection(0, pedidoTexto.Length);
+                                                pedido.RequestFocus();
+                                            }
+                                        });
+                                        return;
+                                    }
                                 }
                             }
-                            if (encontrado == 0)
+
+                            // ========== 2. Validar split pendientes ==========
+                            int pedPendientes = 0;
+                            List<string> emb_folios = new List<string>();
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
                             {
-                                ConPedidos consecutivo = new ConPedidos { prod_clave = row["prod_clave"].ToString().Trim(), nombre = mnom, pedido = Convert.ToInt32(row["pdn_num_unidades"]), surtido = 0 };
-                                db.Insert(consecutivo);
+                                conn.Open();
+                                // Obtener splits pendientes del responsable
+                                string sqlPend = "SELECT emb_folio FROM tb_det_split WHERE NOM_CAPSPLIT = @responsable AND estatus = 'A'";
+                                using (var cmd = new SqlCommand(sqlPend, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@responsable", responsable.Trim());
+                                    using (var reader = cmd.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            emb_folios.Add(reader["emb_folio"].ToString());
+                                        }
+                                    }
+                                }
+                                // Contar los que tienen más de 36 horas
+                                // (para simplificar, usamos una consulta que calcule diferencia)
+                                // En este ejemplo, asumimos que ya tienes el método Splitpendiente, pero lo reemplazamos por una consulta directa.
+                                // Para mantener la lógica original, llamamos al método existente (que usa thisConnection), pero lo haremos dentro de un using local.
+                                // En su lugar, usamos el método ya existente pero con una conexión local.
+                                // Sin embargo, para evitar duplicar, podemos mantener el método pero pasarle la conexión.
+                                // Lo más sencillo es reutilizar el método Splitpendiente() pero asegurándonos de que abra su propia conexión.
+                                // Como el método usa thisConnection, lo dejamos como estaba pero lo llamamos desde aquí.
+                                // Para evitar problemas, lo ejecutamos en el mismo Task.
                             }
-                            hay = "S";
+                            // Llamamos a los métodos existentes (que abren/cierran thisConnection) - pero esto puede causar problemas si thisConnection ya está cerrada.
+                            // Para evitarlo, reemplazamos la llamada con una consulta directa.
+                            // Haremos una versión local de Splitpendiente:
+                            pedPendientes = GetSplitPendientesLocal();
+
+                            if (pedPendientes > 0)
+                            {
+                                string emb_folioPEndiente = string.Join(", ", emb_folios);
+                                RunOnUiThread(() =>
+                                {
+                                    if (!IsDestroyed)
+                                    {
+                                        DialogHelper.ShowWarningDialog(this,
+                                            message: $"Usted tiene {pedPendientes} Split sin cargar del pedido: {emb_folioPEndiente}. Favor de consultar la orden en el monitor de embarques y solicitar al supervisor la carga del Split o cancelarlo si no se ha cargado.",
+                                            positiveText: "Entendido");
+                                        pedido.SetSelection(0, pedidoTexto.Length);
+                                        pedido.RequestFocus();
+                                    }
+                                });
+                                return;
+                            }
+
+                            // ========== 3. Resto de validaciones con conexión local ==========
+                            bool hay = false;
+                            string Tipoped = "NAL";
+                            tb_tabla = "tb_mstr_pedidos_nal";
+                            if (pedidoTexto.Length > 0 && Convert.ToInt32(pedidoTexto) < 300000)
+                            {
+                                Tipoped = "EXP";
+                                tb_tabla = "tb_mstr_pedidos_exp";
+                            }
+
+                            // Verificar si ya está en la tabla local (SQLite)
+                            var queryqe = db.Table<Pedidos>();
+                            foreach (var captu in queryqe)
+                            {
+                                if (captu.folio == pedidoTexto)
+                                {
+                                    hay = true;
+                                    RunOnUiThread(() =>
+                                    {
+                                        if (!IsDestroyed)
+                                        {
+                                            DialogHelper.ShowWarningDialog(this,
+                                                message: $"El pedido {captu.folio} ya se agregó para capturar.",
+                                                positiveText: "Entendido");
+                                            pedido.SetSelection(0, pedidoTexto.Length);
+                                            pedido.RequestFocus();
+                                            ConsPedSur(pedidoTexto);
+                                            Toast.MakeText(this, "Actualizacion de Pedido Exitoso", ToastLength.Short).Show();
+                                        }
+                                    });
+                                    return;
+                                }
+                            }
+
+                            // Limpiar tablas locales
+                            db.Query<Pedidos>("delete from  [Pedidos]");
+                            db.Query<ConPedidos>("delete from  [ConPedidos]");
+                            db.Query<xLote>("delete from  [xLote]");
+                            db.Query<xLoteFinal>("delete from  [xLoteFinal]");
+                            db.Query<xprod>("delete from  [xprod]");
+
+                            // Validar existencia en tb_det_split
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                            {
+                                conn.Open();
+                                string sqlEmb = "SELECT emb_folio FROM tb_det_split WHERE emb_folio = @folio";
+                                using (var cmd = new SqlCommand(sqlEmb, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    var emb = Convert.ToString(cmd.ExecuteScalar());
+                                    if (!string.IsNullOrEmpty(emb))
+                                    {
+                                        RunOnUiThread(() =>
+                                        {
+                                            if (!IsDestroyed)
+                                            {
+                                                DialogHelper.ShowWarningDialog(this,
+                                                    message: $"El pedido: {pedidoTexto} ya ha sido capturado.",
+                                                    positiveText: "Ok");
+                                                string StPed = EstatusPed(pedidoTexto);
+                                                if (StPed != "--:--" || string.IsNullOrEmpty(StPed))
+                                                    capturar.Enabled = true;
+                                                mOp = "C";
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            // Validar fecha de pedido
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                            {
+                                conn.Open();
+                                string sqlFecha = $"SELECT pdn_fecha, pdn_diasmin FROM {tb_tabla} WHERE pdn_folio = @folio AND pdn_estatus != 'C'";
+                                using (var cmd = new SqlCommand(sqlFecha, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    using (var reader = cmd.ExecuteReader())
+                                    {
+                                        if (reader.Read())
+                                        {
+                                            DateTime FechaPedido = reader.GetDateTime(0);
+                                            diasmincarga = reader.IsDBNull(1) ? 12 : reader.GetInt32(1);
+                                            TimeSpan tspan = DateTime.Now - FechaPedido;
+                                            if (tspan.Days > 15)
+                                            {
+                                                RunOnUiThread(() =>
+                                                {
+                                                    if (!IsDestroyed)
+                                                    {
+                                                        DialogHelper.ShowWarningDialog(this,
+                                                            message: $"El pedido {pedidoTexto} tiene una fecha de {FechaPedido.ToString("dd/MM/yyyy")} que supera los 15 días de validez. Favor de informar a ventas.",
+                                                            positiveText: "Entendido");
+                                                        pedido.Text = "";
+                                                        pedido.RequestFocus();
+                                                        capturar.Enabled = false;
+                                                    }
+                                                });
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Validar embarque cerrado
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                            {
+                                conn.Open();
+                                string sqlEmb = "SELECT emb_folio FROM tb_mstr_embarque WHERE emb_folio = @folio AND sts = 'T' AND hora_fin != '--:--'";
+                                using (var cmd = new SqlCommand(sqlEmb, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    var embcer = Convert.ToString(cmd.ExecuteScalar());
+                                    if (!string.IsNullOrEmpty(embcer))
+                                    {
+                                        RunOnUiThread(() =>
+                                        {
+                                            if (!IsDestroyed)
+                                            {
+                                                DialogHelper.ShowWarningDialog(this,
+                                                    message: $"El embarque {pedidoTexto} está cerrado y no se puede cargar.",
+                                                    positiveText: "Entendido");
+                                                pedido.Text = "";
+                                                capturar.Enabled = false;
+                                                pedido.RequestFocus();
+                                            }
+                                        });
+                                        return;
+                                    }
+                                }
+                            }
+
+                            // Validar pedido cancelado
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                            {
+                                conn.Open();
+                                string sqlCancel = $"SELECT pdn_folio FROM {tb_tabla} WHERE pdn_folio = @folio AND pdn_estatus = 'C'";
+                                using (var cmd = new SqlCommand(sqlCancel, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    var embx = Convert.ToString(cmd.ExecuteScalar());
+                                    if (!string.IsNullOrEmpty(embx))
+                                    {
+                                        RunOnUiThread(() =>
+                                        {
+                                            if (!IsDestroyed)
+                                            {
+                                                DialogHelper.ShowWarningDialog(this,
+                                                    message: $"El pedido {pedidoTexto} está cancelado y no se puede cargar.",
+                                                    positiveText: "Entendido");
+                                                pedido.Text = "";
+                                                capturar.Enabled = false;
+                                                pedido.RequestFocus();
+                                            }
+                                        });
+                                        return;
+                                    }
+                                }
+                            }
+
+                            // Obtener detalle del pedido
+                            DataTable Ped = new DataTable();
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                            {
+                                conn.Open();
+                                string sqlDet = "SELECT a.pdn_folio, a.prod_clave, b.prod_nombre, a.pdn_num_unidades " +
+                                                "FROM tb_det_pedidos a INNER JOIN tb_cat_producto b ON a.prod_clave = b.prod_clave " +
+                                                "WHERE a.pdn_folio = @folio AND a.pdn_Tipo = @tipo";
+                                using (var cmd = new SqlCommand(sqlDet, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    cmd.Parameters.AddWithValue("@tipo", Tipoped);
+                                    using (var da = new SqlDataAdapter(cmd))
+                                    {
+                                        da.Fill(Ped);
+                                    }
+                                }
+                            }
+
+                            if (Ped.Rows.Count == 0)
+                            {
+                                RunOnUiThread(() =>
+                                {
+                                    if (!IsDestroyed)
+                                    {
+                                        DialogHelper.ShowErrorDialog(this,
+                                            message: $"El pedido {pedidoTexto} no existe o no se ha dado de alta.",
+                                            positiveText: "Entendido");
+                                        pedido.Text = "";
+                                        capturar.Enabled = false;
+                                        pedido.RequestFocus();
+                                    }
+                                });
+                                return;
+                            }
+
+                            // Si es NAL, validar horas y supervisor
+                            if (Tipoped == "NAL")
+                            {
+                                llenarpedidos();
+                                string color = ValidarHoras(pedidoTexto);
+                                using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                                {
+                                    conn.Open();
+                                    string sqlSup = "SELECT TOP(1) ISNULL(supervisor, 0) FROM tb_Respon_Split WHERE nom_capsplit = @nom AND status = 'A'";
+                                    using (var cmd = new SqlCommand(sqlSup, conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@nom", responsable.Trim());
+                                        var validasupervisor = Convert.ToString(cmd.ExecuteScalar());
+                                        if (color != "1" && validasupervisor != "1")
+                                        {
+                                            RunOnUiThread(() =>
+                                            {
+                                                if (!IsDestroyed)
+                                                {
+                                                    DialogHelper.ShowWarningDialog(this,
+                                                        message: color,
+                                                        positiveText: "Entendido");
+                                                    pedido.Text = "";
+                                                    capturar.Enabled = false;
+                                                    pedido.RequestFocus();
+                                                }
+                                            });
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Registrar acceso si no existe
+                            using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                            {
+                                conn.Open();
+                                string sqlAcceso = "SELECT COUNT(*) FROM tb_det_acceso_celulares WHERE nom_usu = @nom AND folio = @folio AND estado = 'A'";
+                                using (var cmd = new SqlCommand(sqlAcceso, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@nom", responsable.Trim());
+                                    cmd.Parameters.AddWithValue("@folio", pedidoTexto);
+                                    int countAcceso = Convert.ToInt32(cmd.ExecuteScalar());
+                                    if (countAcceso == 0)
+                                    {
+                                        string sqlInsert = "INSERT INTO tb_det_acceso_celulares (fecha, imei, nom_usu, sistema, folio, version, estado) " +
+                                                           "VALUES(GETDATE(), @imei, @nom, 'SplitTrailer', @folio, @version, 'A')";
+                                        using (var cmdInsert = new SqlCommand(sqlInsert, conn))
+                                        {
+                                            cmdInsert.Parameters.AddWithValue("@imei", imei);
+                                            cmdInsert.Parameters.AddWithValue("@nom", responsable.Trim());
+                                            cmdInsert.Parameters.AddWithValue("@folio", pedidoTexto);
+                                            cmdInsert.Parameters.AddWithValue("@version", currentVersionName);
+                                            cmdInsert.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Insertar productos en SQLite
+                            foreach (DataRow row in Ped.Rows)
+                            {
+                                string mnom = row["prod_nombre"].ToString().Trim().Replace("'", " ");
+                                Pedidos Pedidoscapturados = new Pedidos
+                                {
+                                    folio = pedidoTexto,
+                                    prod_clave = row["prod_clave"].ToString().Trim(),
+                                    nombre = mnom,
+                                    pedido = Convert.ToInt32(row["pdn_num_unidades"]),
+                                    surtido = 0
+                                };
+                                db.Insert(Pedidoscapturados);
+
+                                var encontrado = 0;
+                                var query = db.Table<ConPedidos>();
+                                foreach (var captu in query)
+                                {
+                                    if (captu.prod_clave.Trim() == row["prod_clave"].ToString().Trim())
+                                    {
+                                        encontrado = 1;
+                                        var total = Convert.ToInt16(row["pdn_num_unidades"]) + Convert.ToInt16(captu.pedido);
+                                        db.Query<ConPedidos>("UPDATE [ConPedidos] SET pedido = @pedido WHERE prod_clave = @clave",
+                                            new { pedido = total, clave = captu.prod_clave.Trim() });
+                                        break;
+                                    }
+                                }
+                                if (encontrado == 0)
+                                {
+                                    ConPedidos consecutivo = new ConPedidos
+                                    {
+                                        prod_clave = row["prod_clave"].ToString().Trim(),
+                                        nombre = mnom,
+                                        pedido = Convert.ToInt32(row["pdn_num_unidades"]),
+                                        surtido = 0
+                                    };
+                                    db.Insert(consecutivo);
+                                }
+                            }
+
+                            // Actualizar UI
+                            RunOnUiThread(() =>
+                            {
+                                if (!IsDestroyed)
+                                {
+                                    ConsPedSur(pedidoTexto);
+                                    Toast.MakeText(this, "Pedido agregado Correctamente", ToastLength.Short).Show();
+                                    if (mOp == "A")
+                                        capturar.Enabled = true;
+                                    pedido.SetSelection(0, pedidoTexto.Length);
+                                    pedido.RequestFocus();
+                                }
+                            });
                         }
-                        if (mOp == "C")
+                        catch (Java.Lang.Exception ex)
                         {
-                            thisConnection.Close();
-                            ConsPedSur(pedido.Text.Trim());
-                            return;
+                            RunOnUiThread(() =>
+                            {
+                                if (!IsDestroyed)
+                                {
+                                    Toast.MakeText(this, "Error: " + ex.Message, ToastLength.Long).Show();
+                                }
+                            });
                         }
-                        if (hay == "S")
+                        finally
                         {
-                            ConsPedSur(pedido.Text.ToString());
-                            Toast.MakeText(this, "Pedido agregado Correctamente", ToastLength.Short).Show();
+                            RunOnUiThread(() =>
+                            {
+                                if (!IsDestroyed)
+                                {
+                                    pedido.Enabled = true;
+                                    progressBar.Visibility = ViewStates.Gone;
+                                }
+                            });
                         }
-                        thisConnection.Close();
-                        if (mOp == "A")
-                        {
-                            capturar.Enabled = true;
-                        }
-                        pedido.SetSelection(0, pedido.Text.Length);
-                        pedido.RequestFocus();
-                    }
-                    else
-                    {
-                        e.Handled = false;
-                    }
-                    LoadConnection();
+                    });
                 }
             };
 
             CreateNotificationChannel();
 
-            // Referencia al MaterialToolbar
             MaterialToolbar toolbar = FindViewById<MaterialToolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             SupportActionBar.Title = "INGRESAR PEDIDO";
             SupportActionBar.SetDisplayHomeAsUpEnabled(false);
         }
 
+        // ========== MÉTODOS AUXILIARES (con manejo local de conexiones) ==========
+
+        private int GetSplitPendientesLocal()
+        {
+            int pendientes = 0;
+            try
+            {
+                using (var conn = new SqlConnection(MainActivity.cadenaConexion))
+                {
+                    conn.Open();
+                    // Obtener splits del responsable con estatus 'A'
+                    string sql = "SELECT FECHA FROM tb_det_split WHERE NOM_CAPSPLIT = @resp AND estatus = 'A'";
+                    using (var cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@resp", responsable.Trim());
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            var tiempoactual = DateTime.Now;
+                            while (reader.Read())
+                            {
+                                string fe = reader["FECHA"].ToString().Replace("a.m.", "a. m.").Replace("p.m.", "p. m.");
+                                try
+                                {
+                                    DateTime fechaSplit = Convert.ToDateTime(fe);
+                                    TimeSpan span = tiempoactual - fechaSplit;
+                                    if ((span.Days * 24 + span.Hours) > 36)
+                                        pendientes++;
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+            return pendientes;
+        }
         string currentVersionCode;
 
         protected override void OnResume()
@@ -879,7 +1072,11 @@ namespace SplitTrailers
         private string EstatusPed(string mped)
         {
             string valor = "";
-            thisConnection.Open();
+            if (thisConnection.State == System.Data.ConnectionState.Closed)
+            {
+                thisConnection.Open();
+            }
+
             string Cadena = "Select hora_fin from tb_mstr_embarque where emb_folio = '" + mped + "'";
             SqlCommand cmd = new SqlCommand(Cadena, thisConnection);
             valor = Convert.ToString(cmd.ExecuteScalar());

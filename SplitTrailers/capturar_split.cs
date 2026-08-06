@@ -259,21 +259,47 @@ namespace SplitTrailers
 
         public string GetDeviceID()
         {
-            Android.Telephony.TelephonyManager mTelephonyMgr;
-            mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
-            string uniqueID = UUID.RandomUUID().ToString();
-            //imei = mTelephonyMgr.DeviceId;
-            imei = uniqueID;
+            const string PrefKey = "native_device_unique_id";
 
-            var deviceId = CrossDeviceInfo.Current.Id;
-
-            if (imei == null || imei.Length > 17)
+            try
             {
-                deviceId = deviceId.Substring(0, 15);
-                imei = deviceId;
-            }
+                var context = Android.App.Application.Context;
 
-            return imei;
+                // 1. Intentar recuperar el ID guardado usando SharedPreferences nativo
+                var prefs = Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(context);
+                string deviceId = prefs.GetString(PrefKey, string.Empty);
+
+                if (!string.IsNullOrEmpty(deviceId))
+                {
+                    return deviceId;
+                }
+
+                // 2. Obtener el Android ID nativo del dispositivo como base inicial
+                deviceId = Android.Provider.Settings.Secure.GetString(context.ContentResolver, Android.Provider.Settings.Secure.AndroidId);
+
+                // 3. Si por alguna razón el AndroidId es nulo o inválido, generamos un GUID único
+                if (string.IsNullOrEmpty(deviceId) || deviceId == "9774d56d682e549c")
+                {
+                    deviceId = Guid.NewGuid().ToString();
+                }
+
+                // 4. Guardarlo de forma persistente para que nunca cambie mientras la app esté instalada
+                using (var editor = prefs.Edit())
+                {
+                    editor.PutString(PrefKey, deviceId);
+                    editor.Apply();
+                }
+
+                return deviceId;
+            }
+            catch (Java.Lang.Exception)
+            {
+                return Guid.NewGuid().ToString();
+            }
+            catch (System.Exception)
+            {
+                return Guid.NewGuid().ToString();
+            }
         }
 
         public bool OnTouch(View v, MotionEvent e)

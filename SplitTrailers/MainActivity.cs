@@ -36,7 +36,7 @@ namespace SplitTrailers
     {
         //public static string cadenaConexion = "Persist Security Info=False;user id=sa; password=Gabira2026$;Initial Catalog =GAB_Irapuato_Prueba; server=tcp:192.168.123.6,1433; Connect Timeout = 130";
         //public static string cadenaConexion = "Persist Security Info=False;user id=sa; password=Gabira2026$;Initial Catalog =GAB_Irapuato; server=tcp:189.206.160.206,2352; MultipleActiveResultSets=true; Connect Timeout = 130";
-        public static string cadenaConexion = "Persist Security Info=False;user id=sa; password=Gabira2026$;Initial Catalog =GAB_Irapuato; server=tcp:192.168.123.6,1433; MultipleActiveResultSets=true; Connect Timeout = 130";
+        public static string cadenaConexion = "Persist Security Info=False;user id=sa; password=Gabira2026$;Initial Catalog =GAB_Irapuato; server=tcp:192.168.123.6,1433; MultipleActiveResultSets=true; Connect Timeout = 0";
 
         public static Int32 foliocampo = 0;
 

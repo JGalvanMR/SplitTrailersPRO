@@ -16,12 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Eliminar Caja"
-        android:textSize="16sp"
         android:buttonTint="?attr/colorPrimary" />
 
     <TextView
         android:id="@+id/splitdiasmin"
-        style="@style/label_primary"
+        style="@style/label_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DIAS MINIMOS DE CARGA:"
@@ -30,7 +29,7 @@
 
     <TextView
         android:id="@+id/splitcantidad"
-        style="@style/label_primary"
+        style="@style/label_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SPLIT:"
@@ -39,7 +38,7 @@
 
     <TextView
         android:id="@+id/pedidoencaptura"
-        style="@style/label_primary"
+        style="@style/label_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="PEDIDO:"
@@ -59,8 +58,7 @@
             android:scaleX="0.9"
             android:scaleY="0.9"
             android:checked="true"
-            android:text="CAJAXCAJA"
-            android:textSize="16sp" />
+            android:text="CAJAXCAJA"/>
 
         <RadioButton
             android:id="@+id/radio_verde"
@@ -68,13 +66,12 @@
             android:layout_height="wrap_content"
             android:scaleX="0.9"
             android:scaleY="0.9"
-            android:text="TARIMA COMPLETA"
-            android:textSize="16sp" />
+            android:text="TARIMA COMPLETA"/>
     </RadioGroup>
 
     <TextView
         android:id="@+id/textView12"
-        style="@style/label_primary"
+        style="@style/label_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CODIGO:"
