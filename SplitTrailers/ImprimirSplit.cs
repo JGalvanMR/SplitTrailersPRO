@@ -557,7 +557,8 @@ namespace SplitTrailers
                     return;
                 }
 
-                BitmapFactory.Options options = new BitmapFactory.Options();
+                #region //Impresion de TICKET DE SPLIT
+                /*BitmapFactory.Options options = new BitmapFactory.Options();
                 options.InScaled = false;
 
                 Bitmap bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.logomr, options);
@@ -594,6 +595,100 @@ namespace SplitTrailers
                 byteStream.Write(cmd_print);
                 mmOutputStream.Write(WoosimCmd.InitPrinter(), 0, WoosimCmd.InitPrinter().Length);
                 mmOutputStream.Write(byteStream.ToByteArray(), 0, byteStream.ToByteArray().Length);
+                mmOutputStream.Flush();
+                mmOutputStream.Close();
+                mmInputStream.Close();
+                mmSocket.Close();*/
+                #endregion
+                // 1. Impresión del Logo inicial
+                BitmapFactory.Options options = new BitmapFactory.Options { InScaled = false };
+
+                using (Bitmap bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.logomr, options))
+                {
+                    if (bitmap != null)
+                    {
+                        byte[] data = WoosimImage.PrintBitmap(0, 0, 384, 200, bitmap);
+
+                        mmOutputStream.Write(WoosimCmd.SetPageMode(), 0, WoosimCmd.SetPageMode().Length);
+                        if (data != null)
+                        {
+                            mmOutputStream.Write(data, 0, data.Length);
+                        }
+                        mmOutputStream.Write(WoosimCmd.PM_setStdMode(), 0, WoosimCmd.PM_setStdMode().Length);
+                    }
+                }
+
+                // 2. Extracción de datos según el método PrintPage
+                var encoding = System.Text.Encoding.GetEncoding(1252);
+
+                // Limpieza y obtención de valores equivalentes al PrintPage
+                string destinoStr = destino.Trim().ToUpper();
+                string embarqueStr = embarque.Trim();
+                string noSplitStr = splitnumero.ToString().Trim();
+                string cajasStr = cajasnumero.ToString().Trim();
+
+                // Construcción del mensaje para el Código QR (idéntico al flujo del PrintPage)
+                var msg = $"SPLIT*{pedidoImp.Text.Replace("Pedido Actual: ", "").Trim()}*{noSplitStr}, {cajasStr}";
+                byte[] barcode = encoding.GetBytes(msg);
+                byte[] QRCode = WoosimBarcode.Create2DBarcodeQRCode(4, (sbyte)0x4d, 8, barcode);
+
+                // 3. Obtención de Listas de Productos y Cajas (igual que en el PrintPage)
+                List<string> productosSplit = getDetalleSplit(responsplit, embarque, splitnumero.ToString());
+                List<string> cajasSplit = getCajasSplit(responsplit, embarque, splitnumero.ToString());
+
+                // 4. Construcción del Bloque de Texto y Estructura con ByteArrayOutputStream
+                using (ByteArrayOutputStream byteStream = new ByteArrayOutputStream(1024))
+                {
+                    // Encabezado Principal (Destino y Embarque con estilo grande)
+                    byteStream.Write(WoosimCmd.SetTextStyle(false, false, false, 2, 2));
+                    byteStream.Write(WoosimCmd.SetTextAlign(WoosimCmd.AlignCenter));
+                    byteStream.Write(encoding.GetBytes($"{destinoStr}\r\n"));
+                    byteStream.Write(encoding.GetBytes($"{embarqueStr}\r\n"));
+
+                    // Split y Cajas (Estilo mediano)
+                    byteStream.Write(WoosimCmd.SetTextStyle(false, false, false, 1, 1));
+                    byteStream.Write(encoding.GetBytes($"SPLIT: {noSplitStr}    CAJAS: {cajasStr}\r\n\r\n"));
+
+                    // Inserción del Código QR Centrado
+                    if (QRCode != null)
+                    {
+                        byteStream.Write(WoosimCmd.SetTextAlign(WoosimCmd.AlignCenter));
+                        byteStream.Write(QRCode);
+                        byteStream.Write(encoding.GetBytes("\r\n"));
+                    }
+
+                    // Encabezado de la Tabla de Productos
+                    byteStream.Write(WoosimCmd.SetTextStyle(false, false, false, 0, 0)); // Texto normal pequeño
+                    byteStream.Write(WoosimCmd.SetTextAlign(WoosimCmd.AlignLeft));
+                    byteStream.Write(encoding.GetBytes("PRODUCTO                    CAJAS\r\n"));
+                    byteStream.Write(encoding.GetBytes("--------------------------------\r\n"));
+
+                    // Iteración de productos y cajas de forma paralela (simulando el diseño de coordenadas Y)
+                    int maxItems = Math.Max(productosSplit.Count, cajasSplit.Count);
+                    for (int i = 0; i < maxItems; i++)
+                    {
+                        string prod = i < productosSplit.Count ? productosSplit[i] : "";
+                        string caj = i < cajasSplit.Count ? cajasSplit[i] : "";
+
+                        // Formato tabular básico simulado por espacios
+                        string lineaItem = string.Format("{0,-25} {1,5}\r\n", prod, caj);
+                        byteStream.Write(encoding.GetBytes(lineaItem));
+                    }
+
+                    // Pie de página o espacios finales
+                    byteStream.Write(encoding.GetBytes("\r\n\r\n"));
+                    byteStream.Write(WoosimCmd.PrintData());
+
+                    // Envío final al OutputStream de la impresora
+                    mmOutputStream.Write(WoosimCmd.InitPrinter(), 0, WoosimCmd.InitPrinter().Length);
+                    mmOutputStream.Write(byteStream.ToByteArray(), 0, byteStream.ToByteArray().Length);
+                }
+
+                // Cierre de conexión opcional si aplica en tu contexto
+                if (thisConnection != null && thisConnection.State == System.Data.ConnectionState.Open)
+                {
+                    thisConnection.Close();
+                }
             }
             catch (System.Exception ex)
             {
@@ -601,6 +696,47 @@ namespace SplitTrailers
             }
         }
 
+
+        List<string> listDetalleSplit = new List<string>();
+        List<string> getDetalleSplit(string nom_capsplit, string emb_folio, string tarima)
+        {
+            listDetalleSplit.Clear();
+            thisConnection.Open();
+            //string Cadena = "SELECT nom_prod, SUM(cajas) as cajas FROM tb_det_split WHERE NOM_CAPSPLIT='"+ nom_capsplit + "' and emb_folio='" + emb_folio + "' and tarima='" + tarima + "' GROUP BY nom_prod";
+            string Cadena = "SELECT CASE WHEN LEN(nom_prod) > 25 THEN LEFT(nom_prod, 25) + CHAR(10) + SUBSTRING(nom_prod, 26, LEN(nom_prod))ELSE nom_prod END AS nom_prod, sum(cajas) as cajas FROM tb_det_split WHERE NOM_CAPSPLIT='" + nom_capsplit + "' and emb_folio='" + emb_folio + "' and tarima='" + tarima + "' GROUP BY nom_prod";
+            SqlCommand cmd = new SqlCommand(Cadena, thisConnection);
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            int total = 0;
+
+            while (dr.Read())
+            {
+                //listDetalleSplit.Add(Convert.ToString(dr["nom_prod"]).Trim() + "\t\t\t" + Convert.ToString(dr["cajas"]).Trim());
+                listDetalleSplit.Add(Convert.ToString(dr["nom_prod"]).Trim());
+            }
+            thisConnection.Close();
+            return listDetalleSplit;
+        }
+
+        List<string> listCajasSplit = new List<string>();
+        List<string> getCajasSplit(string nom_capsplit, string emb_folio, string tarima)
+        {
+            listCajasSplit.Clear();
+            thisConnection.Open();
+            //string Cadena = "SELECT nom_prod, SUM(cajas) as cajas FROM tb_det_split WHERE NOM_CAPSPLIT='"+ nom_capsplit + "' and emb_folio='" + emb_folio + "' and tarima='" + tarima + "' GROUP BY nom_prod";
+            string Cadena = "SELECT CASE WHEN LEN(nom_prod) > 25 THEN LEFT(nom_prod, 25) + CHAR(10) + SUBSTRING(nom_prod, 26, LEN(nom_prod))ELSE nom_prod END AS nom_prod, sum(cajas) as cajas FROM tb_det_split WHERE NOM_CAPSPLIT='" + nom_capsplit + "' and emb_folio='" + emb_folio + "' and tarima='" + tarima + "' GROUP BY nom_prod";
+            SqlCommand cmd = new SqlCommand(Cadena, thisConnection);
+            SqlDataReader dr = cmd.ExecuteReader();
+
+            int total = 0;
+
+            while (dr.Read())
+            {
+                listCajasSplit.Add(Convert.ToString(dr["cajas"]).Trim());
+            }
+            thisConnection.Close();
+            return listCajasSplit;
+        }
 
 
     }
